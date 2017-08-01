@@ -43,8 +43,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   {KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,           KC_Y,    KC_U,    KC_I,    KC_O,    KC_P    },
   {KC_A,    KC_S,    KC_D,    KC_F,    KC_G,           KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN },
   {KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,           KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH },
-  {XXXXXXX, KC_ESC,  KC_TAB,  SHIFT,   KC_LGUI,        KC_ENT,  SHIFT,   KC_DEL,  KC_PGUP, XXXXXXX },
-  {XXXXXXX, KC_LCTL, KC_LGUI, FNKEY,   KC_BSPC,        KC_SPC,  FNKEY,   KC_RGUI, KC_PGDN, XXXXXXX }
+  {XXXXXXX, KC_ESC,  KC_TAB,  SHIFT,   KC_LGUI,        KC_ENT,  SHIFT,   KC_LBRC, KC_RBRC, XXXXXXX },
+  {XXXXXXX, KC_LCTL, KC_LGUI, FNKEY,   KC_BSPC,        KC_SPC,  FNKEY,   KC_BSLS, KC_EQL,  XXXXXXX }
 },
 
 
@@ -62,10 +62,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_FUNCTION] = { /* Function Layer, primary alternative layer featuring numpad on right hand,
                                    cursor keys on left hand, and all symbols*/
   {KC_1,    KC_2,    KC_3,    KC_4,    KC_5,          KC_6,    KC_7,    KC_8,    KC_9,    KC_0    },
-  {KC_RCTL, _______, _______, _______, _______,       KC_HOME, _______, KC_UP,   _______, KC_BSPC },
-  {KC_LSFT, _______, _______, _______, _______,       KC_END,  KC_LEFT, KC_DOWN, KC_RGHT, KC_ENT  },
-  {XXXXXXX, KC_HOME, KC_GRV,  _______, _______,       _______, SHIFT,   KC_TILD, KC_DOT,  XXXXXXX },
-  {XXXXXXX, KC_END,  _______, KC_MENU, _______,       _______, FNKEY,   KC_MENU, KC_PSCR, XXXXXXX }
+  {KC_RCTL, KC_F1,   KC_F2,   KC_F3,   KC_F4,         KC_HOME, _______, KC_UP,   _______, KC_BSPC },
+  {KC_LSFT, KC_F5,   KC_F6,   KC_F7,   KC_F8,         KC_END,  KC_LEFT, KC_DOWN, KC_RGHT, KC_ENT  },
+  {XXXXXXX, KC_GRV,  KC_CAPS, _______, _______,       KC_PSCR, _______,   KC_F9,   KC_F10,  XXXXXXX },
+  {XXXXXXX, _______, KC_MENU, _______, KC_DEL,        KC_PAUS, _______,   KC_F11,  KC_F12,  XXXXXXX }
 },
 
 
@@ -74,7 +74,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   {KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,         KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10  },
   {_______, _______, _______, _______, _______,       KC_RPRN, KC_F4,   KC_F5,   KC_F6,   KC_F11  },
   {_______, _______, _______, _______, _______,       KC_RCBR, KC_F1,   KC_F2,   KC_F3,   KC_F12  },
-  {XXXXXXX, _______, _______, _______, _______,       _______, _______, _______, _______, XXXXXXX },
+  {XXXXXXX, KC_TILD, _______, _______, _______,       _______, _______, _______, _______, XXXXXXX },
   {XXXXXXX, _______, _______, _______, _______,       _______, _______, _______, _______, XXXXXXX }
 }
 
