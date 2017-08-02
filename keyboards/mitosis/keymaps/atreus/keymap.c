@@ -49,3 +49,13 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
       }
     return MACRO_NONE;
 };
+
+void matrix_scan_user(void) {
+    switch (biton32(layer_state)) {
+      case _QW: set_led_off; break;
+      case _RS: set_led_blue; break;
+      case _LW: set_led_red; break;
+      default: break;
+    }
+};
+
