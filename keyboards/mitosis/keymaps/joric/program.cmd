@@ -1,21 +1,31 @@
+setlocal EnableDelayedExpansion
+
 @echo off
 
-for %%f in (%~dp0.) do set layout=%%~nxf
-
 set path=C:\WinAVR-20100110\bin;%path%
-set port=COM4
 set keyboard=mitosis
+set ports=COM4 COM9
+
+for %%f in (%~dp0.) do set layout=%%~nxf
 set file=../../../../%keyboard%_%layout%.hex
 
 bash -c "cd ../../../../ && make %keyboard%-%layout%" || exit
 
 bash -c "ln -f %file% ../../../../precompiled"
 
-echo Waiting for %port% (press reset)...
+echo Waiting for DFU (press reset)...
 
-:while1
-MODE %port% | grep "RTS"
-IF errorlevel 1 goto while1
+:loop
+for %%x in (%ports%) do (
+	set port=%%x
+	MODE %%x | grep "RTS"
+	IF "!errorlevel!"=="0" goto continue
+)
+goto loop
+
+:continue
+echo %port% detected.
 
 avrdude -p atmega32u4 -P %port%  -cavr109  -b57600 -U flash:w:"%file%":i
+
 
