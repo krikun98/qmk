@@ -3,7 +3,7 @@
 for %%f in (%~dp0.) do set layout=%%~nxf
 
 set path=C:\WinAVR-20100110\bin;%path%
-set port=COM9
+set port=COM4
 set keyboard=mitosis
 set file=../../../../%keyboard%_%layout%.hex
 
