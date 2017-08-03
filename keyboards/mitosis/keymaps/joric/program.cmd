@@ -9,6 +9,8 @@ set file=../../../../%keyboard%_%layout%.hex
 
 bash -c "cd ../../../../ && make %keyboard%-%layout%" || exit
 
+bash -c "ln -f %file% ../../../../precompiled"
+
 echo Waiting for %port% (press reset)...
 
 :while1
