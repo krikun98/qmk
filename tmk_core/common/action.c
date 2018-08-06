@@ -968,20 +968,20 @@ void debug_record(keyrecord_t record)
 void debug_action(action_t action)
 {
     switch (action.kind.id) {
-        case ACT_LMODS:             printf("ACT_LMODS");             break;
-        case ACT_RMODS:             printf("ACT_RMODS");             break;
-        case ACT_LMODS_TAP:         printf("ACT_LMODS_TAP");         break;
-        case ACT_RMODS_TAP:         printf("ACT_RMODS_TAP");         break;
-        case ACT_USAGE:             printf("ACT_USAGE");             break;
-        case ACT_MOUSEKEY:          printf("ACT_MOUSEKEY");          break;
-        case ACT_LAYER:             printf("ACT_LAYER");             break;
-        case ACT_LAYER_TAP:         printf("ACT_LAYER_TAP");         break;
-        case ACT_LAYER_TAP_EXT:     printf("ACT_LAYER_TAP_EXT");     break;
-        case ACT_MACRO:             printf("ACT_MACRO");             break;
-        case ACT_COMMAND:           printf("ACT_COMMAND");           break;
-        case ACT_FUNCTION:          printf("ACT_FUNCTION");          break;
-        case ACT_SWAP_HANDS:        printf("ACT_SWAP_HANDS");        break;
-        default:                    printf("UNKNOWN");               break;
+        case ACT_LMODS:             dprint("ACT_LMODS");             break;
+        case ACT_RMODS:             dprint("ACT_RMODS");             break;
+        case ACT_LMODS_TAP:         dprint("ACT_LMODS_TAP");         break;
+        case ACT_RMODS_TAP:         dprint("ACT_RMODS_TAP");         break;
+        case ACT_USAGE:             dprint("ACT_USAGE");             break;
+        case ACT_MOUSEKEY:          dprint("ACT_MOUSEKEY");          break;
+        case ACT_LAYER:             dprint("ACT_LAYER");             break;
+        case ACT_LAYER_TAP:         dprint("ACT_LAYER_TAP");         break;
+        case ACT_LAYER_TAP_EXT:     dprint("ACT_LAYER_TAP_EXT");     break;
+        case ACT_MACRO:             dprint("ACT_MACRO");             break;
+        case ACT_COMMAND:           dprint("ACT_COMMAND");           break;
+        case ACT_FUNCTION:          dprint("ACT_FUNCTION");          break;
+        case ACT_SWAP_HANDS:        dprint("ACT_SWAP_HANDS");        break;
+        default:                    dprint("UNKNOWN");               break;
     }
-    printf("[%X:%02X]", action.kind.param>>8, action.kind.param&0xff);
+    dprintf("[%X:%02X]", action.kind.param>>8, action.kind.param&0xff);
 }
