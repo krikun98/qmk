@@ -21,8 +21,8 @@
 #define WITHIN_TAPPING_TERM(e)  (TIMER_DIFF_16(e.time, tapping_key.event.time) < TAPPING_TERM)
 
 
-static keyrecord_t tapping_key = {};
-static keyrecord_t waiting_buffer[WAITING_BUFFER_SIZE] = {};
+static keyrecord_t tapping_key;
+static keyrecord_t waiting_buffer[WAITING_BUFFER_SIZE];
 static uint8_t waiting_buffer_head = 0;
 static uint8_t waiting_buffer_tail = 0;
 
@@ -30,7 +30,7 @@ static bool process_tapping(keyrecord_t *record);
 static bool waiting_buffer_enq(keyrecord_t record);
 static void waiting_buffer_clear(void);
 static bool waiting_buffer_typed(keyevent_t event);
-static bool waiting_buffer_has_anykey_pressed(void);
+//static bool waiting_buffer_has_anykey_pressed(void);
 static void waiting_buffer_scan_tap(void);
 static void debug_tapping_key(void);
 static void debug_waiting_buffer(void);
@@ -40,6 +40,9 @@ static void debug_waiting_buffer(void);
  *
  * FIXME: Needs doc
  */
+
+static keyrecord_t keyrecord_t1;
+
 void action_tapping_process(keyrecord_t record)
 {
     if (process_tapping(&record)) {
@@ -52,7 +55,7 @@ void action_tapping_process(keyrecord_t record)
             debug("OVERFLOW: CLEAR ALL STATES\n");
             clear_keyboard();
             waiting_buffer_clear();
-            tapping_key = (keyrecord_t){};
+            tapping_key = keyrecord_t1;
         }
     }
 
@@ -190,7 +193,7 @@ bool process_tapping(keyrecord_t *keyp)
                 debug("Tapping: End. Timeout. Not tap(0): ");
                 debug_event(event); debug("\n");
                 process_record(&tapping_key);
-                tapping_key = (keyrecord_t){};
+                tapping_key = keyrecord_t1;
                 debug_tapping_key();
                 return false;
             }  else {
@@ -198,7 +201,7 @@ bool process_tapping(keyrecord_t *keyp)
                     debug("Tapping: End. last timeout tap release(>0).");
                     keyp->tap = tapping_key.tap;
                     process_record(keyp);
-                    tapping_key = (keyrecord_t){};
+                    tapping_key = keyrecord_t1;
                     return true;
                 }
                 else if (is_tap_key(event.key) && event.pressed) {
@@ -271,7 +274,7 @@ bool process_tapping(keyrecord_t *keyp)
             // timeout. no sequential tap.
             debug("Tapping: End(Timeout after releasing last tap): ");
             debug_event(event); debug("\n");
-            tapping_key = (keyrecord_t){};
+            tapping_key = keyrecord_t1;
             debug_tapping_key();
             return false;
         }
@@ -343,6 +346,7 @@ bool waiting_buffer_typed(keyevent_t event)
  *
  * FIXME: Needs docs
  */
+/*
 __attribute__((unused))
 bool waiting_buffer_has_anykey_pressed(void)
 {
@@ -351,6 +355,7 @@ bool waiting_buffer_has_anykey_pressed(void)
     }
     return false;
 }
+*/
 
 /** \brief Scan buffer for tapping
  *

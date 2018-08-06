@@ -136,10 +136,13 @@ void process_record_nocache(keyrecord_t *record)
 }
 #endif
 
+/*
 __attribute__ ((weak))
 bool process_record_quantum(keyrecord_t *record) {
+	printf("\nEMPTY %s\n", __FUNCTION__);
     return true;
 }
+*/
 
 #ifndef NO_ACTION_TAPPING
 /** \brief Allows for handling tap-hold actions immediately instead of waiting for TAPPING_TERM or another keypress.
@@ -178,10 +181,12 @@ void process_record(keyrecord_t *record)
 
     action_t action = store_or_get_action(record->event.pressed, record->event.key);
     dprint("ACTION: "); debug_action(action);
+
 #ifndef NO_ACTION_LAYER
     dprint(" layer_state: "); layer_debug();
     dprint(" default_layer_state: "); default_layer_debug();
 #endif
+
     dprintln();
 
     process_action(record, action);
@@ -193,6 +198,9 @@ void process_record(keyrecord_t *record)
  */
 void process_action(keyrecord_t *record, action_t action)
 {
+
+	printf("\n---\n%s\n", __FUNCTION__);
+
     keyevent_t event = record->event;
 #ifndef NO_ACTION_TAPPING
     uint8_t tap_count = record->tap.count;
@@ -212,6 +220,7 @@ void process_action(keyrecord_t *record, action_t action)
     }
 #endif
 
+
     switch (action.kind.id) {
         /* Key and Mods */
         case ACT_LMODS:
@@ -219,6 +228,10 @@ void process_action(keyrecord_t *record, action_t action)
             {
                 uint8_t mods = (action.kind.id == ACT_LMODS) ?  action.key.mods :
                                                                 action.key.mods<<4;
+
+
+																printf("MODS: %d\n", mods);
+
                 if (event.pressed) {
                     if (mods) {
                         if (IS_MOD(action.key.code) || action.key.code == KC_NO) {
@@ -431,9 +444,7 @@ void process_action(keyrecord_t *record, action_t action)
     #ifndef NO_ACTION_TAPPING
         case ACT_LAYER_TAP:
         case ACT_LAYER_TAP_EXT:
-            switch (action.layer_tap.code) {
-                case 0xe0 ... 0xef:
-                    /* layer On/Off with modifiers(left only) */
+			if (action.layer_tap.code>=0xe0 && action.layer_tap.code>=0xef) {
                     if (event.pressed) {
                         layer_on(action.layer_tap.val);
                         register_mods(action.layer_tap.code & 0x0f);
@@ -441,7 +452,8 @@ void process_action(keyrecord_t *record, action_t action)
                         layer_off(action.layer_tap.val);
                         unregister_mods(action.layer_tap.code & 0x0f);
                     }
-                    break;
+			} else
+            switch (action.layer_tap.code) {
                 case OP_TAP_TOGGLE:
                     /* tap toggle */
                     if (event.pressed) {
@@ -901,16 +913,20 @@ bool is_tap_key(keypos_t key)
         case ACT_RMODS_TAP:
         case ACT_LAYER_TAP:
         case ACT_LAYER_TAP_EXT:
+			if (action.layer_tap.code<=0xdf) {
+				return true;
+			} else
             switch (action.layer_tap.code) {
-                case 0x00 ... 0xdf:
                 case OP_TAP_TOGGLE:
                 case OP_ONESHOT:
                     return true;
             }
             return false;
         case ACT_SWAP_HANDS:
+			if (action.swap.code<=0xdf) {
+				return true;
+			} else
             switch (action.swap.code) {
-                case 0x00 ... 0xdf:
                 case OP_SH_TAP_TOGGLE:
                     return true;
             }
@@ -952,20 +968,20 @@ void debug_record(keyrecord_t record)
 void debug_action(action_t action)
 {
     switch (action.kind.id) {
-        case ACT_LMODS:             dprint("ACT_LMODS");             break;
-        case ACT_RMODS:             dprint("ACT_RMODS");             break;
-        case ACT_LMODS_TAP:         dprint("ACT_LMODS_TAP");         break;
-        case ACT_RMODS_TAP:         dprint("ACT_RMODS_TAP");         break;
-        case ACT_USAGE:             dprint("ACT_USAGE");             break;
-        case ACT_MOUSEKEY:          dprint("ACT_MOUSEKEY");          break;
-        case ACT_LAYER:             dprint("ACT_LAYER");             break;
-        case ACT_LAYER_TAP:         dprint("ACT_LAYER_TAP");         break;
-        case ACT_LAYER_TAP_EXT:     dprint("ACT_LAYER_TAP_EXT");     break;
-        case ACT_MACRO:             dprint("ACT_MACRO");             break;
-        case ACT_COMMAND:           dprint("ACT_COMMAND");           break;
-        case ACT_FUNCTION:          dprint("ACT_FUNCTION");          break;
-        case ACT_SWAP_HANDS:        dprint("ACT_SWAP_HANDS");        break;
-        default:                    dprint("UNKNOWN");               break;
+        case ACT_LMODS:             printf("ACT_LMODS");             break;
+        case ACT_RMODS:             printf("ACT_RMODS");             break;
+        case ACT_LMODS_TAP:         printf("ACT_LMODS_TAP");         break;
+        case ACT_RMODS_TAP:         printf("ACT_RMODS_TAP");         break;
+        case ACT_USAGE:             printf("ACT_USAGE");             break;
+        case ACT_MOUSEKEY:          printf("ACT_MOUSEKEY");          break;
+        case ACT_LAYER:             printf("ACT_LAYER");             break;
+        case ACT_LAYER_TAP:         printf("ACT_LAYER_TAP");         break;
+        case ACT_LAYER_TAP_EXT:     printf("ACT_LAYER_TAP_EXT");     break;
+        case ACT_MACRO:             printf("ACT_MACRO");             break;
+        case ACT_COMMAND:           printf("ACT_COMMAND");           break;
+        case ACT_FUNCTION:          printf("ACT_FUNCTION");          break;
+        case ACT_SWAP_HANDS:        printf("ACT_SWAP_HANDS");        break;
+        default:                    printf("UNKNOWN");               break;
     }
-    dprintf("[%X:%02X]", action.kind.param>>8, action.kind.param&0xff);
+    printf("[%X:%02X]", action.kind.param>>8, action.kind.param&0xff);
 }

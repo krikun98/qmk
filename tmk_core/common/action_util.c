@@ -41,7 +41,7 @@ static int8_t cb_count = 0;
 
 // TODO: pointer variable is not needed
 //report_keyboard_t keyboard_report = {};
-report_keyboard_t *keyboard_report = &(report_keyboard_t){};
+report_keyboard_t *keyboard_report = 0;//&(report_keyboard_t){};
 
 extern inline void add_key(uint8_t key);
 extern inline void del_key(uint8_t key);
@@ -76,7 +76,7 @@ bool has_oneshot_mods_timed_out(void) {
 static int8_t oneshot_layer_data = 0;
 
 inline uint8_t get_oneshot_layer(void) { return oneshot_layer_data >> 3; }
-inline uint8_t get_oneshot_layer_state(void) { return oneshot_layer_data & 0b111; }
+inline uint8_t get_oneshot_layer_state(void) { return oneshot_layer_data & 7; }
 
 #if (defined(ONESHOT_TIMEOUT) && (ONESHOT_TIMEOUT > 0))
 static int16_t oneshot_layer_time = 0;
@@ -86,7 +86,7 @@ inline bool has_oneshot_layer_timed_out() {
 }
 #endif
 
-/** \brief Set oneshot layer 
+/** \brief Set oneshot layer
  *
  * FIXME: needs doc
  */
@@ -98,7 +98,7 @@ void set_oneshot_layer(uint8_t layer, uint8_t state)
     oneshot_layer_time = timer_read();
 #endif
 }
-/** \brief Reset oneshot layer 
+/** \brief Reset oneshot layer
  *
  * FIXME: needs doc
  */
@@ -108,7 +108,7 @@ void reset_oneshot_layer(void) {
     oneshot_layer_time = 0;
 #endif
 }
-/** \brief Clear oneshot layer 
+/** \brief Clear oneshot layer
  *
  * FIXME: needs doc
  */
@@ -138,6 +138,9 @@ bool is_oneshot_layer_active(void)
  * FIXME: needs doc
  */
 void send_keyboard_report(void) {
+
+	printf("REPORT SENT\n");
+
     keyboard_report->mods  = real_mods;
     keyboard_report->mods |= weak_mods;
     keyboard_report->mods |= macro_mods;

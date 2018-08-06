@@ -97,26 +97,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 enum action_kind_id {
     /* Key Actions */
-    ACT_MODS            = 0b0000,
-    ACT_LMODS           = 0b0000,
-    ACT_RMODS           = 0b0001,
-    ACT_MODS_TAP        = 0b0010,
-    ACT_LMODS_TAP       = 0b0010,
-    ACT_RMODS_TAP       = 0b0011,
+    ACT_MODS            = 0x0000,
+    ACT_LMODS           = 0x0000,
+    ACT_RMODS           = 0x0001,
+    ACT_MODS_TAP        = 0x0002,
+    ACT_LMODS_TAP       = 0x0002,
+    ACT_RMODS_TAP       = 0x0003,
     /* Other Keys */
-    ACT_USAGE           = 0b0100,
-    ACT_MOUSEKEY        = 0b0101,
+    ACT_USAGE           = 0x0004,
+    ACT_MOUSEKEY        = 0x0005,
     /* One-hand Support */
-    ACT_SWAP_HANDS      = 0b0110,
+    ACT_SWAP_HANDS      = 0x0006,
     /* Layer Actions */
-    ACT_LAYER           = 0b1000,
-    ACT_LAYER_TAP       = 0b1010, /* Layer  0-15 */
-    ACT_LAYER_TAP_EXT   = 0b1011, /* Layer 16-31 */
+    ACT_LAYER           = 0x0008,
+    ACT_LAYER_TAP       = 0x000A, /* Layer  0-15 */
+    ACT_LAYER_TAP_EXT   = 0x000B, /* Layer 16-31 */
     /* Extensions */
-    ACT_MACRO           = 0b1100,
-    ACT_BACKLIGHT       = 0b1101,
-    ACT_COMMAND         = 0b1110,
-    ACT_FUNCTION        = 0b1111
+    ACT_MACRO           = 0x000C,
+    ACT_BACKLIGHT       = 0x000D,
+    ACT_COMMAND         = 0x000E,
+    ACT_FUNCTION        = 0x000F
 };
 
 

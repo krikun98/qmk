@@ -220,6 +220,9 @@ void keyboard_task(void)
     if (is_keyboard_master()) {
         for (uint8_t r = 0; r < MATRIX_ROWS; r++) {
             matrix_row = matrix_get_row(r);
+
+			//printf("matrix_row: %d\n", matrix_row);
+
             matrix_change = matrix_row ^ matrix_prev[r];
             if (matrix_change) {
 #ifdef MATRIX_HAS_GHOST

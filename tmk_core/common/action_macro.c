@@ -39,8 +39,19 @@ void action_macro_play(const macro_t *macro_p)
     uint8_t interval = 0;
 
     if (!macro_p) return;
+
+	macro_t m = MACRO_READ();
     while (true) {
-        switch (MACRO_READ()) {
+		if (m>=0x04 && m<=0x73){
+                dprintf("DOWN(%02X)\n", macro);
+                register_code(macro);
+		} else if (m>=0x84 && m<=0xF3) {
+                dprintf("UP(%02X)\n", macro);
+                unregister_code(macro&0x7F);
+		}
+
+
+        switch (m) {
             case KEY_DOWN:
                 MACRO_READ();
                 dprintf("KEY_DOWN(%02X)\n", macro);
@@ -69,14 +80,6 @@ void action_macro_play(const macro_t *macro_p)
             case INTERVAL:
                 interval = MACRO_READ();
                 dprintf("INTERVAL(%u)\n", interval);
-                break;
-            case 0x04 ... 0x73:
-                dprintf("DOWN(%02X)\n", macro);
-                register_code(macro);
-                break;
-            case 0x84 ... 0xF3:
-                dprintf("UP(%02X)\n", macro);
-                unregister_code(macro&0x7F);
                 break;
             case END:
             default:

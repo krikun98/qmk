@@ -76,10 +76,10 @@ void set_oneshot_locked_mods(int8_t mods);
 void clear_oneshot_locked_mods(void);
 
 typedef enum {
-  ONESHOT_PRESSED = 0b01,
-  ONESHOT_OTHER_KEY_PRESSED = 0b10,
-  ONESHOT_START = 0b11,
-  ONESHOT_TOGGLED = 0b100
+  ONESHOT_PRESSED = 0x01,
+  ONESHOT_OTHER_KEY_PRESSED = 0x02,
+  ONESHOT_START = 0x03,
+  ONESHOT_TOGGLED = 0x04
 } oneshot_fullfillment_t;
 void set_oneshot_layer(uint8_t layer, uint8_t state);
 uint8_t get_oneshot_layer(void);

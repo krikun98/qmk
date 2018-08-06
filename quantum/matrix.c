@@ -59,9 +59,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     extern const matrix_row_t matrix_mask[];
 #endif
 
+#if 0
 #if (DIODE_DIRECTION == ROW2COL) || (DIODE_DIRECTION == COL2ROW)
 static const uint8_t row_pins[MATRIX_ROWS] = MATRIX_ROW_PINS;
 static const uint8_t col_pins[MATRIX_COLS] = MATRIX_COL_PINS;
+#endif
 #endif
 
 /* matrix state(1:on, 0:off) */
@@ -74,8 +76,8 @@ static matrix_row_t matrix_debouncing[MATRIX_ROWS];
     static void init_cols(void);
     static bool read_cols_on_row(matrix_row_t current_matrix[], uint8_t current_row);
     static void unselect_rows(void);
-    static void select_row(uint8_t row);
-    static void unselect_row(uint8_t row);
+    //static void select_row(uint8_t row);
+    //static void unselect_row(uint8_t row);
 #elif (DIODE_DIRECTION == ROW2COL)
     static void init_rows(void);
     static bool read_rows_on_col(matrix_row_t current_matrix[], uint8_t current_col);
@@ -84,17 +86,29 @@ static matrix_row_t matrix_debouncing[MATRIX_ROWS];
     static void select_col(uint8_t col);
 #endif
 
+#ifdef __ICCARM__
+__weak
+#else
 __attribute__ ((weak))
+#endif
 void matrix_init_quantum(void) {
     matrix_init_kb();
 }
 
+#ifdef __ICCARM__
+__weak
+#else
 __attribute__ ((weak))
+#endif
 void matrix_scan_quantum(void) {
     matrix_scan_kb();
 }
 
+#ifdef __ICCARM__
+__weak
+#else
 __attribute__ ((weak))
+#endif
 void matrix_init_kb(void) {
     matrix_init_user();
 }
@@ -108,7 +122,11 @@ __attribute__ ((weak))
 void matrix_init_user(void) {
 }
 
+#ifdef __ICCARM__
+__weak
+#else
 __attribute__ ((weak))
+#endif
 void matrix_scan_user(void) {
 }
 
@@ -232,6 +250,7 @@ bool matrix_is_on(uint8_t row, uint8_t col)
     return (matrix[row] & ((matrix_row_t)1<col));
 }
 
+/*
 inline
 matrix_row_t matrix_get_row(uint8_t row)
 {
@@ -243,6 +262,8 @@ matrix_row_t matrix_get_row(uint8_t row)
     return matrix[row];
 #endif
 }
+
+*/
 
 void matrix_print(void)
 {
@@ -270,15 +291,18 @@ uint8_t matrix_key_count(void)
 
 static void init_cols(void)
 {
+#if 0//def __ICCARM__
     for(uint8_t x = 0; x < MATRIX_COLS; x++) {
         uint8_t pin = col_pins[x];
         _SFR_IO8((pin >> 4) + 1) &= ~_BV(pin & 0xF); // IN
         _SFR_IO8((pin >> 4) + 2) |=  _BV(pin & 0xF); // HI
     }
+#endif
 }
 
 static bool read_cols_on_row(matrix_row_t current_matrix[], uint8_t current_row)
 {
+#if 0
     // Store last value of row prior to reading
     matrix_row_t last_row_value = current_matrix[current_row];
 
@@ -304,8 +328,12 @@ static bool read_cols_on_row(matrix_row_t current_matrix[], uint8_t current_row)
     unselect_row(current_row);
 
     return (last_row_value != current_matrix[current_row]);
+#else
+	return false;
+#endif
 }
 
+#if 0
 static void select_row(uint8_t row)
 {
     uint8_t pin = row_pins[row];
@@ -320,13 +348,17 @@ static void unselect_row(uint8_t row)
     _SFR_IO8((pin >> 4) + 2) |=  _BV(pin & 0xF); // HI
 }
 
+#endif
+
 static void unselect_rows(void)
 {
+#if 0
     for(uint8_t x = 0; x < MATRIX_ROWS; x++) {
         uint8_t pin = row_pins[x];
         _SFR_IO8((pin >> 4) + 1) &= ~_BV(pin & 0xF); // IN
         _SFR_IO8((pin >> 4) + 2) |=  _BV(pin & 0xF); // HI
     }
+#endif
 }
 
 #elif (DIODE_DIRECTION == ROW2COL)

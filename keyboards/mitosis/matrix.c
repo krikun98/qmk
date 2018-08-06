@@ -53,7 +53,11 @@ void matrix_init_kb(void) {
     matrix_init_user();
 }
 
+#ifdef __ICCARM__
+__weak
+#else
 __attribute__ ((weak))
+#endif
 void matrix_scan_kb(void) {
     matrix_scan_user();
 }
@@ -62,7 +66,11 @@ __attribute__ ((weak))
 void matrix_init_user(void) {
 }
 
+#ifdef __ICCARM__
+__weak
+#else
 __attribute__ ((weak))
+#endif
 void matrix_scan_user(void) {
 }
 
@@ -103,7 +111,7 @@ uint8_t matrix_scan(void)
             if (timeout > 10000){
                 break;
             }
-        } 
+        }
         uart_data[i] = SERIAL_UART_DATA;
     }
 

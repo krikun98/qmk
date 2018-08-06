@@ -17,6 +17,39 @@
 #ifndef RGB_H
 #define RGB_H
 
+#ifdef __ICCARM__
+__weak
+void rgblight_toggle(void) {};
+
+__weak
+void rgblight_step(void) {};
+
+__weak
+void rgblight_step_reverse(void) {};
+
+__weak
+void rgblight_increase_hue(void) {};
+
+__weak
+void rgblight_decrease_hue(void) {};
+
+__weak
+void rgblight_increase_sat(void) {};
+
+__weak
+void rgblight_decrease_sat(void) {};
+
+__weak
+void rgblight_increase_val(void) {};
+
+__weak
+void rgblight_decrease_val(void) {};
+__weak
+void rgblight_increase_speed(void) {};
+__weak 
+void rgblight_decrease_speed(void) {};
+#else
+
 __attribute__((weak))
 void rgblight_toggle(void) {};
 
@@ -49,5 +82,6 @@ void rgblight_increase_speed(void) {};
 
 __attribute__((weak))
 void rgblight_decrease_speed(void) {};
+#endif
 
 #endif

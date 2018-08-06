@@ -61,12 +61,9 @@ extern backlight_config_t backlight_config;
 #endif
 
 static void do_code16 (uint16_t code, void (*f) (uint8_t)) {
-  switch (code) {
-  case QK_MODS ... QK_MODS_MAX:
-    break;
-  default:
-    return;
-  }
+
+	if (!(code>=QK_MODS && code<=QK_MODS_MAX))
+		return;
 
   if (code & QK_LCTL)
     f(KC_LCTL);
@@ -127,17 +124,29 @@ void unregister_code16 (uint16_t code) {
   }
 }
 
+#ifdef __ICCARM__
+__weak
+#else
 __attribute__ ((weak))
+#endif
 bool process_action_kb(keyrecord_t *record) {
   return true;
 }
 
+#ifdef __ICCARM__
+__weak
+#else
 __attribute__ ((weak))
+#endif
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
   return process_record_user(keycode, record);
 }
 
+#ifdef __ICCARM__
+__weak
+#else
 __attribute__ ((weak))
+#endif
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   return true;
 }
@@ -165,7 +174,7 @@ void reset_keyboard(void) {
 #ifdef BOOTLOADER_CATERINA
   *(uint16_t *)0x0800 = 0x7777; // these two are a-star-specific
 #endif
-  bootloader_jump();
+  //bootloader_jump();
 }
 
 // Shift / paren setup
@@ -224,6 +233,7 @@ bool process_record_quantum(keyrecord_t *record) {
     preprocess_tap_dance(keycode, record);
   #endif
 
+
   if (!(
   #if defined(KEY_LOCK_ENABLE)
     // Must run first to be able to mask key_up events.
@@ -252,7 +262,7 @@ bool process_record_quantum(keyrecord_t *record) {
     process_tap_dance(keycode, record) &&
   #endif
   #ifndef DISABLE_LEADER
-    process_leader(keycode, record) &&
+    //process_leader(keycode, record) &&
   #endif
   #ifndef DISABLE_CHORDING
     process_chording(keycode, record) &&
@@ -282,6 +292,7 @@ bool process_record_quantum(keyrecord_t *record) {
     return false;
   }
 
+
   // Shift / paren setup
 
   switch(keycode) {
@@ -292,7 +303,7 @@ bool process_record_quantum(keyrecord_t *record) {
     return false;
     case DEBUG:
       if (record->event.pressed) {
-          debug_enable = true;
+          //debug_enable = true;
           print("DEBUG: enabled.\n");
       }
     return false;
@@ -535,6 +546,9 @@ bool process_record_quantum(keyrecord_t *record) {
       return false;
     #endif
     #endif
+
+//#define USE_MAGIC
+#ifdef USE_MAGIC
     case MAGIC_SWAP_CONTROL_CAPSLOCK ... MAGIC_TOGGLE_NKRO:
       if (record->event.pressed) {
         // MAGIC actions (BOOTMAGIC without the boot)
@@ -619,6 +633,7 @@ bool process_record_quantum(keyrecord_t *record) {
         return false;
       }
       break;
+#endif
     case KC_LSPO: {
       if (record->event.pressed) {
         shift_interrupted[0] = false;
@@ -882,36 +897,30 @@ void tap_random_base64(void) {
   #else
     uint8_t key = rand() % 64;
   #endif
-  switch (key) {
-    case 0 ... 25:
+
+	if (key<=25) {
       register_code(KC_LSFT);
       register_code(key + KC_A);
       unregister_code(key + KC_A);
       unregister_code(KC_LSFT);
-      break;
-    case 26 ... 51:
+	} else if (key>=26 && key<=51) {
       register_code(key - 26 + KC_A);
       unregister_code(key - 26 + KC_A);
-      break;
-    case 52:
+	} else if (key==52) {
       register_code(KC_0);
       unregister_code(KC_0);
-      break;
-    case 53 ... 61:
+	} else if (key>=53 && key<=61) {
       register_code(key - 53 + KC_1);
       unregister_code(key - 53 + KC_1);
-      break;
-    case 62:
+	} else if (key==62) {
       register_code(KC_LSFT);
       register_code(KC_EQL);
       unregister_code(KC_EQL);
       unregister_code(KC_LSFT);
-      break;
-    case 63:
+	} else if (key==63) {
       register_code(KC_SLSH);
       unregister_code(KC_SLSH);
-      break;
-  }
+	}
 }
 
 void matrix_init_quantum() {
@@ -1282,20 +1291,18 @@ void send_byte(uint8_t number) {
 }
 
 void send_nibble(uint8_t number) {
-    switch (number) {
-        case 0:
+
+	if (number==0) {
             register_code(KC_0);
             unregister_code(KC_0);
-            break;
-        case 1 ... 9:
+	} else if (number>=1 && number<=9) {
             register_code(KC_1 + (number - 1));
             unregister_code(KC_1 + (number - 1));
-            break;
-        case 0xA ... 0xF:
+	} else if (number>0xa && number<=0xf) {
             register_code(KC_A + (number - 0xA));
             unregister_code(KC_A + (number - 0xA));
-            break;
-    }
+	}
+
 }
 
 

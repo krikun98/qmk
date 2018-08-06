@@ -24,7 +24,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 typedef uint8_t macro_t;
 
 #define MACRO_NONE      (macro_t*)0
+
+#ifdef __ICCARM__
+
+/*
+uint8_t * macro_iar(int a, int b, int c, int d, int e) {
+	static macro_t __m[5];
+	__m[0] = a;
+	__m[1] = b;
+	__m[2] = c;
+	__m[3] = d;
+	__m[4] = e;
+	return &__m[0];
+}
+
+#define MACRO(...)      (macro_iar(__VA_ARGS__))
+*/
+#define MACRO(...) 0
+#else
 #define MACRO(...)      ({ static const macro_t __m[] PROGMEM = { __VA_ARGS__ }; &__m[0]; })
+#endif
+
 #define MACRO_GET(p)    pgm_read_byte(p)
 
 // Sends press when the macro key is pressed, release when release, or tap_macro when the key has been tapped
@@ -46,7 +66,7 @@ typedef uint8_t macro_t;
 
 // Momentary switch layer when held, presses a shifted key when tapped (eg: shift+3 for #)
 #define MACRO_TAP_SHFT_KEY_HOLD_LAYER(record, key, layer) MACRO_TAP_HOLD_LAYER(record, MACRO(I(10), D(LSFT), T(key), U(LSFT), END), layer)
-     
+
 
 
 #ifndef NO_ACTION_MACRO

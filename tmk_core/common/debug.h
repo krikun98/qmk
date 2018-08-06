@@ -47,7 +47,7 @@ extern debug_config_t debug_config;
 #endif
 
 /* for backward compatibility */
-#define debug_enable    (debug_config.enable)
+#define debug_enable    true //(debug_config.enable)
 #define debug_matrix    (debug_config.matrix)
 #define debug_keyboard  (debug_config.keyboard)
 #define debug_mouse     (debug_config.mouse)
@@ -89,9 +89,9 @@ extern debug_config_t debug_config;
 
 #else /* NO_DEBUG */
 
-#define dprint(s)
+#define dprint printf
 #define dprintln(s)
-#define dprintf(fmt, ...)
+#define dprintf printf
 #define dmsg(s)
 #define debug(s)
 #define debugln(s)
