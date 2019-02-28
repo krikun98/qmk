@@ -66,7 +66,6 @@ enum tapdances{
 #define KC_XXXXX KC_NO
 #define KC_KANJI KANJI
 
-
 // #define KC_RST   RESET
 // #define KC_LRST  RGBRST
 // #define KC_LTOG  RGB_TOG
@@ -124,11 +123,11 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_LOWER] = LAYOUT_BASE_kc( \
   //,------------------------------------------------------------------------------------------.
-      _____,    F1,    F2,    F3,    F4,    F5,  MINS,   EQL,  LBRC,  RBRC,  BSLS,          DEL,\
+      _____,    F1,    F2,    F3,    F4,    F5,  MINS,   EQL,  JYEN,  LBRC,  RBRC,          DEL,\
   //|------+------+------+------+------+------|------+------+------+------+------+-------------|
-      _____,    F6,    F7,    F8,    F9,   F10, XXXXX, XXXXX, XXXXX,  SCLN,  QUOT,        _____,\
+      _____,    F6,    F7,    F8,    F9,   F10, XXXXX, XXXXX,  SCLN,  QUOT,  BSLS,        _____,\
   //|------+------+------+------+------+------|------+------+------+------+------+------+------|
-      _____,   F11,   F12, XXXXX, KANJI,   ENT, XXXXX, XXXXX,  COMM,   DOT,   GRV,  PGUP,       \
+      _____,   F11,   F12, XXXXX, KANJI,   ENT, XXXXX,  COMM,   DOT,  SLSH,    RO,  PGUP,       \
   //|------+------+------+------+------+------|------+------+------+------+------+------+------|
       _____, _____, _____, _____,          DEL,        _____, _____, XXXXX,  HOME,  PGDN,   END,\
   //`------------------------------------------------------------------------------------------'

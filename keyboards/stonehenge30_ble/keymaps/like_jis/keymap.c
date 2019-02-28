@@ -54,18 +54,17 @@ enum custom_keycodes {
 
 
 enum tapdances{
-  TD_SCCL = 0,
-  TD_SLRO,
+  TD_CODO = 0,
 };
 
 // Layer Mode aliases
-#define KC_LOWER LOWER
-#define KC_RAISE RAISE
+// #define KC_LOWER LOWER
+// #define KC_RAISE RAISE
+#define KC_MLAD  MO(_ADJUST)
 
 #define KC______ KC_TRNS
 #define KC_XXXXX KC_NO
 #define KC_KANJI KANJI
-
 
 // #define KC_RST   RESET
 // #define KC_LRST  RGBRST
@@ -94,74 +93,74 @@ enum tapdances{
 #define KC_BTID3 ADV_ID3
 #define KC_BTID4 ADV_ID4
 
-#define KC_TBSF  LSFT_T(KC_TAB)
-// #define KC_SPSF  LSFT_T(KC_SPC)
-#define KC_ALAP  LALT_T(KC_APP)
-#define KC_JEQL  LSFT(KC_MINS)
+// Base layer mod tap
+#define KC_A_SF  LSFT_T(KC_A)
+#define KC_Z_CT  LCTL_T(KC_Z)
+#define KC_X_AL  LALT_T(KC_X)
+#define KC_C_GU  LGUI_T(KC_C)
+#define KC_M_CT  LCTL_T(KC_M)
+#define KC_ENSF  LSFT_T(KC_ENT)
 
-#define KC_SCCL  TD(TD_SCCL)
-#define KC_SLRO  TD(TD_SLRO)
+// Lower layer mod tap
+#define KC_MNCT  LCTL_T(KC_MINS)
+
+// Raise layer mod tap
+#define KC_F6SF  LSFT_T(KC_F6)
+#define KC_BSSF  LSFT_T(KC_BSLS)
+#define KC_11CT  LCTL_T(KC_F11)
+#define KC_SSCT  LCTL_T(KC_SLSH)
+#define KC_12AL  LALT_T(KC_F12)
+
+// Layer tap
+#define KC_SPLO  LT(_LOWER, KC_SPC)
+#define KC_BSRA  LT(_RAISE, KC_BSPC)
+
+// Tap dance
+#define KC_CODO  TD(TD_CODO)
 
 qk_tap_dance_action_t tap_dance_actions[] = {
-  [TD_SCCL] = ACTION_TAP_DANCE_DOUBLE(KC_SCLN, KC_QUOT),
-  [TD_SLRO] = ACTION_TAP_DANCE_DOUBLE(KC_SLSH, KC_RO),
+  [TD_CODO] = ACTION_TAP_DANCE_DOUBLE(KC_COMM, KC_DOT),
 };
 
-const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  [_BASE] = LAYOUT_BASE_kc( \
-  //,------------------------------------------------------------------------------------------.
-        ESC,     Q,     W,     E,     R,     T,     Y,     U,     I,     O,     P,         MINS,\
-  //|------+------+------+------+------+------|------+------+------+------+------+-------------|
-       TBSF,     A,     S,     D,     F,     G,     H,     J,     K,     L,  SCCL,          ENT,\
-  //|------+------+------+------+------+------|------+------+------+------+------+------+------|
-       LSFT,     Z,     X,     C,     V,     B,     N,     M,  COMM,   DOT,  SLRO,    UP,       \
-  //|------+------+------+------+------+------|------+------+------+------+------+------+------|
-      LCTRL,  LALT,  LGUI, LOWER,         BSPC,          SPC, RAISE,  ALAP,  LEFT,  DOWN,  RGHT,\
-  //`------------------------------------------------------------------------------------------'
-        DEL \
-  // ExtraKey: Split backspace key or it is below the enter key.
+const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+  [_BASE] = LAYOUT_kc( \
+  //,----------------------------------------------------------------------------.
+          Q,     W,     E,     R,     T,  BSRA,     Y,     U,     I,     O,     P,\
+  //|------+------+------+------+------|------|------+------+------+------+------|
+       A_SF,     S,     D,     F,     G,            H,     J,     K,     L,  ENSF,\
+  //|------+------+------+------+------|------|------+------+------+------+------|
+       Z_CT,  X_AL,  C_GU,     V,     B,  SPLO,     N,  M_CT,  CODO \
+  //|------+------+------+------+------|------|------+------+------|
   ),
 
-  [_LOWER] = LAYOUT_BASE_kc( \
-  //,------------------------------------------------------------------------------------------.
-      _____,    F1,    F2,    F3,    F4,    F5,  MINS,   EQL,  LBRC,  RBRC,  BSLS,          DEL,\
-  //|------+------+------+------+------+------|------+------+------+------+------+-------------|
-      _____,    F6,    F7,    F8,    F9,   F10, XXXXX, XXXXX, XXXXX,  SCLN,  QUOT,        _____,\
-  //|------+------+------+------+------+------|------+------+------+------+------+------+------|
-      _____,   F11,   F12, XXXXX, KANJI,   ENT, XXXXX, XXXXX,  COMM,   DOT,   GRV,  PGUP,       \
-  //|------+------+------+------+------+------|------+------+------+------+------+------+------|
-      _____, _____, _____, _____,          DEL,        _____, _____, XXXXX,  HOME,  PGDN,   END,\
-  //`------------------------------------------------------------------------------------------'
-      XXXXX \
-  // ExtraKey: Split backspace key or it is below the enter key.
+  [_LOWER] = LAYOUT_kc( \
+  //,----------------------------------------------------------------------------.
+          1,     2,     3,     4,     5, _____,     6,     7,     8,     9,     0,\
+  //|------+------+------+------+------|------|------+------+------+------+------|
+       LSFT, _____, _____, _____, _____,         LEFT,  DOWN,    UP,  RGHT,  LSFT,\
+  //|------+------+------+------+------|------|------+------+------+------+------|
+       LCTL,  LALT,  LGUI, _____, _____, _____,  LGUI,  MNCT,   DOT \
+  //|------+------+------+------+------|------|------+------+------|
   ),
 
-  [_RAISE] = LAYOUT_BASE_kc( \
-  //,------------------------------------------------------------------------------------------.
-      _____,     1,     2,     3,     4,     5,     6,     7,     8,     9,     0,        XXXXX,\
-  //|------+------+------+------+------+------|------+------+------+------+------+-------------|
-      _____, XXXXX, XXXXX, XXXXX, XXXXX, XXXXX, XXXXX,     4,     5,     6,  QUOT,        _____,\
-  //|------+------+------+------+------+------|------+------+------+------+------+------+------|
-      _____, XXXXX, XXXXX, XXXXX, XXXXX, XXXXX, XXXXX,     1,     2,     3,    RO, XXXXX,       \
-  //|------+------+------+------+------+------|------+------+------+------+------+------+------|
-      _____, _____, _____, _____,        _____,        _____, _____,     0,   DOT,  COMM,  SLSH,\
-  //`------------------------------------------------------------------------------------------'
-      XXXXX \
-  // ExtraKey: Split backspace key or it is below the enter key.
+  [_RAISE] = LAYOUT_kc( \
+  //,----------------------------------------------------------------------------.
+         F1,    F2,    F3,    F4,    F5, _____,  MINS,   EQL,  JYEN,  LBRC,  RBRC,\
+  //|------+------+------+------+------|------|------+------+------+------+------|
+       F6SF,    F7,    F8,    F9,   F10,          DEL, XXXXX,  SCLN,  QUOT,  BSSF,\
+  //|------+------+------+------+------|------|------+------+------+------+------|
+       11CT,  12AL,   ESC,   TAB, KANJI,  MLAD,  LGUI,  SSCT,    RO \
+  //|------+------+------+------+------|------|------+------+------|
   ),
 
-  [_ADJUST] = LAYOUT_BASE_kc( \
-  //,------------------------------------------------------------------------------------------.
-      XXXXX,   RST,  BATT,  KNRM,  KSWP, XXXXX, XXXXX,  WH_L,  WH_U, XXXXX, XXXXX,        XXXXX,\
-  //|------+------+------+------+------+------|------+------+------+------+------+-------------|
-      XXXXX,  BTON, USBON, BTID0, BTID2, BTID4, XXXXX,  WH_R,  WH_D, XXXXX, XXXXX,        XXXXX,\
-  //|------+------+------+------+------+------|------+------+------+------+------+------+------|
-      _____,  BTOF, USBOF, BTID1, BTID3, BTNEW, XXXXX, XXXXX,  BTN1,  BTN2, XXXXX,  MS_U,       \
-  //|------+------+------+------+------+------|------+------+------+------+------+------+------|
-      _____, _____, _____, _____,        XXXXX,        XXXXX, _____, XXXXX,  MS_L,  MS_D,  MS_R,\
-  //`------------------------------------------------------------------------------------------'
-      XXXXX \
-  // ExtraKey: Split backspace key or it is below the enter key.
+  [_ADJUST] = LAYOUT_kc( \
+  //,----------------------------------------------------------------------------.
+        RST,  BATT,  KNRM,  KSWP, XXXXX, _____, XXXXX, XXXXX, XXXXX,  HOME,  PGUP, \
+  //|------+------+------+------+------|------|------+------+------+------+------|
+       BTON, USBON, BTID0, BTID2, BTID4,         BTN1,  MS_U,  BTN2,   END,  PGDN, \
+  //|------+------+------+------+------|------|------+------+------+------+------|
+       BTOF, USBOF, BTID1, BTID3, BTNEW, _____,  MS_L,  MS_D,  MS_R \
+  //|------+------+------+------+------|------|------+------+------|
   )
 };
 
@@ -178,14 +177,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   bool result = true;
 
   switch (keycode) {
-  case LOWER:
-    update_change_layer(record->event.pressed, _LOWER, _RAISE, _ADJUST);
-    result = false;
-    break;
-  case RAISE:
-    update_change_layer(record->event.pressed, _RAISE, _LOWER, _ADJUST);
-    result = false;
-    break;
+  // case LOWER:
+  //   update_change_layer(record->event.pressed, _LOWER, _RAISE, _ADJUST);
+  //   result = false;
+  //   break;
+  // case RAISE:
+  //   update_change_layer(record->event.pressed, _RAISE, _LOWER, _ADJUST);
+  //   result = false;
+  //   break;
   case KANJI:
     if (record->event.pressed) {
       if (keymap_config.swap_lalt_lgui == false) {
