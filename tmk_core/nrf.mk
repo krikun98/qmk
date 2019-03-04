@@ -260,7 +260,9 @@ ifeq ($(NRFSDK_VER), 12)
     ASFLAGS += -DSWI_DISABLE0
     ASFLAGS += -DNRF51822
     ASFLAGS += -DNRF_SD_BLE_API_VERSION=2
-    ASFLAGS += -D__HEAP_SIZE=0
+    ASFLAGS += -D__HEAP_SIZE=1024 -D__STACK_SIZE=1024
+    # somehow fixes "error: target CPU does not support ARM mode" // joric
+    ASFLAGS += -mcpu=cortex-m0 -mthumb
 
     # Linker flags
     LDFLAGS += -mthumb -mabi=aapcs -L$(NRFSDK_ROOT)/components/toolchain/gcc -T$(LDSCRIPT)
@@ -269,6 +271,7 @@ ifeq ($(NRFSDK_VER), 12)
     LDFLAGS += -Wl,--gc-sections
     # use newlib in nano version
     LDFLAGS += --specs=nano.specs -lc -lnosys
+    LDFLAGS += -Wl,--no-wchar-size-warning
   endif
   ifeq ($(MCU_FAMILY),NRF52)
     NRFSRC += \

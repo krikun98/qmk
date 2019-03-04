@@ -547,8 +547,20 @@ static void on_ble_central_conn_evt(const ble_evt_t * const p_ble_evt)
             {
                 if (find_adv_name(&p_gap_evt->params.adv_report, m_target_periph_name))
                 {
+
+
+    #if (NRF_SD_BLE_API_VERSION == 2)
+        m_scan_params.selective   = 0;
+        m_scan_params.p_whitelist = NULL;
+    #endif
+    #if (NRF_SD_BLE_API_VERSION == 3)
+        m_scan_params.use_whitelist = 0;
+    #endif
+
                     // Initiate connection.
-                  m_scan_params.use_whitelist = 0;
+                  //m_scan_params.use_whitelist = 0;
+
+
                     err_code = sd_ble_gap_connect(&p_gap_evt->params.adv_report.peer_addr,
                                                   &m_scan_params,
                                                   &m_connection_param);
