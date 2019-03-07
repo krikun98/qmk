@@ -3,11 +3,21 @@ DEFAULT_FOLDER = mitosis_ble/master
 
 NRF_DEBUG = no
 
-MOUSEKEY_ENABLE = yes	# Mouse keys
-EXTRAKEY_ENABLE = yes	# Audio control and System control
-CONSOLE_ENABLE = yes	# Console for debug
-COMMAND_ENABLE = yes    # Commands for debug and configuration
-SLEEP_LED_ENABLE = yes  # Breathing sleep LED during USB suspend
+# default state, RAM overflow 304 bytes
+# with all options disabled, RAM overflow 280 bytes
+# with disabled log in nrf.mk, RAM overflow is 252 bytes
+#  NRFCFLAGS += -DNRF_LOG_ENABLED=0
+#  NRFCFLAGS += -DNRF_LOG_BACKEND_SERIAL_USES_UART=0
+# disabled stack, still 252 bytes
+# ASFLAGS += -D__HEAP_SIZE=0 -D__STACK_SIZE=0
+# twis disabled, 212 bytes
+
+
+MOUSEKEY_ENABLE = no	# Mouse keys
+EXTRAKEY_ENABLE = no	# Audio control and System control
+CONSOLE_ENABLE = no    # Console for debug
+COMMAND_ENABLE = no    # Commands for debug and configuration
+SLEEP_LED_ENABLE = no  # Breathing sleep LED during USB suspend
 NKRO_ENABLE = no	    # USB Nkey Rollover
 CUSTOM_MATRIX = yes # This flag should be on for nrf52
 

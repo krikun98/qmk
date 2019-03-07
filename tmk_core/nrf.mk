@@ -51,8 +51,8 @@ else
   NRFCFLAGS += -DNRF_LOG_BACKEND_UART_ENABLED=0
   NRFCFLAGS += -DNRF_LOG_DEFAULT_LEVEL=3
   else
-  NRFCFLAGS += -DNRF_LOG_ENABLED=1
-	NRFCFLAGS += -DNRF_LOG_BACKEND_SERIAL_USES_UART=1
+  NRFCFLAGS += -DNRF_LOG_ENABLED=0
+  NRFCFLAGS += -DNRF_LOG_BACKEND_SERIAL_USES_UART=0
   NRFCFLAGS += -DNRF_LOG_DEFAULT_LEVEL=0
   endif
 endif
@@ -84,7 +84,6 @@ ifeq ($(NRFSDK_VER), 12)
     $(NRFSDK_ROOT)/components/drivers_nrf/common/nrf_drv_common.c \
     $(NRFSDK_ROOT)/components/drivers_nrf/gpiote/nrf_drv_gpiote.c \
     $(NRFSDK_ROOT)/components/drivers_nrf/uart/nrf_drv_uart.c \
-    $(NRFSDK_ROOT)/components/drivers_nrf/twi_master/nrf_drv_twi.c \
     $(NRFSDK_ROOT)/components/ble/common/ble_advdata.c \
     $(NRFSDK_ROOT)/components/ble/common/ble_conn_params.c \
     $(NRFSDK_ROOT)/components/ble/common/ble_conn_state.c \
@@ -109,7 +108,11 @@ ifeq ($(NRFSDK_VER), 12)
     $(NRFSDK_ROOT)/components/ble/ble_services/ble_nus/ble_nus.c \
     $(NRFSDK_ROOT)/components/softdevice/common/softdevice_handler/softdevice_handler.c \
     $(NRFSDK_ROOT)/components/softdevice/common/softdevice_handler/softdevice_handler_appsh.c \
-    
+
+    #disabled features
+    #$(NRFSDK_ROOT)/components/drivers_nrf/twi_master/nrf_drv_twi.c \
+
+
   # Include folders common to all targets
   EXTRAINCDIRS += \
     $(TMK_PATH)/protocol/nrf \
@@ -230,7 +233,7 @@ ifeq ($(NRFSDK_VER), 12)
     # C flags common to all targets
     NRFCFLAGS +=-DADC_ENABLED=1
     NRFCFLAGS +=-DSAADC_ENABLED=0
-    NRFCFLAGS +=-DFDS_VIRTUAL_PAGE_SIZE=256
+    NRFCFLAGS +=-DFDS_VIRTUAL_PAGE_SIZE=1024
     NRFCFLAGS += -DBOARD_CUSTOM
     NRFCFLAGS += -DSOFTDEVICE_PRESENT
     NRFCFLAGS += -DNRF51
@@ -245,7 +248,8 @@ ifeq ($(NRFSDK_VER), 12)
     NRFCFLAGS += -mfloat-abi=soft
     # keep every function in separate section, this allows linker to discard unused ones
     NRFCFLAGS += -ffunction-sections -fdata-sections -fno-strict-aliasing
-    NRFCFLAGS += -fno-builtin --short-enums 
+    NRFCFLAGS += -fno-builtin --short-enums
+    NRFCLAGS += -D__HEAP_SIZE=0 -D__STACK_SIZE=0
 
     # C++ flags common to all targets
     CXXFLAGS += \
@@ -260,7 +264,7 @@ ifeq ($(NRFSDK_VER), 12)
     ASFLAGS += -DSWI_DISABLE0
     ASFLAGS += -DNRF51822
     ASFLAGS += -DNRF_SD_BLE_API_VERSION=2
-    ASFLAGS += -D__HEAP_SIZE=1024 -D__STACK_SIZE=1024
+    ASFLAGS += -D__HEAP_SIZE=0 -D__STACK_SIZE=0
     # somehow fixes "error: target CPU does not support ARM mode" // joric
     ASFLAGS += -mcpu=cortex-m0 -mthumb
 
@@ -344,9 +348,9 @@ ifeq ($(NRFSDK_VER), 12)
       ASFLAGS += -DNRF52_PAN_55
     endif   
     # C flags common to all targets
-    NRFCFLAGS +=-DADC_ENABLED=0
+    NRFCFLAGS +=-DADC_ENABLED=1
     NRFCFLAGS +=-DSAADC_ENABLED=1
-    NRFCFLAGS +=-DFDS_VIRTUAL_PAGE_SIZE=1024
+    NRFCFLAGS +=-DFDS_VIRTUAL_PAGE_SIZE=256
   #  NRFCFLAGS += -DNRF52
     NRFCFLAGS += -DSOFTDEVICE_PRESENT
     NRFCFLAGS += -DBOARD_CUSTOM

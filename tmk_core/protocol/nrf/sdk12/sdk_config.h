@@ -312,7 +312,7 @@
 // <4=> Debug 
 
 #ifndef ADC_CONFIG_LOG_LEVEL
-#define ADC_CONFIG_LOG_LEVEL 3
+#define ADC_CONFIG_LOG_LEVEL 0
 #endif
 
 // <o> ADC_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -452,7 +452,7 @@
 // <4=> Debug 
 
 #ifndef CLOCK_CONFIG_LOG_LEVEL
-#define CLOCK_CONFIG_LOG_LEVEL 3
+#define CLOCK_CONFIG_LOG_LEVEL 0
 #endif
 
 // <o> CLOCK_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -593,7 +593,7 @@
 // <4=> Debug 
 
 #ifndef COMP_CONFIG_LOG_LEVEL
-#define COMP_CONFIG_LOG_LEVEL 3
+#define COMP_CONFIG_LOG_LEVEL 0
 #endif
 
 // <o> COMP_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -655,7 +655,7 @@
 // <4=> Debug 
 
 #ifndef SWI_CONFIG_LOG_LEVEL
-#define SWI_CONFIG_LOG_LEVEL 3
+#define SWI_CONFIG_LOG_LEVEL 0
 #endif
 
 // <o> SWI_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -735,7 +735,7 @@
 // <4=> Debug 
 
 #ifndef GPIOTE_CONFIG_LOG_LEVEL
-#define GPIOTE_CONFIG_LOG_LEVEL 3
+#define GPIOTE_CONFIG_LOG_LEVEL 0
 #endif
 
 // <o> GPIOTE_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -932,7 +932,7 @@
 // <4=> Debug 
 
 #ifndef I2S_CONFIG_LOG_LEVEL
-#define I2S_CONFIG_LOG_LEVEL 3
+#define I2S_CONFIG_LOG_LEVEL 0
 #endif
 
 // <o> I2S_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -1063,7 +1063,7 @@
 // <4=> Debug 
 
 #ifndef LPCOMP_CONFIG_LOG_LEVEL
-#define LPCOMP_CONFIG_LOG_LEVEL 3
+#define LPCOMP_CONFIG_LOG_LEVEL 0
 #endif
 
 // <o> LPCOMP_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -1166,7 +1166,7 @@
 // <4=> Debug 
 
 #ifndef PDM_CONFIG_LOG_LEVEL
-#define PDM_CONFIG_LOG_LEVEL 3
+#define PDM_CONFIG_LOG_LEVEL 0
 #endif
 
 // <o> PDM_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -1228,7 +1228,7 @@
 // <4=> Debug 
 
 #ifndef COMMON_CONFIG_LOG_LEVEL
-#define COMMON_CONFIG_LOG_LEVEL 3
+#define COMMON_CONFIG_LOG_LEVEL 0
 #endif
 
 // <o> COMMON_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -1330,7 +1330,7 @@
 // <4=> Debug 
 
 #ifndef PPI_CONFIG_LOG_LEVEL
-#define PPI_CONFIG_LOG_LEVEL 3
+#define PPI_CONFIG_LOG_LEVEL 0
 #endif
 
 // <o> PPI_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -1507,7 +1507,7 @@
 // <4=> Debug 
 
 #ifndef PWM_CONFIG_LOG_LEVEL
-#define PWM_CONFIG_LOG_LEVEL 3
+#define PWM_CONFIG_LOG_LEVEL 0
 #endif
 
 // <o> PWM_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -1661,7 +1661,7 @@
 // <4=> Debug 
 
 #ifndef QDEC_CONFIG_LOG_LEVEL
-#define QDEC_CONFIG_LOG_LEVEL 3
+#define QDEC_CONFIG_LOG_LEVEL 0
 #endif
 
 // <o> QDEC_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -1748,7 +1748,7 @@
 // <4=> Debug 
 
 #ifndef RNG_CONFIG_LOG_LEVEL
-#define RNG_CONFIG_LOG_LEVEL 3
+#define RNG_CONFIG_LOG_LEVEL 0
 #endif
 
 // <o> RNG_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -1863,7 +1863,7 @@
 // <4=> Debug 
 
 #ifndef RTC_CONFIG_LOG_LEVEL
-#define RTC_CONFIG_LOG_LEVEL 3
+#define RTC_CONFIG_LOG_LEVEL 0
 #endif
 
 // <o> RTC_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -1972,7 +1972,7 @@
 // <4=> Debug 
 
 #ifndef SAADC_CONFIG_LOG_LEVEL
-#define SAADC_CONFIG_LOG_LEVEL 3
+#define SAADC_CONFIG_LOG_LEVEL 0
 #endif
 
 // <o> SAADC_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -2102,7 +2102,7 @@
 // <4=> Debug 
 
 #ifndef SPIS_CONFIG_LOG_LEVEL
-#define SPIS_CONFIG_LOG_LEVEL 3
+#define SPIS_CONFIG_LOG_LEVEL 0
 #endif
 
 // <o> SPIS_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -2260,7 +2260,7 @@
 // <4=> Debug 
 
 #ifndef SPI_CONFIG_LOG_LEVEL
-#define SPI_CONFIG_LOG_LEVEL 3
+#define SPI_CONFIG_LOG_LEVEL 0
 #endif
 
 // <o> SPI_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -2407,7 +2407,7 @@
 // <4=> Debug 
 
 #ifndef TIMER_CONFIG_LOG_LEVEL
-#define TIMER_CONFIG_LOG_LEVEL 3
+#define TIMER_CONFIG_LOG_LEVEL 0
 #endif
 
 // <o> TIMER_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -2451,7 +2451,7 @@
 // <e> TWIS_ENABLED - nrf_drv_twis - TWIS peripheral driver
 //==========================================================
 #ifndef TWIS_ENABLED
-#define TWIS_ENABLED 1
+#define TWIS_ENABLED 0
 #endif
 #if  TWIS_ENABLED
 // <o> TWIS_DEFAULT_CONFIG_ADDR0 - Address0 
@@ -2544,7 +2544,7 @@
 // <4=> Debug 
 
 #ifndef TWIS_CONFIG_LOG_LEVEL
-#define TWIS_CONFIG_LOG_LEVEL 3
+#define TWIS_CONFIG_LOG_LEVEL 0
 #endif
 
 // <o> TWIS_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -2675,7 +2675,7 @@
 // <4=> Debug 
 
 #ifndef TWI_CONFIG_LOG_LEVEL
-#define TWI_CONFIG_LOG_LEVEL 3
+#define TWI_CONFIG_LOG_LEVEL 0
 #endif
 
 // <o> TWI_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -2719,7 +2719,7 @@
 // <e> UART_ENABLED - nrf_drv_uart - UART/UARTE peripheral driver
 //==========================================================
 #ifndef UART_ENABLED
-#define UART_ENABLED 1
+#define UART_ENABLED 0
 #endif
 #if  UART_ENABLED
 // <o> UART_DEFAULT_CONFIG_HWFC  - Hardware Flow Control
@@ -2793,7 +2793,7 @@
 // <e> UART0_ENABLED - Enable UART0 instance
 //==========================================================
 #ifndef UART0_ENABLED
-#define UART0_ENABLED 1
+#define UART0_ENABLED 0
 #endif
 #if  UART0_ENABLED
 // <q> UART0_CONFIG_USE_EASY_DMA  - Default setting for using EasyDMA
@@ -2821,7 +2821,7 @@
 // <4=> Debug 
 
 #ifndef UART_CONFIG_LOG_LEVEL
-#define UART_CONFIG_LOG_LEVEL 3
+#define UART_CONFIG_LOG_LEVEL 0
 #endif
 
 // <o> UART_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -2939,7 +2939,7 @@
 // <4=> Debug 
 
 #ifndef WDT_CONFIG_LOG_LEVEL
-#define WDT_CONFIG_LOG_LEVEL 3
+#define WDT_CONFIG_LOG_LEVEL 0
 #endif
 
 // <o> WDT_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -3084,28 +3084,28 @@
  
 
 #ifndef APP_USBD_CLASS_HID_ENABLED
-#define APP_USBD_CLASS_HID_ENABLED 1
+#define APP_USBD_CLASS_HID_ENABLED 0
 #endif
 
 // <q> APP_USBD_HID_GENERIC_ENABLED  - app_usbd_hid_generic - USB HID generic
  
 
 #ifndef APP_USBD_HID_GENERIC_ENABLED
-#define APP_USBD_HID_GENERIC_ENABLED 1
+#define APP_USBD_HID_GENERIC_ENABLED 0
 #endif
 
 // <q> APP_USBD_HID_KBD_ENABLED  - app_usbd_hid_kbd - USB HID keyboard
  
 
 #ifndef APP_USBD_HID_KBD_ENABLED
-#define APP_USBD_HID_KBD_ENABLED 1
+#define APP_USBD_HID_KBD_ENABLED 0
 #endif
 
 // <q> APP_USBD_HID_MOUSE_ENABLED  - app_usbd_hid_mouse - USB HID mouse
  
 
 #ifndef APP_USBD_HID_MOUSE_ENABLED
-#define APP_USBD_HID_MOUSE_ENABLED 1
+#define APP_USBD_HID_MOUSE_ENABLED 0
 #endif
 
 // <q> BUTTON_ENABLED  - app_button - buttons handling module
@@ -3658,7 +3658,7 @@
 // <e> NRF_LOG_BACKEND_SERIAL_USES_UART - If enabled data is printed over UART
 //==========================================================
 #ifndef NRF_LOG_BACKEND_SERIAL_USES_UART
-#define NRF_LOG_BACKEND_SERIAL_USES_UART 1
+#define NRF_LOG_BACKEND_SERIAL_USES_UART 0
 #endif
 #if  NRF_LOG_BACKEND_SERIAL_USES_UART
 // <o> NRF_LOG_BACKEND_SERIAL_UART_BAUDRATE  - Default Baudrate
