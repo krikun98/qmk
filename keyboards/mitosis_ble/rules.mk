@@ -21,6 +21,13 @@ SLEEP_LED_ENABLE = no  # Breathing sleep LED during USB suspend
 NKRO_ENABLE = no	    # USB Nkey Rollover
 CUSTOM_MATRIX = yes # This flag should be on for nrf52
 
+BOOTMAGIC_ENABLE = no  # Virtual DIP switch configuration
+UNICODE_ENABLE   = no
+SLEEP_LED_ENABLE = no
+API_SYSEX_ENABLE = no
+RGBLIGHT_ENABLE = no
+RGBLIGHT_ANIMATION = no
+
 ## chip/board settings
 MCU_FAMILY = NRF51
 # linker script to use
