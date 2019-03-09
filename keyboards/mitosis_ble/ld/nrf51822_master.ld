@@ -1,18 +1,12 @@
 /* Linker script to configure memory regions. */
 
-/*
-  Bluetosis settings for SDK12:
-  FLASH (rx) : ORIGIN = 0x1b000, LENGTH = 0x25000
-  RAM (rwx) : ORIGIN = 0x20002000, LENGTH = 0x2000
-*/
-
 SEARCH_DIR(.)
 GROUP(-lgcc -lc -lnosys)
 
 MEMORY
 {
   FLASH (rx) : ORIGIN = 0x1b000, LENGTH = 0x25000
-  RAM (rwx) : ORIGIN = 0x20002000, LENGTH = 0x2000
+  RAM (rwx) : ORIGIN = 0x20002600, LENGTH = 0x1A00
 }
 
 SECTIONS

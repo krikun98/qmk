@@ -38,10 +38,9 @@ void ble_advertising_modes_config_set(ble_adv_modes_config_t const * const p_adv
 #define NRF_BLE_MAX_MTU_SIZE            GATT_MTU_SIZE_DEFAULT                       /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
 #endif
 
-// CRASHES BECAUSE OF CENTRAL_LINK_COUNT 1 !!!
-
-#undef CENTRAL_LINK_COUNT
-#define CENTRAL_LINK_COUNT               0                                          /**< Number of central links used by the application. When changing this number remember to adjust the RAM settings*/
+// CRASHES BECAUSE OF CENTRAL_LINK_COUNT 1 (adjust ld settings)
+//#undef CENTRAL_LINK_COUNT
+//#define CENTRAL_LINK_COUNT               0                                          /**< Number of central links used by the application. When changing this number remember to adjust the RAM settings*/
 
 #define PERIPHERAL_LINK_COUNT            1                                          /**< Number of peripheral links used by the application. When changing this number remember to adjust the RAM settings*/
 
