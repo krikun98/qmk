@@ -41,15 +41,19 @@ void ble_advertising_modes_config_set(ble_adv_modes_config_t const * const p_adv
 #define UART_TX_BUF_SIZE                 256                                        /**< UART TX buffer size. */
 #define UART_RX_BUF_SIZE                 1                                          /**< UART RX buffer size. */
 
-#undef printf
-#define printf my_debug_log
+//#undef printf
+//#define printf my_debug_log
 
 #undef NRF_LOG_INFO
 #undef NRF_LOG_DEBUG
 #undef NRF_LOG_PROCESS
+#undef NRF_LOG_FINAL_FLUSH
+
 #define NRF_LOG_INFO my_debug_log
 #define NRF_LOG_DEBUG my_debug_log
+
 #define NRF_LOG_PROCESS() false
+#define NRF_LOG_FINAL_FLUSH() false
 
 #undef NRF_LOG_INIT
 #define NRF_LOG_INIT my_debug_init
@@ -69,7 +73,7 @@ void ble_advertising_modes_config_set(ble_adv_modes_config_t const * const p_adv
 #undef APP_ERROR_CHECK
 #define APP_ERROR_CHECK(x) if (x!=NRF_SUCCESS) printf("ERROR 0x%04x in line %u\n", (int)x, __LINE__)
 
-uint32_t my_debug_init();
+uint32_t my_debug_init(void *p);
 void my_debug_log(const char *fmt, ...);
 void uart_error_handle(app_uart_evt_t * p_event);
 
@@ -89,7 +93,7 @@ void uart_error_handle(app_uart_evt_t * p_event)
 {
 }
 
-uint32_t my_debug_init()
+uint32_t my_debug_init(void *p)
 {
     uint32_t err_code;
     const app_uart_comm_params_t comm_params = {
@@ -99,7 +103,7 @@ uint32_t my_debug_init()
     };
     APP_UART_FIFO_INIT(&comm_params, UART_RX_BUF_SIZE, UART_TX_BUF_SIZE, uart_error_handle, APP_IRQ_PRIORITY_LOW, err_code);
     APP_ERROR_CHECK(err_code);
-    printf("\nUART initialized\n");
+    NRF_LOG_INFO("\nUART initialized\n");
     return err_code;
 }
 
@@ -492,7 +496,7 @@ static void battery_level_meas_timeout_handler(void * p_context)
  */
 void timers_init(void (*main_task)(void*)) {
 
-  my_debug_init();
+  NRF_LOG_INIT(NULL); //NB! joric
 
   uint32_t err_code;
 
@@ -770,6 +774,8 @@ void conn_params_init(void)
  */
 void timers_start(void)
 {
+    NRF_LOG_INFO("Timers start\n");
+
     uint32_t err_code;
     err_code = app_timer_start(m_battery_timer_id, BATTERY_LEVEL_MEAS_INTERVAL, NULL);
     APP_ERROR_CHECK(err_code);
@@ -2917,8 +2923,7 @@ void set_usb_enabled (bool enabled) { enable_usb_send = false; }
 void ble_disconnect(){}
 
 void ble_send_keyboard(report_keyboard_t *report){
-    unsigned char * buf = report->raw;
-    printf("Sending HID report: %02x %02x %02x %02x %02x %02x %02x %02x\n", buf[0], buf[1], buf[2], buf[3], buf[4], buf[5], buf[6], buf[7]);
+    NRF_LOG_INFO("Sending HID report: %08x\n", report->raw[0]);
 }
 
 void ble_send_mouse(report_mouse_t *report){}
