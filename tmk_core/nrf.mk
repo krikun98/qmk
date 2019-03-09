@@ -108,6 +108,10 @@ ifeq ($(NRFSDK_VER), 12)
     $(NRFSDK_ROOT)/components/ble/ble_services/ble_nus/ble_nus.c \
     $(NRFSDK_ROOT)/components/softdevice/common/softdevice_handler/softdevice_handler.c \
     $(NRFSDK_ROOT)/components/softdevice/common/softdevice_handler/softdevice_handler_appsh.c \
+    $(NRFSDK_ROOT)/components/libraries/fifo/app_fifo.c \
+    $(NRFSDK_ROOT)/components/libraries/uart/app_uart_fifo.c \
+    $(NRFSDK_ROOT)/components/libraries/uart/retarget.c \
+
 
     #disabled features
     #$(NRFSDK_ROOT)/components/drivers_nrf/twi_master/nrf_drv_twi.c \
@@ -179,6 +183,7 @@ ifeq ($(NRFSDK_VER), 12)
     $(NRFSDK_ROOT)/components/libraries/hardfault \
     $(NRFSDK_ROOT)/components/ble/ble_services/ble_cscs \
     $(NRFSDK_ROOT)/components/libraries/uart \
+    $(NRFSDK_ROOT)/components/libraries/fifo \
     $(NRFSDK_ROOT)/components/libraries/hci \
     $(NRFSDK_ROOT)/components/libraries/usbd/class/hid/kbd \
     $(NRFSDK_ROOT)/components/drivers_nrf/spi_slave \

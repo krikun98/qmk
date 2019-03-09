@@ -34,6 +34,72 @@ void ble_advertising_modes_config_set(ble_adv_modes_config_t const * const p_adv
 #include "ble_central.h"
 #include "ble_report_def.h"
 
+#define SIMPLE_DEBUG
+
+#ifdef SIMPLE_DEBUG
+#include "app_uart.h"
+#include <stdarg.h>
+
+#define UART_TX_BUF_SIZE                 256                                        /**< UART TX buffer size. */
+#define UART_RX_BUF_SIZE                 1                                          /**< UART RX buffer size. */
+
+#undef NRF_LOG_INFO
+#undef NRF_LOG_DEBUG
+#undef NRF_LOG_PROCESS
+#define NRF_LOG_INFO printf
+#define NRF_LOG_DEBUG printf
+#define NRF_LOG_PROCESS() false
+
+#undef NRF_LOG_INIT
+#define NRF_LOG_INIT debug_init
+
+#undef RX_PIN_NUMBER
+#undef TX_PIN_NUMBER
+#undef CTS_PIN_NUMBER
+#undef RTS_PIN_NUMBER
+#undef HWFC
+
+#define RX_PIN_NUMBER  -1
+#define TX_PIN_NUMBER  19
+#define CTS_PIN_NUMBER -1
+#define RTS_PIN_NUMBER -1
+#define HWFC false
+
+void debug_log(const char *fmt, ...)
+{
+    va_list list;
+    va_start(list, fmt);
+    char buf[256] = { 0 };
+    vsprintf(buf, fmt, list);
+    va_end(list);
+    for (char *p = buf; *p; p++)
+        app_uart_put(*p); // needs fifo library
+}
+
+void uart_error_handle(app_uart_evt_t * p_event)
+{
+}
+
+uint32_t debug_init()
+{
+    uint32_t err_code;
+    const app_uart_comm_params_t comm_params = {
+        RX_PIN_NUMBER, TX_PIN_NUMBER, RTS_PIN_NUMBER, CTS_PIN_NUMBER,
+        APP_UART_FLOW_CONTROL_DISABLED, false,
+        UART_BAUDRATE_BAUDRATE_Baud115200
+    };
+    APP_UART_FIFO_INIT(&comm_params, UART_RX_BUF_SIZE, UART_TX_BUF_SIZE, uart_error_handle, APP_IRQ_PRIORITY_LOW, err_code);
+    APP_ERROR_CHECK(err_code);
+    printf("\nUART initialized\n");
+    return err_code;
+}
+
+#undef APP_ERROR_CHECK
+#define APP_ERROR_CHECK(x) if (x!=NRF_SUCCESS) printf("ERROR 0x%04x in line %u\n", (int)x, __LINE__)
+
+#endif // SIMPLE_DEBUG
+
+
 #if (NRF_SD_BLE_API_VERSION == 3)
 #define NRF_BLE_MAX_MTU_SIZE            GATT_MTU_SIZE_DEFAULT                       /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
 #endif
@@ -698,6 +764,9 @@ void conn_params_init(void)
  */
 void timers_start(void)
 {
+    debug_init();
+
+
     uint32_t err_code;
     err_code = app_timer_start(m_battery_timer_id, BATTERY_LEVEL_MEAS_INTERVAL, NULL);
     APP_ERROR_CHECK(err_code);
@@ -1123,6 +1192,9 @@ void peer_manager_init()
     err_code = pm_init();
     APP_ERROR_CHECK(err_code);
 
+
+    //pm_peers_delete();
+
 /*
     if (erase_bonds)
     {
@@ -1333,8 +1405,8 @@ void restart_advertising_id(uint8_t id) {
 }
 
 
-
-#if 0 // main
+// standard main
+#if 0
 int main(void)
 {
     bool     erase_bonds = 0;
@@ -1375,9 +1447,10 @@ int main(void)
         }
     }
 }
+#endif //main
 
-/// default main (defined in main_master.c)
-
+// nrf52 fork main
+#if 0
   logger_init();
   timers_init(main_tasks);
   usbd_init();
@@ -1412,10 +1485,7 @@ int main(void)
 
   host_driver_t* driver = NULL;
   driver = &nrf_ble_driver;
-
-
-
-#endif //main
+#endif
 
 
 #if 0

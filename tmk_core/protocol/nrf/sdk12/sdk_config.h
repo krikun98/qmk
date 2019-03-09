@@ -53,6 +53,13 @@
 // <q> BLE_ADVERTISING_ENABLED  - ble_advertising - Advertising module
  
 
+#define RETARGET_ENABLED 1
+
+#ifndef APP_FIFO_ENABLED
+#define APP_FIFO_ENABLED 1
+#endif
+
+
 #ifndef BLE_ADVERTISING_ENABLED
 #define BLE_ADVERTISING_ENABLED 1
 #endif
@@ -2719,7 +2726,7 @@
 // <e> UART_ENABLED - nrf_drv_uart - UART/UARTE peripheral driver
 //==========================================================
 #ifndef UART_ENABLED
-#define UART_ENABLED 0
+#define UART_ENABLED 1
 #endif
 #if  UART_ENABLED
 // <o> UART_DEFAULT_CONFIG_HWFC  - Hardware Flow Control
@@ -2793,7 +2800,7 @@
 // <e> UART0_ENABLED - Enable UART0 instance
 //==========================================================
 #ifndef UART0_ENABLED
-#define UART0_ENABLED 0
+#define UART0_ENABLED 1
 #endif
 #if  UART0_ENABLED
 // <q> UART0_CONFIG_USE_EASY_DMA  - Default setting for using EasyDMA
@@ -2821,7 +2828,7 @@
 // <4=> Debug 
 
 #ifndef UART_CONFIG_LOG_LEVEL
-#define UART_CONFIG_LOG_LEVEL 0
+#define UART_CONFIG_LOG_LEVEL 3
 #endif
 
 // <o> UART_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -3059,7 +3066,7 @@
 // <e> APP_UART_ENABLED - app_uart - UART driver
 //==========================================================
 #ifndef APP_UART_ENABLED
-#define APP_UART_ENABLED 0
+#define APP_UART_ENABLED 1
 #endif
 #if  APP_UART_ENABLED
 // <o> APP_UART_DRIVER_INSTANCE  - UART instance used
