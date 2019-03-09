@@ -600,8 +600,6 @@ static void bas_init(void)
  */
 static void hids_init(void)
 {
-    printf("hids_init\n");
-
     uint32_t                   err_code;
     ble_hids_init_t            hids_init_obj;
     ble_hids_inp_rep_init_t    input_report_array[1];
@@ -2919,7 +2917,11 @@ void set_usb_enabled (bool enabled) { enable_usb_send = false; }
 
 void ble_disconnect(){}
 
-void ble_send_keyboard(report_keyboard_t *report){}
+void ble_send_keyboard(report_keyboard_t *report){
+    unsigned char * buf = report->raw;
+    printf("Sending HID report: %02x %02x %02x %02x %02x %02x %02x %02x\n", buf[0], buf[1], buf[2], buf[3], buf[4], buf[5], buf[6], buf[7]);
+}
+
 void ble_send_mouse(report_mouse_t *report){}
 void ble_send_system(uint16_t data){}
 void ble_send_consumer(uint16_t data){}
