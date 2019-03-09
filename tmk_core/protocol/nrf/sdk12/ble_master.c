@@ -35,9 +35,6 @@ void ble_advertising_modes_config_set(ble_adv_modes_config_t const * const p_adv
 #include "ble_report_def.h"
 
 
-#define SIMPLE_DEBUG
-
-#ifdef SIMPLE_DEBUG
 #include "app_uart.h"
 #include <stdarg.h>
 
@@ -45,17 +42,17 @@ void ble_advertising_modes_config_set(ble_adv_modes_config_t const * const p_adv
 #define UART_RX_BUF_SIZE                 1                                          /**< UART RX buffer size. */
 
 #undef printf
-#define printf debug_log
+#define printf my_debug_log
 
 #undef NRF_LOG_INFO
 #undef NRF_LOG_DEBUG
 #undef NRF_LOG_PROCESS
-#define NRF_LOG_INFO printf
-#define NRF_LOG_DEBUG printf
+#define NRF_LOG_INFO my_debug_log
+#define NRF_LOG_DEBUG my_debug_log
 #define NRF_LOG_PROCESS() false
 
 #undef NRF_LOG_INIT
-#define NRF_LOG_INIT debug_init
+#define NRF_LOG_INIT my_debug_init
 
 #undef RX_PIN_NUMBER
 #undef TX_PIN_NUMBER
@@ -69,7 +66,15 @@ void ble_advertising_modes_config_set(ble_adv_modes_config_t const * const p_adv
 #define RTS_PIN_NUMBER -1
 #define HWFC false
 
-void debug_log(const char *fmt, ...)
+#undef APP_ERROR_CHECK
+#define APP_ERROR_CHECK(x) if (x!=NRF_SUCCESS) printf("ERROR 0x%04x in line %u\n", (int)x, __LINE__)
+
+uint32_t my_debug_init();
+void my_debug_log(const char *fmt, ...);
+void uart_error_handle(app_uart_evt_t * p_event);
+
+
+void my_debug_log(const char *fmt, ...)
 {
     va_list list;
     va_start(list, fmt);
@@ -84,7 +89,7 @@ void uart_error_handle(app_uart_evt_t * p_event)
 {
 }
 
-uint32_t debug_init()
+uint32_t my_debug_init()
 {
     uint32_t err_code;
     const app_uart_comm_params_t comm_params = {
@@ -97,12 +102,6 @@ uint32_t debug_init()
     printf("\nUART initialized\n");
     return err_code;
 }
-
-#undef APP_ERROR_CHECK
-#define APP_ERROR_CHECK(x) if (x!=NRF_SUCCESS) printf("ERROR 0x%04x in line %u\n", (int)x, __LINE__)
-
-#endif // SIMPLE_DEBUG
-
 
 #if (NRF_SD_BLE_API_VERSION == 3)
 #define NRF_BLE_MAX_MTU_SIZE            GATT_MTU_SIZE_DEFAULT                       /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
@@ -493,7 +492,7 @@ static void battery_level_meas_timeout_handler(void * p_context)
  */
 void timers_init(void (*main_task)(void*)) {
 
-  debug_init();
+  my_debug_init();
 
   uint32_t err_code;
 
