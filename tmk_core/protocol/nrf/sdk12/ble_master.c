@@ -23,19 +23,26 @@
 #include "fstorage.h"
 #include "ble_conn_state.h"
 
+void ble_advertising_modes_config_set(ble_adv_modes_config_t const * const p_adv_modes_config);
+
 #define NRF_LOG_MODULE_NAME "APP"
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
 
-#if BUTTONS_NUMBER < 2
-//#error "Not enough resources on board"
-#endif
+#include "ble_common.h"
+#include "ble_master.h"
+#include "ble_central.h"
+#include "ble_report_def.h"
 
 #if (NRF_SD_BLE_API_VERSION == 3)
 #define NRF_BLE_MAX_MTU_SIZE            GATT_MTU_SIZE_DEFAULT                       /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
 #endif
 
+// CRASHES BECAUSE OF CENTRAL_LINK_COUNT 1 !!!
+
+#undef CENTRAL_LINK_COUNT
 #define CENTRAL_LINK_COUNT               0                                          /**< Number of central links used by the application. When changing this number remember to adjust the RAM settings*/
+
 #define PERIPHERAL_LINK_COUNT            1                                          /**< Number of peripheral links used by the application. When changing this number remember to adjust the RAM settings*/
 
 #define UART_TX_BUF_SIZE                 256                                        /**< UART TX buffer size. */
@@ -134,6 +141,7 @@ static uint16_t   m_conn_handle  = BLE_CONN_HANDLE_INVALID; /**< Handle of the c
 
 
 APP_TIMER_DEF(m_battery_timer_id);                          /**< Battery timer. */
+APP_TIMER_DEF(main_task_timer_id);
 
 static pm_peer_id_t m_peer_id;                              /**< Device reference handle to the current bonded central. */
 static bool         m_caps_on = false;                      /**< Variable to indicate if Caps Lock is turned on. */
@@ -145,21 +153,7 @@ static bool           m_is_wl_changed;                                      /**<
 static ble_uuid_t m_adv_uuids[] = {{BLE_UUID_HUMAN_INTERFACE_DEVICE_SERVICE, BLE_UUID_TYPE_BLE}};
 
 
-#define KEYBOARD_SCAN_INTERVAL 25
-#define KEYBOARD_SCAN_MEAS_INTERVAL APP_TIMER_TICKS(KEYBOARD_SCAN_INTERVAL, APP_TIMER_PRESCALER)  /**< Keyboard scan interval (ticks). */
-
-APP_TIMER_DEF(m_keyboard_scan_timer_id);
-
-void keyboard_task();
-
-static void keyboard_scan_timeout_handler(void *p_context)
-{
-    UNUSED_PARAMETER(p_context);
-    // well, as fast as possible, it's impossible.
-    keyboard_task();
-}
-
-static void battery_level_update(void);
+void battery_level_update(void);
 static void on_hids_evt(ble_hids_t * p_hids, ble_hids_evt_t * p_evt);
 
 
@@ -186,7 +180,9 @@ void assert_nrf_callback(uint16_t line_num, const uint8_t * p_file_name)
  * @param[inout] p_size    In: The size of the @p p_peers buffer.
  *                         Out: The number of peers copied in the buffer.
  */
-static void peer_list_get(pm_peer_id_t * p_peers, uint32_t * p_size)
+
+/*
+void peer_list_get(pm_peer_id_t * p_peers, uint32_t * p_size)
 {
     pm_peer_id_t peer_id;
     uint32_t     peers_to_copy;
@@ -210,7 +206,7 @@ static void peer_list_get(pm_peer_id_t * p_peers, uint32_t * p_size)
         peer_id = pm_next_peer_id_get(peer_id);
     }
 }
-
+*/
 
 /**@brief Function for starting advertising.
  */
@@ -389,7 +385,7 @@ static void ble_advertising_error_handler(uint32_t nrf_error)
 
 /**@brief Function for performing a battery measurement, and update the Battery Level characteristic in the Battery Service.
  */
-static void battery_level_update(void)
+void battery_level_update(void)
 {
     uint32_t err_code;
     uint8_t  battery_level;
@@ -426,25 +422,22 @@ static void battery_level_meas_timeout_handler(void * p_context)
  *
  * @details Initializes the timer module.
  */
-void timers_init(void)
-{
-    uint32_t err_code;
+void timers_init(void (*main_task)(void*)) {
+  uint32_t err_code;
 
-    // Initialize timer module, making it use the scheduler.
-    APP_TIMER_APPSH_INIT(APP_TIMER_PRESCALER, APP_TIMER_OP_QUEUE_SIZE, true);
+  // Initialize timer module, making it use the scheduler.
+  APP_TIMER_APPSH_INIT(APP_TIMER_PRESCALER, APP_TIMER_OP_QUEUE_SIZE, true);
 
-    // Create battery timer.
-    err_code = app_timer_create(&m_battery_timer_id,
-                                APP_TIMER_MODE_REPEATED,
-                                battery_level_meas_timeout_handler);
-    APP_ERROR_CHECK(err_code);
+  // Create battery timer.
+  err_code = app_timer_create(&m_battery_timer_id, APP_TIMER_MODE_REPEATED,
+      battery_level_meas_timeout_handler);
+  APP_ERROR_CHECK(err_code);
 
-    // Create matrix scan timer
-    err_code = app_timer_create(&m_keyboard_scan_timer_id,
-                                APP_TIMER_MODE_REPEATED,
-                                keyboard_scan_timeout_handler);
-    APP_ERROR_CHECK(err_code);
+  err_code = app_timer_create(&main_task_timer_id, APP_TIMER_MODE_REPEATED,
+      main_task);
+  APP_ERROR_CHECK(err_code);
 }
+
 
 
 /**@brief Function for the GAP initialization.
@@ -707,15 +700,14 @@ void conn_params_init(void)
 void timers_start(void)
 {
     uint32_t err_code;
-
     err_code = app_timer_start(m_battery_timer_id, BATTERY_LEVEL_MEAS_INTERVAL, NULL);
-    APP_ERROR_CHECK(err_code);
-
-    // Start scan timer (timers_start)
-    err_code = app_timer_start(m_keyboard_scan_timer_id, KEYBOARD_SCAN_MEAS_INTERVAL, NULL);
     APP_ERROR_CHECK(err_code);
 }
 
+void main_task_start(uint8_t interval) {
+  uint32_t err_code = app_timer_start(main_task_timer_id, APP_TIMER_TICKS(interval, 0), NULL);
+  APP_ERROR_CHECK(err_code);
+}
 
 
 /**@brief Function for handling the HID Report Characteristic Write event.
@@ -772,7 +764,9 @@ static void on_hid_rep_char_write(ble_hids_evt_t * p_evt)
  *
  * @note This function will not return.
  */
-static void sleep_mode_enter(void)
+
+/*
+void sleep_mode_enter(void)
 {
 //    uint32_t err_code = bsp_indication_set(BSP_INDICATE_IDLE);
 
@@ -786,7 +780,7 @@ static void sleep_mode_enter(void)
     uint32_t err_code = sd_power_system_off();
     APP_ERROR_CHECK(err_code);
 }
-
+*/
 
 /**@brief Function for handling HID events.
  *
@@ -1206,7 +1200,7 @@ void advertising_init(void)
  *
  * @param[out] p_erase_bonds  Will be true if the clear bonding button was pressed to wake the application up.
  */
-void buttons_leds_init()
+void buttons_leds_init(bool * p_erase_bonds)
 {
 /*
     bsp_event_t startup_event;
@@ -1222,6 +1216,8 @@ void buttons_leds_init()
 
     *p_erase_bonds = (startup_event == BSP_EVENT_CLEAR_BONDING_DATA);
 */
+
+    *p_erase_bonds = false;
 }
 
 
@@ -1238,6 +1234,104 @@ void power_manage(void)
 
 /**@brief Function for application main entry.
  */
+
+
+void restart_advertising_wo_whitelist() {
+  uint32_t err_code;
+
+  sd_ble_gap_adv_stop();
+
+#ifdef NRF_SEPARATE_KEYBOARD_MASTER
+  scan_start();
+#endif
+
+    ble_adv_modes_config_t options;
+    options.ble_adv_whitelist_enabled = false;
+    options.ble_adv_directed_enabled = false;
+    options.ble_adv_directed_slow_enabled = false;
+    options.ble_adv_directed_slow_interval = 0;
+    options.ble_adv_directed_slow_timeout = 0;
+    options.ble_adv_fast_enabled = true;
+    options.ble_adv_fast_interval = APP_ADV_FAST_INTERVAL;
+    options.ble_adv_fast_timeout = APP_ADV_FAST_TIMEOUT;
+    options.ble_adv_slow_enabled = true;
+    options.ble_adv_slow_interval = APP_ADV_SLOW_INTERVAL;
+    options.ble_adv_slow_timeout = APP_ADV_SLOW_TIMEOUT;
+    ble_advertising_modes_config_set(&options);
+
+    memset(m_whitelist_peers, PM_PEER_ID_INVALID, sizeof(m_whitelist_peers));
+    m_whitelist_peer_cnt = 0;
+    m_is_wl_changed = true;
+
+  if (m_conn_handle != BLE_CONN_HANDLE_INVALID) {
+    err_code = sd_ble_gap_disconnect(m_conn_handle,
+    BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
+    if (err_code != NRF_ERROR_INVALID_STATE) {
+      APP_ERROR_CHECK(err_code);
+    }
+  } else {
+    err_code = ble_advertising_start(BLE_ADV_MODE_FAST);
+  }
+  if (err_code != NRF_ERROR_INVALID_STATE) {
+    APP_ERROR_CHECK(err_code);
+  }
+}
+
+void restart_advertising_id(uint8_t id) {
+  ret_code_t ret;
+
+  if (m_conn_handle != BLE_CONN_HANDLE_INVALID) {
+    ble_adv_modes_config_t options;
+    options.ble_adv_whitelist_enabled = true;
+    options.ble_adv_directed_enabled = false;
+    options.ble_adv_directed_slow_enabled = false;
+    options.ble_adv_directed_slow_interval = 0;
+    options.ble_adv_directed_slow_timeout = 0;
+    options.ble_adv_fast_enabled = true;
+    options.ble_adv_fast_interval = APP_ADV_FAST_INTERVAL;
+    options.ble_adv_fast_timeout = APP_ADV_FAST_TIMEOUT;
+    options.ble_adv_slow_enabled = true;
+    options.ble_adv_slow_interval = APP_ADV_SLOW_INTERVAL;
+    options.ble_adv_slow_timeout = APP_ADV_SLOW_TIMEOUT;
+    ble_advertising_modes_config_set(&options);
+
+    ret = sd_ble_gap_disconnect(m_conn_handle,
+        BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
+    if (ret != NRF_ERROR_INVALID_STATE) {
+      APP_ERROR_CHECK(ret);
+    }
+  }
+  sd_ble_gap_adv_stop();
+
+//#ifdef NRF_SEPARATE_KEYBOARD_MASTER
+//  sd_ble_gap_scan_stop();
+//#endif
+
+  memset(m_whitelist_peers, PM_PEER_ID_INVALID, sizeof(m_whitelist_peers));
+  m_whitelist_peer_cnt = (sizeof(m_whitelist_peers) / sizeof(pm_peer_id_t));
+
+  peer_list_get(m_whitelist_peers, &m_whitelist_peer_cnt);
+  if (id > m_whitelist_peer_cnt) {
+    return;
+  }
+  m_whitelist_peer_cnt = 1;
+  m_whitelist_peers[0] = m_whitelist_peers[id];
+
+  ret = pm_whitelist_set(m_whitelist_peers, m_whitelist_peer_cnt);
+  APP_ERROR_CHECK(ret);
+
+  ret = pm_device_identities_list_set(m_whitelist_peers, m_whitelist_peer_cnt);
+  if (ret != NRF_ERROR_NOT_SUPPORTED) {
+    APP_ERROR_CHECK(ret);
+  }
+
+//#ifdef NRF_SEPARATE_KEYBOARD_MASTER
+//  sd_ble_gap_scan_start();
+//#endif
+
+  ret = ble_advertising_start(BLE_ADV_MODE_FAST);
+  APP_ERROR_CHECK(ret);
+}
 
 
 
@@ -2746,15 +2840,14 @@ void set_ble_enabled (bool enabled) { enable_ble_send = enabled; }
 bool get_usb_enabled () { return enable_usb_send; }
 void set_usb_enabled (bool enabled) { enable_usb_send = false; }
 
+////////////////////////
 
 void ble_disconnect(){}
-void ble_send_keyboard(){}
-void ble_send_mouse(){}
-void ble_send_system(){}
-void ble_send_consumer(){}
-void restart_advertising_wo_whitelist(){}
-void restart_advertising_id(){}
-void main_task_start(){}
+
+void ble_send_keyboard(report_keyboard_t *report){}
+void ble_send_mouse(report_mouse_t *report){}
+void ble_send_system(uint16_t data){}
+void ble_send_consumer(uint16_t data){}
+
 void sendchar_pf(){}
 void keyboard_leds(){}
-
