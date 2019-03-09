@@ -319,7 +319,7 @@
 // <4=> Debug 
 
 #ifndef ADC_CONFIG_LOG_LEVEL
-#define ADC_CONFIG_LOG_LEVEL 0
+#define ADC_CONFIG_LOG_LEVEL 3
 #endif
 
 // <o> ADC_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -408,7 +408,7 @@
 // <e> CLOCK_ENABLED - nrf_drv_clock - CLOCK peripheral driver
 //==========================================================
 #ifndef CLOCK_ENABLED
-#define CLOCK_ENABLED 1
+#define CLOCK_ENABLED 1 // setting clock to 0 affects simple debug a little bit, bluetosis sets this to 0 !!!
 #endif
 #if  CLOCK_ENABLED
 // <o> CLOCK_CONFIG_XTAL_FREQ  - HF XTAL Frequency
@@ -428,7 +428,7 @@
 // <2=> Synth 
 
 #ifndef CLOCK_CONFIG_LF_SRC
-#define CLOCK_CONFIG_LF_SRC 0
+#define CLOCK_CONFIG_LF_SRC 1 // was 0 !!!
 #endif
 
 // <o> CLOCK_CONFIG_IRQ_PRIORITY  - Interrupt priority
@@ -459,7 +459,7 @@
 // <4=> Debug 
 
 #ifndef CLOCK_CONFIG_LOG_LEVEL
-#define CLOCK_CONFIG_LOG_LEVEL 0
+#define CLOCK_CONFIG_LOG_LEVEL 3
 #endif
 
 // <o> CLOCK_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -600,7 +600,7 @@
 // <4=> Debug 
 
 #ifndef COMP_CONFIG_LOG_LEVEL
-#define COMP_CONFIG_LOG_LEVEL 0
+#define COMP_CONFIG_LOG_LEVEL 3
 #endif
 
 // <o> COMP_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -662,7 +662,7 @@
 // <4=> Debug 
 
 #ifndef SWI_CONFIG_LOG_LEVEL
-#define SWI_CONFIG_LOG_LEVEL 0
+#define SWI_CONFIG_LOG_LEVEL 3
 #endif
 
 // <o> SWI_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -742,7 +742,7 @@
 // <4=> Debug 
 
 #ifndef GPIOTE_CONFIG_LOG_LEVEL
-#define GPIOTE_CONFIG_LOG_LEVEL 0
+#define GPIOTE_CONFIG_LOG_LEVEL 3
 #endif
 
 // <o> GPIOTE_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -939,7 +939,7 @@
 // <4=> Debug 
 
 #ifndef I2S_CONFIG_LOG_LEVEL
-#define I2S_CONFIG_LOG_LEVEL 0
+#define I2S_CONFIG_LOG_LEVEL 3
 #endif
 
 // <o> I2S_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -1070,7 +1070,7 @@
 // <4=> Debug 
 
 #ifndef LPCOMP_CONFIG_LOG_LEVEL
-#define LPCOMP_CONFIG_LOG_LEVEL 0
+#define LPCOMP_CONFIG_LOG_LEVEL 3
 #endif
 
 // <o> LPCOMP_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -1173,7 +1173,7 @@
 // <4=> Debug 
 
 #ifndef PDM_CONFIG_LOG_LEVEL
-#define PDM_CONFIG_LOG_LEVEL 0
+#define PDM_CONFIG_LOG_LEVEL 3
 #endif
 
 // <o> PDM_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -1235,7 +1235,7 @@
 // <4=> Debug 
 
 #ifndef COMMON_CONFIG_LOG_LEVEL
-#define COMMON_CONFIG_LOG_LEVEL 0
+#define COMMON_CONFIG_LOG_LEVEL 3
 #endif
 
 // <o> COMMON_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -1337,7 +1337,7 @@
 // <4=> Debug 
 
 #ifndef PPI_CONFIG_LOG_LEVEL
-#define PPI_CONFIG_LOG_LEVEL 0
+#define PPI_CONFIG_LOG_LEVEL 3
 #endif
 
 // <o> PPI_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -1514,7 +1514,7 @@
 // <4=> Debug 
 
 #ifndef PWM_CONFIG_LOG_LEVEL
-#define PWM_CONFIG_LOG_LEVEL 0
+#define PWM_CONFIG_LOG_LEVEL 3
 #endif
 
 // <o> PWM_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -1668,7 +1668,7 @@
 // <4=> Debug 
 
 #ifndef QDEC_CONFIG_LOG_LEVEL
-#define QDEC_CONFIG_LOG_LEVEL 0
+#define QDEC_CONFIG_LOG_LEVEL 3
 #endif
 
 // <o> QDEC_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -1755,7 +1755,7 @@
 // <4=> Debug 
 
 #ifndef RNG_CONFIG_LOG_LEVEL
-#define RNG_CONFIG_LOG_LEVEL 0
+#define RNG_CONFIG_LOG_LEVEL 3
 #endif
 
 // <o> RNG_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -1870,7 +1870,7 @@
 // <4=> Debug 
 
 #ifndef RTC_CONFIG_LOG_LEVEL
-#define RTC_CONFIG_LOG_LEVEL 0
+#define RTC_CONFIG_LOG_LEVEL 3
 #endif
 
 // <o> RTC_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -1925,7 +1925,7 @@
 // <3=> 14 bit 
 
 #ifndef SAADC_CONFIG_RESOLUTION
-#define SAADC_CONFIG_RESOLUTION 0
+#define SAADC_CONFIG_RESOLUTION 1 //was 0!!!
 #endif
 
 // <o> SAADC_CONFIG_OVERSAMPLE  - Sample period
@@ -1979,7 +1979,7 @@
 // <4=> Debug 
 
 #ifndef SAADC_CONFIG_LOG_LEVEL
-#define SAADC_CONFIG_LOG_LEVEL 0
+#define SAADC_CONFIG_LOG_LEVEL 3
 #endif
 
 // <o> SAADC_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -2109,7 +2109,7 @@
 // <4=> Debug 
 
 #ifndef SPIS_CONFIG_LOG_LEVEL
-#define SPIS_CONFIG_LOG_LEVEL 0
+#define SPIS_CONFIG_LOG_LEVEL 3
 #endif
 
 // <o> SPIS_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -2267,7 +2267,7 @@
 // <4=> Debug 
 
 #ifndef SPI_CONFIG_LOG_LEVEL
-#define SPI_CONFIG_LOG_LEVEL 0
+#define SPI_CONFIG_LOG_LEVEL 3
 #endif
 
 // <o> SPI_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -2414,7 +2414,7 @@
 // <4=> Debug 
 
 #ifndef TIMER_CONFIG_LOG_LEVEL
-#define TIMER_CONFIG_LOG_LEVEL 0
+#define TIMER_CONFIG_LOG_LEVEL 3
 #endif
 
 // <o> TIMER_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -2551,7 +2551,7 @@
 // <4=> Debug 
 
 #ifndef TWIS_CONFIG_LOG_LEVEL
-#define TWIS_CONFIG_LOG_LEVEL 0
+#define TWIS_CONFIG_LOG_LEVEL 3
 #endif
 
 // <o> TWIS_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -2682,7 +2682,7 @@
 // <4=> Debug 
 
 #ifndef TWI_CONFIG_LOG_LEVEL
-#define TWI_CONFIG_LOG_LEVEL 0
+#define TWI_CONFIG_LOG_LEVEL 3
 #endif
 
 // <o> TWI_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -2946,7 +2946,7 @@
 // <4=> Debug 
 
 #ifndef WDT_CONFIG_LOG_LEVEL
-#define WDT_CONFIG_LOG_LEVEL 0
+#define WDT_CONFIG_LOG_LEVEL 3
 #endif
 
 // <o> WDT_CONFIG_INFO_COLOR  - ANSI escape code prefix.
@@ -3612,7 +3612,7 @@
 // <4=> Debug 
 
 #ifndef NRF_LOG_DEFAULT_LEVEL
-#define NRF_LOG_DEFAULT_LEVEL 4
+#define NRF_LOG_DEFAULT_LEVEL 3
 #endif
 
 // <e> NRF_LOG_DEFERRED - Enable deffered logger.
@@ -3620,14 +3620,14 @@
 // <i> Log data is buffered and can be processed in idle.
 //==========================================================
 #ifndef NRF_LOG_DEFERRED
-#define NRF_LOG_DEFERRED 0
+#define NRF_LOG_DEFERRED 1
 #endif
 #if  NRF_LOG_DEFERRED
 // <o> NRF_LOG_DEFERRED_BUFSIZE - Size of the buffer for logs in words. 
 // <i> Must be power of 2
 
 #ifndef NRF_LOG_DEFERRED_BUFSIZE
-#define NRF_LOG_DEFERRED_BUFSIZE 64
+#define NRF_LOG_DEFERRED_BUFSIZE 256
 #endif
 
 #endif //NRF_LOG_DEFERRED
@@ -3652,7 +3652,7 @@
 // <i> Logger backend RAM usage is determined by this value.
 
 #ifndef NRF_LOG_BACKEND_MAX_STRING_LENGTH
-#define NRF_LOG_BACKEND_MAX_STRING_LENGTH 128
+#define NRF_LOG_BACKEND_MAX_STRING_LENGTH 256
 #endif
 
 // <o> NRF_LOG_TIMESTAMP_DIGITS - Number of digits for timestamp 
@@ -3665,7 +3665,7 @@
 // <e> NRF_LOG_BACKEND_SERIAL_USES_UART - If enabled data is printed over UART
 //==========================================================
 #ifndef NRF_LOG_BACKEND_SERIAL_USES_UART
-#define NRF_LOG_BACKEND_SERIAL_USES_UART 0
+#define NRF_LOG_BACKEND_SERIAL_USES_UART 1
 #endif
 #if  NRF_LOG_BACKEND_SERIAL_USES_UART
 // <o> NRF_LOG_BACKEND_SERIAL_UART_BAUDRATE  - Default Baudrate
@@ -3693,7 +3693,7 @@
 
 // <o> NRF_LOG_BACKEND_SERIAL_UART_TX_PIN - UART TX pin 
 #ifndef NRF_LOG_BACKEND_SERIAL_UART_TX_PIN
-#define NRF_LOG_BACKEND_SERIAL_UART_TX_PIN 24
+#define NRF_LOG_BACKEND_SERIAL_UART_TX_PIN 21
 #endif
 
 // <o> NRF_LOG_BACKEND_SERIAL_UART_RX_PIN - UART RX pin 

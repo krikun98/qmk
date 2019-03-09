@@ -34,6 +34,7 @@ void ble_advertising_modes_config_set(ble_adv_modes_config_t const * const p_adv
 #include "ble_central.h"
 #include "ble_report_def.h"
 
+
 #define SIMPLE_DEBUG
 
 #ifdef SIMPLE_DEBUG
@@ -42,6 +43,9 @@ void ble_advertising_modes_config_set(ble_adv_modes_config_t const * const p_adv
 
 #define UART_TX_BUF_SIZE                 256                                        /**< UART TX buffer size. */
 #define UART_RX_BUF_SIZE                 1                                          /**< UART RX buffer size. */
+
+#undef printf
+#define printf debug_log
 
 #undef NRF_LOG_INFO
 #undef NRF_LOG_DEBUG
@@ -60,7 +64,7 @@ void ble_advertising_modes_config_set(ble_adv_modes_config_t const * const p_adv
 #undef HWFC
 
 #define RX_PIN_NUMBER  -1
-#define TX_PIN_NUMBER  19
+#define TX_PIN_NUMBER  19 // pin19 == S15 (right hand jorian, PCB underside, key pin closest to the SWD header)
 #define CTS_PIN_NUMBER -1
 #define RTS_PIN_NUMBER -1
 #define HWFC false
@@ -488,6 +492,9 @@ static void battery_level_meas_timeout_handler(void * p_context)
  * @details Initializes the timer module.
  */
 void timers_init(void (*main_task)(void*)) {
+
+  debug_init();
+
   uint32_t err_code;
 
   // Initialize timer module, making it use the scheduler.
@@ -593,6 +600,8 @@ static void bas_init(void)
  */
 static void hids_init(void)
 {
+    printf("hids_init\n");
+
     uint32_t                   err_code;
     ble_hids_init_t            hids_init_obj;
     ble_hids_inp_rep_init_t    input_report_array[1];
@@ -764,9 +773,6 @@ void conn_params_init(void)
  */
 void timers_start(void)
 {
-    debug_init();
-
-
     uint32_t err_code;
     err_code = app_timer_start(m_battery_timer_id, BATTERY_LEVEL_MEAS_INTERVAL, NULL);
     APP_ERROR_CHECK(err_code);

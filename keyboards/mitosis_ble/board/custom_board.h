@@ -52,7 +52,7 @@ extern "C" {
 #define PIN2 GPIO(0,11)
 #define PIN5 GPIO(0,18)
 #define PIN6 GPIO(0,16)
-#define PIN7 GPIO(0,19)
+#define PIN7 GPIO(0,17) // 19 changed to 17 (for jorian TX)
 #define PIN8 GPIO(0,20)
 #define PIN9 GPIO(0,22)
 #define PIN10 GPIO(0,23)
