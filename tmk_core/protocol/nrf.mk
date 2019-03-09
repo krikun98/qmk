@@ -2,10 +2,8 @@ PROTOCOL_DIR = protocol
 NRF_DIR = $(PROTOCOL_DIR)/nrf
 
   SRC += $(NRF_DIR)/matrix.c \
-  				$(NRF_DIR)/io_expander.c \
-
-  SRC += $(NRF_DIR)/$(NRF_VER_DIR)/ble_common.c \
-       $(NRF_DIR)/$(NRF_VER_DIR)/i2c_master.c \
+        $(NRF_DIR)/io_expander.c \
+        $(NRF_DIR)/$(NRF_VER_DIR)/ble_common.c
 
 ifeq ($(MCU_FAMILY),NRF51)
   SRC += $(NRF_DIR)/$(NRF_VER_DIR)/system_nrf51.c
@@ -14,6 +12,7 @@ endif
 
 ifeq ($(MCU_FAMILY),NRF52)
   SRC += $(NRF_DIR)/nrf52/adc.c
+  SRC += $(NRF_DIR)/$(NRF_VER_DIR)/i2c_master.c
 endif
 
   

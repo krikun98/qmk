@@ -1,6 +1,6 @@
 @echo off
 
-set conf=slave
+set conf=master
 
 ::set export=NRFSDK10_ROOT=/mnt/c/SDK/nRF51_SDK_10.0.0_dc26b5e
 set export=NRFSDK12_ROOT=/mnt/c/SDK/nRF5_SDK_12.3.0_d7731ad
