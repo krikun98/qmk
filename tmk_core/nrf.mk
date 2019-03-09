@@ -63,7 +63,6 @@ ifeq ($(NRFSDK_VER), 12)
   NRFLIB := libnrf.sdk12.$(MCU_SERIES)
   # Source files common to all targets
   NRFLIBSRC += \
-    $(TMK_PATH)/protocol/nrf/$(NRF_VER_DIR)/ble_advertising.c \
     $(NRFSDK_ROOT)/components/libraries/log/src/nrf_log_backend_serial.c \
     $(NRFSDK_ROOT)/components/libraries/log/src/nrf_log_frontend.c \
     $(NRFSDK_ROOT)/components/libraries/button/app_button.c \
@@ -111,9 +110,10 @@ ifeq ($(NRFSDK_VER), 12)
     $(NRFSDK_ROOT)/components/libraries/fifo/app_fifo.c \
     $(NRFSDK_ROOT)/components/libraries/uart/app_uart_fifo.c \
     $(NRFSDK_ROOT)/components/libraries/uart/retarget.c \
-
+    $(TMK_PATH)/protocol/nrf/$(NRF_VER_DIR)/ble_advertising.c \
 
     #disabled features
+    #$(NRFSDK_ROOT)/components/ble/ble_advertising/ble_advertising.c \
     #$(NRFSDK_ROOT)/components/drivers_nrf/twi_master/nrf_drv_twi.c \
 
 
@@ -254,7 +254,9 @@ ifeq ($(NRFSDK_VER), 12)
     # keep every function in separate section, this allows linker to discard unused ones
     NRFCFLAGS += -ffunction-sections -fdata-sections -fno-strict-aliasing
     NRFCFLAGS += -fno-builtin --short-enums
-    NRFCLAGS += -D__HEAP_SIZE=0 -D__STACK_SIZE=0
+    NRFCFLAGS += -D__HEAP_SIZE=0 -D__STACK_SIZE=0
+    # bluetooth debugging only! PLEASE REMOVE
+    NRFCFLAGS += -DENABLE_STARTUP_ADV_NOLIST
 
     # C++ flags common to all targets
     CXXFLAGS += \

@@ -284,6 +284,8 @@ void peer_list_get(pm_peer_id_t * p_peers, uint32_t * p_size)
  */
 void advertising_start(void)
 {
+    NRF_LOG_INFO("advertising start\n");
+
     ret_code_t ret;
 
     memset(m_whitelist_peers, PM_PEER_ID_INVALID, sizeof(m_whitelist_peers));
@@ -457,6 +459,8 @@ static void ble_advertising_error_handler(uint32_t nrf_error)
 
 /**@brief Function for performing a battery measurement, and update the Battery Level characteristic in the Battery Service.
  */
+
+#if 0
 void battery_level_update(void)
 {
     uint32_t err_code;
@@ -488,6 +492,37 @@ static void battery_level_meas_timeout_handler(void * p_context)
     UNUSED_PARAMETER(p_context);
     battery_level_update();
 }
+#endif
+
+void battery_level_update(void) {
+  uint32_t err_code;
+  uint8_t battery_level;
+
+  adc_start();
+  battery_level = 50;//get_vcc() / 30;
+
+  NRF_LOG_INFO("battery level: %d\n", battery_level);
+
+  err_code = ble_bas_battery_level_update(&m_bas, battery_level);
+  if ((err_code != NRF_SUCCESS) && (err_code != NRF_ERROR_INVALID_STATE)
+      && (err_code != BLE_ERROR_NO_TX_PACKETS)
+      && (err_code != BLE_ERROR_GATTS_SYS_ATTR_MISSING)) {
+//    APP_ERROR_HANDLER(err_code);
+  }
+}
+
+/**@brief Function for handling the Battery measurement timer timeout.
+ *
+ * @details This function will be called each time the battery level measurement timer expires.
+ *
+ * @param[in]   p_context   Pointer used for passing some arbitrary information (context) from the
+ *                          app_start_timer() call to the timeout handler.
+ */
+void battery_level_meas_timeout_handler(void * p_context) {
+  UNUSED_PARAMETER(p_context);
+  battery_level_update();
+}
+
 
 
 /**@brief Function for the Timer initialization.
@@ -1201,9 +1236,6 @@ void peer_manager_init()
     err_code = pm_init();
     APP_ERROR_CHECK(err_code);
 
-
-    //pm_peers_delete();
-
 /*
     if (erase_bonds)
     {
@@ -1239,6 +1271,11 @@ void peer_manager_init()
  */
 void advertising_init(void)
 {
+    NRF_LOG_INFO("advertising init\n");
+
+    NRF_LOG_INFO("deleting peers\n");
+    pm_peers_delete();
+
     uint32_t               err_code;
     uint8_t                adv_flags;
     ble_advdata_t          advdata;
@@ -2923,7 +2960,8 @@ void set_usb_enabled (bool enabled) { enable_usb_send = false; }
 void ble_disconnect(){}
 
 void ble_send_keyboard(report_keyboard_t *report){
-    NRF_LOG_INFO("Sending HID report: %08x\n", report->raw[0]);
+    NRF_LOG_INFO("Sending HID report: %02x %02x %02x %02x\n",
+        report->raw[0],report->raw[1],report->raw[2],report->raw[3]);
 }
 
 void ble_send_mouse(report_mouse_t *report){}
