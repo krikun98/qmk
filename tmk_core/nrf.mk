@@ -781,7 +781,7 @@ endif
 ##############################################################################
 # Compiler settings
 #
-CC = arm-none-eabi-gcc
+CC = arm-none-eabi-gcc -std=c99
 OBJCOPY = arm-none-eabi-objcopy
 OBJDUMP = arm-none-eabi-objdump
 SIZE = arm-none-eabi-size
