@@ -10,17 +10,22 @@ You have to flash Master and Slave firmwares separately, there's no unified firm
 
 ## Pairing
 
-Pairing is a little bit weird. On the master you'd need to erase all bonds first, then run advertising without whitelist.
-To reset bonds on slave keyboard, press 3 first row 0 keys on powering on (it's modifier keys on Jian).
-To reconnect master after powering on the computer you'd need to run advertising without whitelist yet again, it doesn't connect automatically.
+Pairing is a little bit weird. The init sequence is to erase all bonds first, then run advertising without whitelist.
+
+**To reconnect master you need to run advertising without whitelist yet again, it doesn't connect automatically.**
+So, every time you powering on the keyboard or the computer you need to press shortcut that runs advertising.
 
 Also there's a huge lag on the master keyboard.
 Might be hardware problems (Bluetooth antenna on the flipped module is really blocked from all sides) might be software.
 Most likely software, because slave, running wirelessly via USB-connected master has no lag at all.
 
+If you're having problems with pairing to the slave keyboard, you need to erase bonds on the slave keyboard as well.
+To reset bonds on the slave keyboard, press all 3 first keys on row 0 while powering on (it's modifier keys on Jian).
+When halves are bonded there's no preferred order of powering them on, they will connect to each other anyway.
+
 ## Default layout
 
-Adjust layer is activated by pressing and holding <kbd>Raise</kbd> and <kbd>Lower</kbd> simultaneously.
+Adjust layer is activated by holding <kbd>Raise</kbd> and <kbd>Lower</kbd> simultaneously.
 See original [Jian layout](http://www.keyboard-layout-editor.com/#/gists/4b6c2af67148f58ddd6c6b2976c4370f).
 
 BLE and USB are enabled by default. You would like to restart advertising first.
