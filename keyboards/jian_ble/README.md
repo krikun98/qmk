@@ -18,6 +18,7 @@ BLE and USB are enabled by default. You would like to restart advertising first.
 * <kbd>Raise</kbd> + <kbd>Lower</kbd> + <kbd>AdvAll</kbd> restart advertising
 * <kbd>Raise</kbd> + <kbd>Lower</kbd> + <kbd>UF2</kbd> open USB drive for firmware update
 
+**To reset bonds on slave keyboard, press 3 first row0 keys on powering on (it's modifier keys on Jian).**
 
 See [Jian BLE layout](http://www.keyboard-layout-editor.com/#/gists/3a6600e58e6d2e0e38c1bfa9e30988ec) for BLE shortcuts.
 See [keymap.c](keymaps/default/keymap.c) for reference.

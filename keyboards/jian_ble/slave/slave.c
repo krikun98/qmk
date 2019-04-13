@@ -46,11 +46,19 @@ void matrix_init_user() {
   } else if (row == 0b10) {
     bootloader_flag = true;
   }
+
 }
+
+#include "nrf_log.h"
+
+//int counter = 0;
 
 void matrix_scan_user() {
   static int cnt;
   if (bootloader_flag && cnt++==500) {
     bootloader_jump();
   }
+
+  //NRF_LOG_INFO("You are here %d", counter);
+  //counter++;
 }
