@@ -8,6 +8,16 @@ Please read this QMK nrf52 manual first (japanese only for now)
 
 You have to flash Master and Slave firmwares separately, there's no unified firmware for both halves.
 
+## Pairing
+
+Pairing is a little bit weird. On the master you'd need to erase all bonds first, then run advertising without whitelist.
+To reset bonds on slave keyboard, press 3 first row 0 keys on powering on (it's modifier keys on Jian).
+To reconnect master after powering on the computer you'd need to run advertising without whitelist yet again, it doesn't connect automatically.
+
+Also there's a huge lag on the master keyboard.
+Might be hardware problems (Bluetooth antenna on the flipped module is really blocked from all sides) might be software.
+Most likely software, because slave, running wirelessly via USB-connected master has no lag at all.
+
 ## Default layout
 
 Adjust layer is activated by pressing and holding <kbd>Raise</kbd> and <kbd>Lower</kbd> simultaneously.
@@ -15,10 +25,8 @@ See original [Jian layout](http://www.keyboard-layout-editor.com/#/gists/4b6c2af
 
 BLE and USB are enabled by default. You would like to restart advertising first.
 
-* <kbd>Raise</kbd> + <kbd>Lower</kbd> + <kbd>AdvAll</kbd> restart advertising
+* <kbd>Raise</kbd> + <kbd>Lower</kbd> + <kbd>AdvAll</kbd> restart advertising without whitelist.
 * <kbd>Raise</kbd> + <kbd>Lower</kbd> + <kbd>UF2</kbd> open USB drive for firmware update
-
-**To reset bonds on slave keyboard, press 3 first row0 keys on powering on (it's modifier keys on Jian).**
 
 See [Jian BLE layout](http://www.keyboard-layout-editor.com/#/gists/3a6600e58e6d2e0e38c1bfa9e30988ec) for BLE shortcuts.
 See [keymap.c](keymaps/default/keymap.c) for reference.

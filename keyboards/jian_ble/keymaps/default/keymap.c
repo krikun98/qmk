@@ -124,7 +124,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 
 [_ADJUST] = LAYOUT(\
-    RESET, DEBUG,   KC_ASUP, XXXXXXX, XXXXXXX, DELBNDS, AD_WO_L,      AD_WO_L, DELBNDS, XXXXXXX, XXXXXXX,  KC_ASUP, DEBUG,   RESET, \
+    RESET, DEBUG,   BATT_LV, XXXXXXX, XXXXXXX, DELBNDS, AD_WO_L,      AD_WO_L, DELBNDS, XXXXXXX, XXXXXXX,  BATT_LV, DEBUG,   RESET, \
            DEL_ID0, DEL_ID1, DEL_ID2, DEL_ID3, USB_DIS, USB_EN,       USB_EN,  USB_DIS,  DEL_ID3, DEL_ID2, DEL_ID1, DEL_ID0, \
            ADV_ID0, ADV_ID1, ADV_ID2, ADV_ID3, BLE_DIS, BLE_EN,       BLE_EN,  BLE_DIS,  ADV_ID3, ADV_ID2, ADV_ID1, ADV_ID0, \
                                       _______, SH_TG,   _______,      _______, SH_TG,   _______\
@@ -148,6 +148,8 @@ void uf2_jump(void) {
   NVIC_SystemReset();
 }
 
+
+#include "nrf_log.h"
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   char str[16];
@@ -176,15 +178,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return false;
       break;
     case ADV_ID0:
+      NRF_LOG_INFO("Restart advertising ID: %d", 0);
       restart_advertising_id(0);
       return false;
     case ADV_ID1:
+      NRF_LOG_INFO("Restart advertising ID: %d", 1);
       restart_advertising_id(1);
       return false;
     case ADV_ID2:
+      NRF_LOG_INFO("Restart advertising ID: %d", 2);
       restart_advertising_id(2);
       return false;
     case ADV_ID3:
+      NRF_LOG_INFO("Restart advertising ID: %d", 3);
       restart_advertising_id(3);
       return false;
     case ADV_ID4:
