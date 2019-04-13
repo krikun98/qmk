@@ -14,6 +14,7 @@ Pairing is a little bit weird. The init sequence is to erase all bonds first, th
 
 **To reconnect master you need to run advertising without whitelist yet again, it doesn't connect automatically.**
 So, every time you powering on the keyboard or the computer you need to press shortcut that runs advertising.
+**Upd.** There's a define that helps, `#define ENABLE_STARTUP_ADV_NOLIST` but it probably doesn't help on powering on the computer.
 
 Also there's a huge lag on the master keyboard.
 Might be hardware problems (Bluetooth antenna on the flipped module is really blocked from all sides) might be software.
