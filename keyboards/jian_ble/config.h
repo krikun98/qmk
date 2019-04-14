@@ -22,9 +22,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define BLE_NUS_MIN_INTERVAL 30
-#define BLE_NUS_MAX_INTERVAL 40
-
 #define ENABLE_STARTUP_ADV_NOLIST
 
 /* USB Device descriptor parameter */
@@ -81,7 +78,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#define MATRIX_HAS_GHOST
 
 /* Set 0 if debouncing isn't needed */
-#define DEBOUNCE    1
+#define DEBOUNCING_DELAY 5
+
 
 /* Mechanical locking support. Use KC_LCAP, KC_LNUM or KC_LSCR instead in keymap */
 #define LOCKING_SUPPORT_ENABLE

@@ -42,18 +42,18 @@ extern "C" {
 // #define NRF_CLOCK_LFCLKSRC      NRF_CLOCK_LFCLKSRC_XTAL_20_PPM
 #else
 
+/*
 #define NRF_CLOCK_LFCLKSRC      {.source        = NRF_CLOCK_LF_SRC_RC,            \
                                  .rc_ctiv       = 16,                                \
                                  .rc_temp_ctiv  = 2,                                \
                                  .xtal_accuracy = 0}
+*/
 
-/*
-// using E73 internal oscillator (if there's no external crystal soldered)
+// using E73 internal oscillator (assume there's no external crystal soldered)
 #define NRF_CLOCK_LFCLKSRC      {.source        = 0,            \
                                  .rc_ctiv       = 16,                                \
                                  .rc_temp_ctiv  = 2,                                \
                                  .xtal_accuracy = 7}
-*/
 
 #endif
 
