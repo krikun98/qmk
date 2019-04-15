@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include QMK_KEYBOARD_H
 #include "app_ble_func.h"
 #include "nrf_log.h"
+#include "nrf_gpio.h"
 
 extern keymap_config_t keymap_config;
 
@@ -56,7 +57,7 @@ enum custom_keycodes {
   PLOVER,
   EXT_PLV,
   SH_TG, // not implemented
-  BLE_DBG
+  BLE_DBG,
 };
 
 
@@ -125,9 +126,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 
 [_ADJUST] = LAYOUT(\
-    RESET, DEBUG,   BATT_LV, XXXXXXX, XXXXXXX, DELBNDS, AD_WO_L,      AD_WO_L, DELBNDS, XXXXXXX, XXXXXXX,  BATT_LV, DEBUG,   RESET, \
-           DEL_ID0, DEL_ID1, DEL_ID2, DEL_ID3, USB_DIS, USB_EN,       USB_EN,  USB_DIS,  DEL_ID3, DEL_ID2, DEL_ID1, DEL_ID0, \
-           ADV_ID0, ADV_ID1, ADV_ID2, ADV_ID3, BLE_DIS, BLE_EN,       BLE_EN,  BLE_DIS,  ADV_ID3, ADV_ID2, ADV_ID1, ADV_ID0, \
+    RESET, DEBUG,   BATT_LV, BL_INC,  XXXXXXX, DELBNDS, AD_WO_L,      AD_WO_L, DELBNDS,  XXXXXXX, BL_INC,  BATT_LV, DEBUG,   RESET, \
+           DEL_ID1, DEL_ID2, BL_DEC,  XXXXXXX, USB_DIS, USB_EN,       USB_EN,  USB_DIS,  XXXXXXX, BL_DEC,  DEL_ID2, DEL_ID1, \
+           ADV_ID1, ADV_ID2, XXXXXXX, XXXXXXX, BLE_DIS, BLE_EN,       BLE_EN,  BLE_DIS,  XXXXXXX, XXXXXXX, ADV_ID2, ADV_ID1, \
                                       _______, SH_TG,   _______,      _______, SH_TG,   _______\
 )
 
@@ -221,6 +222,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       set_ble_enabled(true);
       //delete_bonds(); // causes reset
       restart_advertising_wo_whitelist();
+      return false;
+    case BL_INC:
+      nrf_gpio_pin_set(BACKLIGHT_PIN);
+      return false;
+    case BL_DEC:
+      nrf_gpio_pin_clear(BACKLIGHT_PIN);
       return false;
     }
   }

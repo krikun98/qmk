@@ -386,14 +386,21 @@ static void ble_advertising_error_handler(uint32_t nrf_error) {
   APP_ERROR_HANDLER(nrf_error);
 }
 
+#define BAT_VCC_MAX 3300
+#define BAT_VCC_MIN 3000
+
 /**@brief Function for performing a battery measurement, and update the Battery Level characteristic in the Battery Service.
  */
 static void battery_level_update(void) {
   ret_code_t err_code;
   uint8_t battery_level;
+  uint16_t vcc;
 
   adc_start();
-  battery_level = get_vcc() / 30;
+  vcc = get_vcc();
+  battery_level = (uint8_t)((vcc - BAT_VCC_MIN) * 100 / (BAT_VCC_MAX - BAT_VCC_MIN));
+  battery_level  = battery_level > 100 ? 100 : battery_level < 0 ? 0 : battery_level;
+  NRF_LOG_INFO("battery_level: %d (%dmV)\n", battery_level, vcc);
 
   err_code = ble_bas_battery_level_update(&m_bas, battery_level,
       BLE_CONN_HANDLE_ALL);
@@ -752,6 +759,43 @@ void conn_params_init(void) {
   APP_ERROR_CHECK(err_code);
 }
 
+
+#define USB_LED_NUM_LOCK                0
+#define USB_LED_CAPS_LOCK               1
+#define USB_LED_SCROLL_LOCK             2
+
+#define OUTPUT_REPORT_BIT_MASK_NUM_LOCK    0x01
+#define OUTPUT_REPORT_BIT_MASK_SCROLL_LOCK    0x04
+
+static void on_hid_rep_char_write(ble_hids_evt_t * p_evt){
+    if (p_evt->params.char_write.char_id.rep_type == BLE_HIDS_REP_TYPE_OUTPUT) {
+        ret_code_t err_code;
+        uint8_t  report_val;
+        uint8_t  report_index = p_evt->params.char_write.char_id.rep_index;
+
+        if (report_index == OUTPUT_REPORT_INDEX) {
+            // This code assumes that the output report is one byte long. Hence the following
+            // static assert is made.
+            STATIC_ASSERT(OUTPUT_REPORT_MAX_LEN == 1);
+
+            err_code = ble_hids_outp_rep_get(&m_hids_composite,
+                                             report_index,
+                                             OUTPUT_REPORT_MAX_LEN,
+                                             0,
+                                             m_conn_handle,
+                                             &report_val);
+            APP_ERROR_CHECK(err_code);
+
+    NRF_LOG_INFO("keyboard_led_stats: %d", keyboard_led_stats);
+
+      keyboard_led_stats = ((report_val & OUTPUT_REPORT_BIT_MASK_CAPS_LOCK) ? USB_LED_CAPS_LOCK : 0)
+        || ((report_val & OUTPUT_REPORT_BIT_MASK_NUM_LOCK) ? USB_LED_NUM_LOCK : 0)
+        || ((report_val & OUTPUT_REPORT_BIT_MASK_SCROLL_LOCK) ? USB_LED_SCROLL_LOCK : 0);
+
+        }
+    }
+}
+
 /**@brief Function for starting timers.
  */
 void timers_start(void) {
@@ -770,6 +814,9 @@ void timers_start(void) {
  * @param[in]   p_evt   Event received from the HID service.
  */
 static void on_hids_evt(ble_hids_t * p_hids, ble_hids_evt_t * p_evt) {
+
+  NRF_LOG_INFO("%s - %d", __FUNCTION__, p_evt->evt_type);
+
   switch (p_evt->evt_type) {
   case BLE_HIDS_EVT_BOOT_MODE_ENTERED:
     m_in_boot_mode = true;
@@ -780,6 +827,7 @@ static void on_hids_evt(ble_hids_t * p_hids, ble_hids_evt_t * p_evt) {
     break;
 
   case BLE_HIDS_EVT_REP_CHAR_WRITE:
+    on_hid_rep_char_write(p_evt);
     break;
 
   case BLE_HIDS_EVT_NOTIF_ENABLED:
