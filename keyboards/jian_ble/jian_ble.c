@@ -1,5 +1,7 @@
 #include "jian_ble.h"
 
+#include "pin_assign.h"
+
 #include "nrf_gpio.h"
 
 #define setPinOutput nrf_gpio_cfg_output
@@ -31,12 +33,14 @@ void matrix_init_kb(void) {
 #ifdef PHYSICAL_LEDS_ENABLE
   led_init_kb();
 #endif // PHYSICAL_LEDS_ENABLE
-  //matrix_init_user();
+  matrix_init_user();
 };
 
 #ifdef PHYSICAL_LEDS_ENABLE
 void led_set_kb(uint8_t usb_led)
 {
+    NRF_LOG_INFO("leds: %d", usb_led);
+
 #ifdef NUM_LOCK_LED_PIN
    if (IS_LED_ON(usb_led, USB_LED_NUM_LOCK)) {
         SET_NUM_LOCK_LED();

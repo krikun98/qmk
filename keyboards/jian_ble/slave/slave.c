@@ -1,4 +1,3 @@
-
 #include "matrix.h"
 
 #include "wait.h"
@@ -12,6 +11,7 @@
 #include "nrf_gpio.h"
 #include "nrf_delay.h"
 
+extern void led_init_kb(void);
 
 void unselect_rows(void);
 void select_row(uint8_t row);
@@ -35,6 +35,9 @@ void matrix_init_user() {
     nrf_gpio_pin_clear(BACKLIGHT_PIN);
     nrf_delay_ms(100);
   }
+
+  nrf_gpio_pin_set(LED_PIN);
+  led_init_kb();
 
   select_row(0);
   wait_us(50);

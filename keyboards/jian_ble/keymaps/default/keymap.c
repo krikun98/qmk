@@ -17,6 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include QMK_KEYBOARD_H
 #include "app_ble_func.h"
+#include "nrf_log.h"
 
 extern keymap_config_t keymap_config;
 
@@ -148,8 +149,6 @@ void uf2_jump(void) {
   NVIC_SystemReset();
 }
 
-
-#include "nrf_log.h"
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   char str[16];

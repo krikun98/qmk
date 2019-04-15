@@ -4,6 +4,9 @@
 
 #include "nrf_gpio.h"
 #include "nrf_delay.h"
+#include "nrf_log.h"
+
+extern void led_init_kb(void);
 
 void matrix_init_user() {
   set_usb_enabled(true);
@@ -22,6 +25,8 @@ void matrix_init_user() {
     nrf_delay_ms(100);
   }
 
-  //led_init_kb();
+  nrf_gpio_pin_set(LED_PIN);
+
+  led_init_kb();
 }
 

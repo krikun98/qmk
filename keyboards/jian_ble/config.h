@@ -1,24 +1,3 @@
-/*
-Copyright 2012 Jun Wako <wakojun@gmail.com>
-Copyright 2015 Jack Humbert
-Copyright 2017 Biacco42
-Copyright 2018 Sekigon
-Copyright 2019 Joric
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
 #ifndef CONFIG_H
 #define CONFIG_H
 
@@ -39,9 +18,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // different Jian configs
 #define DIPS_ENABLE
 #define PHYSICAL_LEDS_ENABLE
-#define NUM_LOCK_LED_PIN PIN8
-#define CAPS_LOCK_LED_PIN PIN9
-#define SCROLL_LOCK_LED_PIN PIN12
+#define NUM_LOCK_LED_PIN C6
+#define CAPS_LOCK_LED_PIN D7
+#define SCROLL_LOCK_LED_PIN B5
+
 #define NUM_LOCK_INVERT  //uncomment this if you using n-mosfet
 #define CAPS_LOCK_INVERT  //uncomment this if you using n-mosfet
 #define SCROLL_LOCK_INVERT  //uncomment this if you using n-mosfet
@@ -69,8 +49,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SET_SCROLL_LOCK_LED() writePinLow(SCROLL_LOCK_LED_PIN)
 #define RESET_SCROLL_LOCK_LED() writePinHigh(SCROLL_LOCK_LED_PIN)
 #endif // SCROLL_LOCK_INVERT
-
-
 
 #define DIODE_DIRECTION COL2ROW
 
