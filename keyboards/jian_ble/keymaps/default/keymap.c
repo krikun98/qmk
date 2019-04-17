@@ -150,7 +150,6 @@ void uf2_jump(void) {
   NVIC_SystemReset();
 }
 
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   char str[16];
   if (record->event.pressed) {

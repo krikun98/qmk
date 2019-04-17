@@ -14,6 +14,7 @@ void matrix_init_user() {
   // blink on power on
   nrf_gpio_cfg_output(LED_PIN);
   nrf_gpio_cfg_output(BACKLIGHT_PIN);
+  nrf_gpio_cfg_input(SWITCH_PIN, NRF_GPIO_PIN_PULLDOWN);
 
   for (int i = 0; i < 3; i++) {
     nrf_gpio_pin_set(LED_PIN);
@@ -29,4 +30,18 @@ void matrix_init_user() {
 
   led_init_kb();
 }
+
+#include "nrf_log.h"
+
+void matrix_scan_user(void) {
+    uint8_t value = nrf_gpio_pin_read(SWITCH_PIN);
+
+    //NRF_LOG_INFO("SWITCH_PIN value: %d", value);
+
+    if (value)
+        nrf_gpio_pin_set(LED_PIN);
+    else
+        nrf_gpio_pin_clear(LED_PIN);
+}
+
 

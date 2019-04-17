@@ -31,6 +31,7 @@ extern "C" {
 #define RESET_PIN GPIO(1,18)
 #define SWO_PIN GPIO(1,00)
 #define DFU_PIN GPIO(1,02)
+#define SWITCH_PIN GPIO(0,26)
 
 //#define NRF_LOG_ENABLED 0
 //#define NRF_LOG_BACKEND_SERIAL_USES_UART 0
