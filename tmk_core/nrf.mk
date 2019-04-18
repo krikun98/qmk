@@ -373,6 +373,9 @@ ifeq ($(NRFSDK_VER), 12)
     ASFLAGS += -DSWI_DISABLE0
     ASFLAGS += -DS132
     ASFLAGS += -D__HEAP_SIZE=0
+    # somehow fixes "error: target CPU does not support ARM mode" // joric
+    ASFLAGS += -mcpu=cortex-m4 -mthumb
+
 
     # Linker flags
     LDFLAGS += -mthumb -mabi=aapcs -L$(NRFSDK_ROOT)/components/toolchain/gcc -T$(LDSCRIPT)
@@ -744,7 +747,7 @@ endif
 
   # Linker flags
   LDFLAGS += -mthumb -mabi=aapcs -L$(NRFSDK_ROOT)/modules/nrfx/mdk -T$(LDSCRIPT)
-  LDFLAGS += -mcpu=cortex-m4
+  LDFLAGS += -mcpu=cortex-m4 -mthumb
   LDFLAGS += -mfloat-abi=hard -mfpu=fpv4-sp-d16
   # let linker to dump unused sections
   LDFLAGS += -Wl,--gc-sections
