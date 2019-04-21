@@ -2960,8 +2960,37 @@ void set_usb_enabled (bool enabled) { enable_usb_send = false; }
 void ble_disconnect(){}
 
 void ble_send_keyboard(report_keyboard_t *report){
-    NRF_LOG_INFO("Sending HID report: %02x %02x %02x %02x\n",
-        report->raw[0],report->raw[1],report->raw[2],report->raw[3]);
+
+    unsigned char * buf = report->raw;
+    NRF_LOG_INFO("Sending HID report: %02x %02x %02x %02x %02x %02x %02x %02x\n",
+        buf[0], buf[1], buf[2], buf[3], buf[4], buf[5], buf[6], buf[7]);
+
+  if (m_conn_handle == BLE_CONN_HANDLE_INVALID) {
+    return;
+  }
+  uint32_t err_code;
+  if (!m_in_boot_mode) {
+#ifdef NKRO_ENABLE
+    err_code = ble_hids_inp_rep_send(&m_hids,
+        COMPOSITE_REPORT_INDEX_KEYBOARD, NKRO_BYTE_LEN, report->raw);
+#else
+    err_code = ble_hids_inp_rep_send(&m_hids,
+        COMPOSITE_REPORT_INDEX_KEYBOARD, INPUT_REPORT_KEYS_MAX_LEN,
+        report->raw);
+#endif
+    NRF_LOG_INFO("key normal report send\r\n");
+  } else {
+    err_code = ble_hids_boot_kb_inp_rep_send(&m_hids,
+    INPUT_REPORT_KEYS_MAX_LEN, report->raw);
+    NRF_LOG_INFO("key boot report send\r\n");
+  }
+//    APP_ERROR_CHECK(err_code);
+  if (err_code != NRF_SUCCESS) {
+    NRF_LOG_INFO("send key error\r\n");
+  } else {
+    keyboard_report_sent = *report;
+  }
+
 }
 
 void ble_send_mouse(report_mouse_t *report){}

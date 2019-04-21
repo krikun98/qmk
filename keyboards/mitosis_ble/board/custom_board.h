@@ -48,14 +48,21 @@ extern "C" {
 //#include "nrf_gpio.h"
 
 #ifdef NRF_SEPARATE_KEYBOARD_MASTER
+#define COMPILE_LEFT
 #define DEBUG_PIN 21
 #define LED_DATA_PIN 19
 #endif
 
 #ifdef NRF_SEPARATE_KEYBOARD_SLAVE
+#define COMPILE_RIGHT
 #define DEBUG_PIN 19
 #define LED_DATA_PIN 21
 #endif
+
+#include "mitosis.h"
+#undef NRF_CLOCK_LFCLKSRC
+
+#define NO_PIN (~0)
 
 #define GPIO(port, pin) ((port << 6) | pin)
 #define PIN1 GPIO(0,8)
@@ -86,6 +93,7 @@ extern "C" {
 #ifdef S210
 // #define NRF_CLOCK_LFCLKSRC      NRF_CLOCK_LFCLKSRC_XTAL_20_PPM
 #else
+
 #define NRF_CLOCK_LFCLKSRC      {.source        = NRF_CLOCK_LF_SRC_RC,            \
                                  .rc_ctiv       = 16,                                \
                                  .rc_temp_ctiv  = 2,                                \

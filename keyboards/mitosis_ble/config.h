@@ -30,12 +30,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define PRODUCT_ID      0x0042
 #define DEVICE_VER      0x0100
 #define MANUFACTURER    Joric
-#define PRODUCT         Mitosis
+#define PRODUCT         Mitosis BLE
 #define DESCRIPTION     The Answer to the Ultimate Question of Life, the Universe, and at least Keyboards
 
 /* key matrix size */
-#define MATRIX_ROWS 8
-#define MATRIX_COLS 7
+#define MATRIX_ROWS 2
+#define MATRIX_COLS 23
 
 #define DIODE_DIRECTION COL2ROW
 
