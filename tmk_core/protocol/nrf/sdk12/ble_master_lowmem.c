@@ -29,55 +29,6 @@ void ble_advertising_modes_config_set(ble_adv_modes_config_t const * const p_adv
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
 
-#include "ble_common.h"
-#include "ble_master.h"
-#include "ble_central.h"
-#include "ble_report_def.h"
-
-
-#include "app_uart.h"
-#include <stdarg.h>
-
-#define UART_TX_BUF_SIZE                 256                                        /**< UART TX buffer size. */
-#define UART_RX_BUF_SIZE                 1                                          /**< UART RX buffer size. */
-
-//#undef printf
-//#define printf my_debug_log
-
-#undef NRF_LOG_INFO
-#undef NRF_LOG_DEBUG
-#undef NRF_LOG_PROCESS
-#undef NRF_LOG_FINAL_FLUSH
-
-#define NRF_LOG_INFO my_debug_log
-#define NRF_LOG_DEBUG my_debug_log
-
-#define NRF_LOG_PROCESS() false
-#define NRF_LOG_FINAL_FLUSH() false
-
-#undef NRF_LOG_INIT
-#define NRF_LOG_INIT my_debug_init
-
-#undef RX_PIN_NUMBER
-#undef TX_PIN_NUMBER
-#undef CTS_PIN_NUMBER
-#undef RTS_PIN_NUMBER
-#undef HWFC
-
-#define RX_PIN_NUMBER  -1
-#define TX_PIN_NUMBER  19 // pin19 == S15 (right hand jorian, PCB underside, key pin closest to the SWD header)
-#define CTS_PIN_NUMBER -1
-#define RTS_PIN_NUMBER -1
-#define HWFC false
-
-#undef APP_ERROR_CHECK
-#define APP_ERROR_CHECK(x) if (x!=NRF_SUCCESS) printf("ERROR 0x%04x in line %u\n", (int)x, __LINE__)
-
-uint32_t my_debug_init(void *p);
-void my_debug_log(const char *fmt, ...);
-void uart_error_handle(app_uart_evt_t * p_event);
-
-
 void my_debug_log(const char *fmt, ...)
 {
     va_list list;
@@ -106,6 +57,12 @@ uint32_t my_debug_init(void *p)
     NRF_LOG_INFO("\nUART initialized\n");
     return err_code;
 }
+
+
+#include "ble_common.h"
+#include "ble_master.h"
+#include "ble_central.h"
+#include "ble_report_def.h"
 
 #if (NRF_SD_BLE_API_VERSION == 3)
 #define NRF_BLE_MAX_MTU_SIZE            GATT_MTU_SIZE_DEFAULT                       /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
