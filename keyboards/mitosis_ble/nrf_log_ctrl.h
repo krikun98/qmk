@@ -31,7 +31,7 @@
 #undef HWFC
 
 #define RX_PIN_NUMBER  -1
-#define TX_PIN_NUMBER  21 // pin19 == S15 (right hand jorian, PCB underside, key pin closest to the SWD header)
+#define TX_PIN_NUMBER  DEBUG_PIN
 #define CTS_PIN_NUMBER -1
 #define RTS_PIN_NUMBER -1
 #define HWFC false
