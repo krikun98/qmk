@@ -3,6 +3,8 @@
 
 #include "custom_board.h"
 
+#define ENABLE_STARTUP_ADV_NOLIST 1
+
 #define THIS_DEVICE_ROWS 1
 #define THIS_DEVICE_COLS 23
 

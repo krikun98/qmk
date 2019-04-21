@@ -51,8 +51,8 @@ else
   NRFCFLAGS += -DNRF_LOG_BACKEND_UART_ENABLED=0
   NRFCFLAGS += -DNRF_LOG_DEFAULT_LEVEL=3
   else
-  NRFCFLAGS += -DNRF_LOG_ENABLED=0
-  NRFCFLAGS += -DNRF_LOG_BACKEND_SERIAL_USES_UART=0
+  NRFCFLAGS += -DNRF_LOG_ENABLED=1
+	NRFCFLAGS += -DNRF_LOG_BACKEND_SERIAL_USES_UART=1
   NRFCFLAGS += -DNRF_LOG_DEFAULT_LEVEL=0
   endif
 endif
@@ -63,6 +63,7 @@ ifeq ($(NRFSDK_VER), 12)
   NRFLIB := libnrf.sdk12.$(MCU_SERIES)
   # Source files common to all targets
   NRFLIBSRC += \
+    $(TMK_PATH)/protocol/nrf/$(NRF_VER_DIR)/ble_advertising.c \
     $(NRFSDK_ROOT)/components/libraries/log/src/nrf_log_backend_serial.c \
     $(NRFSDK_ROOT)/components/libraries/log/src/nrf_log_frontend.c \
     $(NRFSDK_ROOT)/components/libraries/button/app_button.c \
@@ -107,16 +108,16 @@ ifeq ($(NRFSDK_VER), 12)
     $(NRFSDK_ROOT)/components/ble/ble_services/ble_nus/ble_nus.c \
     $(NRFSDK_ROOT)/components/softdevice/common/softdevice_handler/softdevice_handler.c \
     $(NRFSDK_ROOT)/components/softdevice/common/softdevice_handler/softdevice_handler_appsh.c \
-    $(NRFSDK_ROOT)/components/libraries/fifo/app_fifo.c \
-    $(NRFSDK_ROOT)/components/libraries/uart/app_uart_fifo.c \
-    $(NRFSDK_ROOT)/components/libraries/uart/retarget.c \
-    $(TMK_PATH)/protocol/nrf/$(NRF_VER_DIR)/ble_advertising.c
 
 ifeq ($(wildcard $(MASTER_LOWMEM)), "")
   NRFLIBSRC += \
-    $(NRFSDK_ROOT)/components/ble/ble_advertising/ble_advertising.c \
     $(NRFSDK_ROOT)/components/drivers_nrf/twi_master/nrf_drv_twi.c \
     $(NRFSDK_ROOT)/components/drivers_nrf/twis_slave/nrf_drv_twis.c
+else
+  NRFLIBSRC += \
+    $(NRFSDK_ROOT)/components/libraries/fifo/app_fifo.c \
+    $(NRFSDK_ROOT)/components/libraries/uart/app_uart_fifo.c \
+    $(NRFSDK_ROOT)/components/libraries/uart/retarget.c
 endif
 
   # Include folders common to all targets
@@ -186,7 +187,6 @@ endif
     $(NRFSDK_ROOT)/components/libraries/hardfault \
     $(NRFSDK_ROOT)/components/ble/ble_services/ble_cscs \
     $(NRFSDK_ROOT)/components/libraries/uart \
-    $(NRFSDK_ROOT)/components/libraries/fifo \
     $(NRFSDK_ROOT)/components/libraries/hci \
     $(NRFSDK_ROOT)/components/libraries/usbd/class/hid/kbd \
     $(NRFSDK_ROOT)/components/drivers_nrf/spi_slave \
@@ -228,7 +228,12 @@ endif
     $(NRFSDK_ROOT)/components/softdevice/common/softdevice_handler \
     $(NRFSDK_ROOT)/components/ble/ble_services/ble_hrs \
     $(NRFSDK_ROOT)/components/libraries/log/src \
-    
+
+ifeq ($(wildcard $(MASTER_LOWMEM)), "")
+else
+    EXTRAINCDIRS += $(NRFSDK_ROOT)/components/libraries/fifo
+endif
+
   ifeq ($(MCU_FAMILY),NRF51)
     NRFSRC += $(NRFSDK_ROOT)/components/toolchain/gcc/gcc_startup_nrf51.S \
       $(NRFSDK_ROOT)/components/drivers_nrf/adc/nrf_drv_adc.c \
@@ -241,7 +246,7 @@ endif
     # C flags common to all targets
     NRFCFLAGS +=-DADC_ENABLED=1
     NRFCFLAGS +=-DSAADC_ENABLED=0
-    NRFCFLAGS +=-DFDS_VIRTUAL_PAGE_SIZE=1024
+    NRFCFLAGS +=-DFDS_VIRTUAL_PAGE_SIZE=256
     NRFCFLAGS += -DBOARD_CUSTOM
     NRFCFLAGS += -DSOFTDEVICE_PRESENT
     NRFCFLAGS += -DNRF51
@@ -256,10 +261,7 @@ endif
     NRFCFLAGS += -mfloat-abi=soft
     # keep every function in separate section, this allows linker to discard unused ones
     NRFCFLAGS += -ffunction-sections -fdata-sections -fno-strict-aliasing
-    NRFCFLAGS += -fno-builtin --short-enums
-    NRFCFLAGS += -D__HEAP_SIZE=0 -D__STACK_SIZE=0
-    # bluetooth debugging only! PLEASE REMOVE
-    NRFCFLAGS += -DENABLE_STARTUP_ADV_NOLIST
+    NRFCFLAGS += -fno-builtin --short-enums 
 
     # C++ flags common to all targets
     CXXFLAGS += \
@@ -274,9 +276,9 @@ endif
     ASFLAGS += -DSWI_DISABLE0
     ASFLAGS += -DNRF51822
     ASFLAGS += -DNRF_SD_BLE_API_VERSION=2
-    ASFLAGS += -D__HEAP_SIZE=0 -D__STACK_SIZE=0
-    # somehow fixes "error: target CPU does not support ARM mode" // joric
-    ASFLAGS += -mcpu=cortex-m0 -mthumb
+    ASFLAGS += -D__HEAP_SIZE=0
+    ASFLAGS += -D__STACK_SIZE=0 # // fixes RAM overflow with stack (for real!) // joric
+    ASFLAGS += -mcpu=cortex-m0 -mthumb # fixes "error: target CPU does not support ARM mode" // joric
 
     # Linker flags
     LDFLAGS += -mthumb -mabi=aapcs -L$(NRFSDK_ROOT)/components/toolchain/gcc -T$(LDSCRIPT)
@@ -358,9 +360,9 @@ endif
       ASFLAGS += -DNRF52_PAN_55
     endif   
     # C flags common to all targets
-    NRFCFLAGS +=-DADC_ENABLED=1
+    NRFCFLAGS +=-DADC_ENABLED=0
     NRFCFLAGS +=-DSAADC_ENABLED=1
-    NRFCFLAGS +=-DFDS_VIRTUAL_PAGE_SIZE=256
+    NRFCFLAGS +=-DFDS_VIRTUAL_PAGE_SIZE=1024
   #  NRFCFLAGS += -DNRF52
     NRFCFLAGS += -DSOFTDEVICE_PRESENT
     NRFCFLAGS += -DBOARD_CUSTOM

@@ -1,12 +1,17 @@
 PROTOCOL_DIR = protocol
 NRF_DIR = $(PROTOCOL_DIR)/nrf
 
-  SRC += $(NRF_DIR)/matrix.c
-  SRC += $(NRF_DIR)/$(NRF_VER_DIR)/ble_common.c
-
   ifeq ($(wildcard $(MASTER_LOWMEM)), "")
-    SRC += $(NRF_DIR)/$(NRF_VER_DIR)/i2c_master.c
-    SRC += $(NRF_DIR)/$(NRF_VER_DIR)/i2c_slave.c
+  SRC += $(NRF_DIR)/matrix.c \
+  				$(NRF_DIR)/io_expander.c \
+
+  SRC += $(NRF_DIR)/$(NRF_VER_DIR)/ble_common.c \
+       $(NRF_DIR)/$(NRF_VER_DIR)/i2c_master.c \
+       $(NRF_DIR)/$(NRF_VER_DIR)/i2c_slave.c \
+
+  else
+  SRC += $(NRF_DIR)/matrix.c \
+    $(NRF_DIR)/$(NRF_VER_DIR)/ble_common.c
   endif
 
 ifeq ($(MCU_FAMILY),NRF51)
@@ -16,7 +21,6 @@ endif
 
 ifeq ($(MCU_FAMILY),NRF52)
   SRC += $(NRF_DIR)/nrf52/adc.c
-  SRC += $(NRF_DIR)/$(NRF_VER_DIR)/i2c_master.c
 endif
 
   
@@ -40,13 +44,11 @@ ifeq ($(strip $(NRF_SEPARATE)), slave)
   SRC += $(NRF_DIR)/$(NRF_VER_DIR)/ble_slave.c
   SRC += $(NRF_DIR)/main_slave.c
 else 
-
   ifeq ($(wildcard $(MASTER_LOWMEM)), "")
     SRC += $(NRF_DIR)/$(NRF_VER_DIR)/ble_master.c
   else
     SRC += $(NRF_DIR)/$(NRF_VER_DIR)/ble_master_lowmem.c
   endif
-
   SRC += $(NRF_DIR)/main_master.c
   ifeq ($(strip $(NRF_SEPARATE)), master)
     CFLAGS += -DNRF_SEPARATE_KEYBOARD_MASTER
