@@ -37,11 +37,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "app_ble_func.h"
 
 #ifdef USE_I2C
-#include "i2c_master.h"
+#include "i2c.h"
 #endif
 #include "io_expander.h"
 
-#ifndef THIS_DEVICE_ROWS
+#ifndef MATRIX_ROW_PINS
  #include "pin_assign.h"
 #endif
 
@@ -107,10 +107,19 @@ static ble_switch_state_t front_queue(switch_queue *q){
 
 static void init_rows(void);
 static void init_cols(void);
+#if DIODE_DIRECTION == ROW2COL
+void scan_row2col_matrix(void);
+matrix_row_t get_row2col_matrix(uint8_t row);
+void unselect_cols(void);
+void select_col(uint8_t col);
+matrix_col_t read_rows(void);
+matrix_col_t read_col(uint8_t col);
+#else
 void unselect_rows(void);
 void select_row(uint8_t row);
 matrix_row_t read_cols(void);
 matrix_row_t read_row(uint8_t row);
+#endif
 
 __attribute__ ((weak))
 void matrix_init_user(void) {
@@ -142,7 +151,7 @@ static uint8_t sync;
 void radio_event_callback(bool active){
   if(!active && send_flag){
 #ifdef NRF_SEPARATE_KEYBOARD_SLAVE
-    sync = timing;
+    sync = timing % 0xFF;
     send_flag = false;
 #endif
   }
@@ -151,7 +160,11 @@ void radio_event_callback(bool active){
 void matrix_init(void) {
   // initialize row and col
   init_rows();
+#if DIODE_DIRECTION == ROW2COL
+  unselect_cols();
+#else
   unselect_rows();
+#endif
   init_cols();
 //    NRF_LOG_INFO("matrix init\r\n")
 
@@ -161,8 +174,11 @@ void matrix_init(void) {
     matrix_debouncing[i] = 0;
   }
 
-#ifdef USE_I2C
+#if defined(NRF_SEPARATE_KEYBOARD_MASTER) && defined(USE_I2C)
   i2c_init();
+#endif
+#if defined(NRF_SEPARATE_KEYBOARD_SLAVE) && defined(USE_I2C)
+  i2cs_init();
 #endif
   matrix_init_user();
 }
@@ -186,16 +202,24 @@ uint8_t matrix_scan_impl(matrix_row_t* _matrix){
   volatile int matrix_changed = 0;
   ble_switch_state_t ble_switch_send[THIS_DEVICE_ROWS*THIS_DEVICE_COLS];
 
+#if DIODE_DIRECTION == ROW2COL
+  scan_row2col_matrix();
   for (uint8_t i = 0; i < THIS_DEVICE_ROWS; i++) {
-//    select_row(i);
-//    wait_us(0);
+    matrix_row_t row = get_row2col_matrix(i);
+    if (matrix_debouncing[i + matrix_offset] != row) {
+      matrix_debouncing[i + matrix_offset] = row;
+      debouncing = DEBOUNCE;
+    }
+  }
+#else
+  for (uint8_t i = 0; i < THIS_DEVICE_ROWS; i++) {
     matrix_row_t row = read_row(i);
     if (matrix_debouncing[i + matrix_offset] != row) {
       matrix_debouncing[i + matrix_offset] = row;
       debouncing = DEBOUNCE;
     }
-//    unselect_rows();
   }
+#endif
 
   if (debouncing) {
     if (--debouncing) {
@@ -218,6 +242,7 @@ uint8_t matrix_scan_impl(matrix_row_t* _matrix){
         }
 #if defined(NRF_SEPARATE_KEYBOARD_MASTER) || defined(NRF_SEPARATE_KEYBOARD_SLAVE)
         matrix_dummy[i + matrix_offset] = matrix_debouncing[i + matrix_offset];
+//        matrix[i + matrix_offset] = matrix_debouncing[i + matrix_offset]; Do not set matrix directory
 #else
         matrix_dummy[i + matrix_offset] = matrix_debouncing[i + matrix_offset];
         matrix[i + matrix_offset] = matrix_debouncing[i + matrix_offset];
@@ -231,7 +256,7 @@ uint8_t matrix_scan_impl(matrix_row_t* _matrix){
     push_queue(&delay_keys_queue, ble_switch_send[i+1]);
   }
 
-#ifdef USE_I2C
+#if defined(NRF_SEPARATE_KEYBOARD_MASTER) && defined(USE_I2C)
 #if MATRIX_COLS>8
 #error "MATRIX_COLS should be less than eight for I2C "
 #endif
@@ -315,6 +340,10 @@ uint8_t matrix_scan_impl(matrix_row_t* _matrix){
 //  cnt2%=10000;
 
 #ifdef NRF_SEPARATE_KEYBOARD_SLAVE
+#ifdef USE_I2C
+  i2cs_prepare((uint8_t*)&matrix_dummy[matrix_offset], sizeof(matrix_row_t)*THIS_DEVICE_ROWS);
+  UNUSED_VARIABLE(ble_switch_send);
+#endif
   if (matrix_changed) {
     NRF_LOG_DEBUG("NUS send");
     ble_nus_send_bytes((uint8_t*) ble_switch_send, (matrix_changed+1)*sizeof(ble_switch_state_t));
@@ -398,6 +427,11 @@ void matrix_print(void)
 }
 
 static void init_rows() {
+#if DIODE_DIRECTION == ROW2COL
+  for(int i=0; i<THIS_DEVICE_ROWS; i++) {
+    nrf_gpio_cfg_input(row_pins[i], NRF_GPIO_PIN_PULLUP);
+  }
+#else
   for(int i=0; i<THIS_DEVICE_ROWS; i++) {
     nrf_gpio_cfg(row_pins[i],
         NRF_GPIO_PIN_DIR_OUTPUT,
@@ -406,15 +440,80 @@ static void init_rows() {
         NRF_GPIO_PIN_S0D1,
         NRF_GPIO_PIN_NOSENSE);
   }
+#endif
 }
 /* Column pin configuration
  */
 static void  init_cols(void)
 {
+#if DIODE_DIRECTION == ROW2COL
+  for(int i=0; i<THIS_DEVICE_COLS; i++) {
+    nrf_gpio_cfg(col_pins[i],
+        NRF_GPIO_PIN_DIR_OUTPUT,
+        NRF_GPIO_PIN_INPUT_DISCONNECT,
+        NRF_GPIO_PIN_NOPULL,
+        NRF_GPIO_PIN_S0D1,
+        NRF_GPIO_PIN_NOSENSE);
+  }
+#else
   for(int i=0; i<THIS_DEVICE_COLS; i++) {
     nrf_gpio_cfg_input(col_pins[i], NRF_GPIO_PIN_PULLUP);
   }
+#endif
 }
+#if DIODE_DIRECTION == ROW2COL
+matrix_row_t matrix_row2col[MATRIX_ROWS];
+void scan_row2col_matrix(void)
+{
+  for (uint8_t i = 0; i < THIS_DEVICE_COLS; i++) {
+    matrix_col_t col = read_col(i);
+    for (uint8_t j = 0; j < THIS_DEVICE_ROWS; j++) {
+      uint8_t bit =  (col >> j) & 1;
+      if ( bit == 1) {
+        matrix_row2col[j] |= (1 << i);
+      } else {
+        matrix_row2col[j] &= ~(1 << i);
+      }
+    }
+  }
+}
+matrix_row_t get_row2col_matrix(uint8_t row)
+{
+  return matrix_row2col[row];
+}
+
+/* Returns status of switches(1:on, 0:off) */
+matrix_col_t read_rows(void)
+{
+  matrix_col_t col = 0;
+  for (int i=0; i<THIS_DEVICE_ROWS; i++) {
+    col |= ((nrf_gpio_pin_read(row_pins[i]) ? 0 : 1) << i);
+  }
+  return col;
+}
+
+__attribute__ ((weak))
+matrix_col_t read_col(uint8_t col)
+{
+  select_col(col);
+  wait_us(0);
+  matrix_col_t col_state = read_rows();
+  unselect_cols();
+  return col_state;
+}
+
+void unselect_cols(void)
+{
+  for(int i=0; i<THIS_DEVICE_COLS; i++) {
+    nrf_gpio_pin_set(col_pins[i]);
+  }
+}
+
+void select_col(uint8_t col)
+{
+    nrf_gpio_pin_clear(col_pins[col]);
+}
+#else
 
 /* Returns status of switches(1:on, 0:off) */
 matrix_row_t read_cols(void)
@@ -453,6 +552,7 @@ void select_row(uint8_t row)
 {
     nrf_gpio_pin_clear(row_pins[row]);
 }
+#endif
 
 void ble_nus_on_disconnect() {
 #if defined(NRF_SEPARATE_KEYBOARD_MASTER) || defined(NRF_SEPARATE_KEYBOARD_SLAVE)
@@ -467,10 +567,12 @@ void ble_nus_on_disconnect() {
 void ble_nus_packetrcv_handler(ble_switch_state_t* buf, uint8_t len) {
   static uint8_t prev_recv_timing;
   int i=0;
+  int32_t slave_time_est;
   if (buf[0].dat[0]==0xFF) {
     // master and slave synchronizing
     NRF_LOG_DEBUG("%d %d %d %d",timing, buf[0].dat[1], prev_recv_timing, ((int32_t)timing+buf[0].dat[1]-prev_recv_timing) % 0xFF);
-    timing=((int32_t)timing+buf[0].dat[1]-prev_recv_timing) % 0xFF;
+    slave_time_est = (int32_t)buf[0].dat[1];
+    timing=((int32_t)timing+slave_time_est-prev_recv_timing) % 0xFF;
     prev_recv_timing = timing;
     i=1;
   }

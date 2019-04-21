@@ -110,12 +110,14 @@ ifeq ($(NRFSDK_VER), 12)
     $(NRFSDK_ROOT)/components/libraries/fifo/app_fifo.c \
     $(NRFSDK_ROOT)/components/libraries/uart/app_uart_fifo.c \
     $(NRFSDK_ROOT)/components/libraries/uart/retarget.c \
-    $(TMK_PATH)/protocol/nrf/$(NRF_VER_DIR)/ble_advertising.c \
+    $(TMK_PATH)/protocol/nrf/$(NRF_VER_DIR)/ble_advertising.c
 
-    #disabled features
-    #$(NRFSDK_ROOT)/components/ble/ble_advertising/ble_advertising.c \
-    #$(NRFSDK_ROOT)/components/drivers_nrf/twi_master/nrf_drv_twi.c \
-
+ifeq ($(wildcard $(MASTER_LOWMEM)), "")
+  NRFLIBSRC += \
+    $(NRFSDK_ROOT)/components/ble/ble_advertising/ble_advertising.c \
+    $(NRFSDK_ROOT)/components/drivers_nrf/twi_master/nrf_drv_twi.c \
+    $(NRFSDK_ROOT)/components/drivers_nrf/twis_slave/nrf_drv_twis.c
+endif
 
   # Include folders common to all targets
   EXTRAINCDIRS += \
@@ -124,6 +126,7 @@ ifeq ($(NRFSDK_VER), 12)
     $(TMK_PATH)/protocol/chibios/lufa_utils \
     $(NRFSDK_ROOT)/components/drivers_nrf/comp \
     $(NRFSDK_ROOT)/components/drivers_nrf/twi_master \
+    $(NRFSDK_ROOT)/components/drivers_nrf/twis_slave \
     $(NRFSDK_ROOT)/components/ble/ble_services/ble_ancs_c \
     $(NRFSDK_ROOT)/components/ble/ble_services/ble_ias_c \
     $(NRFSDK_ROOT)/components/libraries/pwm \
