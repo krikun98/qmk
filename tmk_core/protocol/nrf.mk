@@ -36,7 +36,13 @@ ifeq ($(strip $(NRF_SEPARATE)), slave)
   SRC += $(NRF_DIR)/$(NRF_VER_DIR)/ble_slave.c
   SRC += $(NRF_DIR)/main_slave.c
 else 
-  SRC += $(NRF_DIR)/$(NRF_VER_DIR)/ble_master.c
+
+  ifeq ($(MCU_SERIES), NRF51822)
+    SRC += $(NRF_DIR)/$(NRF_VER_DIR)/ble_master_lowmem.c
+  else
+    SRC += $(NRF_DIR)/$(NRF_VER_DIR)/ble_master.c
+  endif
+
   SRC += $(NRF_DIR)/main_master.c
   ifeq ($(strip $(NRF_SEPARATE)), master)
     CFLAGS += -DNRF_SEPARATE_KEYBOARD_MASTER

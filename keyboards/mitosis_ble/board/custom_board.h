@@ -47,6 +47,16 @@ extern "C" {
 
 //#include "nrf_gpio.h"
 
+#ifdef NRF_SEPARATE_KEYBOARD_MASTER
+#define DEBUG_PIN 21
+#define LED_DATA_PIN 19
+#endif
+
+#ifdef NRF_SEPARATE_KEYBOARD_SLAVE
+#define DEBUG_PIN 19
+#define LED_DATA_PIN 21
+#endif
+
 #define GPIO(port, pin) ((port << 6) | pin)
 #define PIN1 GPIO(0,8)
 #define PIN2 GPIO(0,11)
