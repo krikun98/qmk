@@ -109,7 +109,8 @@ ifeq ($(NRFSDK_VER), 12)
     $(NRFSDK_ROOT)/components/softdevice/common/softdevice_handler/softdevice_handler.c \
     $(NRFSDK_ROOT)/components/softdevice/common/softdevice_handler/softdevice_handler_appsh.c \
 
-ifeq ($(wildcard $(MASTER_LOWMEM)), "")
+ifeq ($(strip $(NRF_DISABLE_TWI)), yes)
+else
   NRFLIBSRC += \
     $(NRFSDK_ROOT)/components/drivers_nrf/twi_master/nrf_drv_twi.c \
     $(NRFSDK_ROOT)/components/drivers_nrf/twis_slave/nrf_drv_twis.c

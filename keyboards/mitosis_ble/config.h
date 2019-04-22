@@ -25,8 +25,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define BLE_NUS_MIN_INTERVAL 30
 #define BLE_NUS_MAX_INTERVAL 70
 
-#define MASTER_LOWMEM 1
-
 /* USB Device descriptor parameter */
 #define VENDOR_ID       0xBC42
 #define PRODUCT_ID      0x0042

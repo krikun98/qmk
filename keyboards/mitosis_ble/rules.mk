@@ -2,6 +2,9 @@ DEFAULT_FOLDER = mitosis_ble/master
 
 NRF_DEBUG = yes
 
+NRF_MASTER_LOWMEM = yes # use ble_master_lowmem.c instead of ble_master.c
+NRF_DISABLE_TWI = yes # disables Two-Wire-Interface and TWI slave for i2c
+
 MOUSEKEY_ENABLE = no	# Mouse keys
 EXTRAKEY_ENABLE = no	# Audio control and System control
 CONSOLE_ENABLE = no    # Console for debug
