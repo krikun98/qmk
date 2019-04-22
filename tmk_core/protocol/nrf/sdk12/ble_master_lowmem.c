@@ -2880,8 +2880,8 @@ void ble_disconnect(){}
 
 void ble_send_keyboard(report_keyboard_t *report){
 
-  uint8_t * buf = (uint8_t*)report->raw;
-  NRF_LOG_INFO("Sending HID report: %02x %02x %02x %02x\r\n", buf[0], buf[1], buf[2], buf[3]);
+  //uint8_t * buf = (uint8_t*)report->raw;
+  //NRF_LOG_INFO("Sending HID report: %02x %02x %02x %02x\r\n", buf[0], buf[1], buf[2], buf[3]);
 
   if (m_conn_handle == BLE_CONN_HANDLE_INVALID) {
     return;
