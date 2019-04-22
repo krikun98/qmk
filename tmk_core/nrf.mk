@@ -113,11 +113,6 @@ ifeq ($(wildcard $(MASTER_LOWMEM)), "")
   NRFLIBSRC += \
     $(NRFSDK_ROOT)/components/drivers_nrf/twi_master/nrf_drv_twi.c \
     $(NRFSDK_ROOT)/components/drivers_nrf/twis_slave/nrf_drv_twis.c
-else
-  NRFLIBSRC += \
-    $(NRFSDK_ROOT)/components/libraries/fifo/app_fifo.c \
-    $(NRFSDK_ROOT)/components/libraries/uart/app_uart_fifo.c \
-    $(NRFSDK_ROOT)/components/libraries/uart/retarget.c
 endif
 
   # Include folders common to all targets
@@ -228,11 +223,6 @@ endif
     $(NRFSDK_ROOT)/components/softdevice/common/softdevice_handler \
     $(NRFSDK_ROOT)/components/ble/ble_services/ble_hrs \
     $(NRFSDK_ROOT)/components/libraries/log/src \
-
-ifeq ($(wildcard $(MASTER_LOWMEM)), "")
-else
-    EXTRAINCDIRS += $(NRFSDK_ROOT)/components/libraries/fifo
-endif
 
   ifeq ($(MCU_FAMILY),NRF51)
     NRFSRC += $(NRFSDK_ROOT)/components/toolchain/gcc/gcc_startup_nrf51.S \

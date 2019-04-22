@@ -58,8 +58,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 )
 
 //#define RGBLIGHT_ANIMATIONS
-//#define RGB_DI_PIN 8     // The pin the LED strip is connected to
-//#define RGBLED_NUM 5     // Number of LEDs in your strip
+#define RGB_DI_PIN LED_DATA_PIN     // The pin the LED strip is connected to
+#define RGBLED_NUM 22     // Number of LEDs in your strip
 
 /*
  * Feature disable options

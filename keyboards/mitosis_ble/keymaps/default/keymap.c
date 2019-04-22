@@ -68,7 +68,7 @@ DUAL_R,  KC_BSPC, KC_ENT,  _______,  XXXXXXX[_BL] = {
 
 };
 
-#include "nrf_log_ctrl.h"
+#include "nrf_log.h"
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (record->event.pressed) {

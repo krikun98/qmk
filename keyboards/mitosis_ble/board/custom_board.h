@@ -84,6 +84,11 @@ extern "C" {
 #define PIN18 GPIO(0,30)
 #define PIN19 GPIO(0,0)
 #define PIN20 GPIO(0,5)
+
+// both NRF_LOG_BACKEND_SERIAL_UART_TX_PIN and NRF_LOG_BACKEND_UART_TX_PIN are ignored //joric
+// SDK doesn't look for custom_board.h while compiling nrf_log_backend_serial.c, i don't know how to solve this
+// use "NRFCFLAGS += -DNRF_LOG_BACKEND_SERIAL_UART_TX_PIN=21" in rules.mk or edit sdk_config.h directly
+
 //#define NRF_LOG_ENABLED 0
 //#define NRF_LOG_BACKEND_SERIAL_USES_UART 0
 //#define NRF_LOG_BACKEND_SERIAL_UART_TX_PIN 5

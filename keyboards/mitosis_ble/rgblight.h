@@ -6,8 +6,8 @@
 #include "quantum.h"
 
 neopixel_strip_t m_strip;
-uint8_t dig_pin_num = LED_DATA_PIN;
-uint8_t leds_per_strip = 22;
+uint8_t dig_pin_num = RGB_DI_PIN;
+uint8_t leds_per_strip = RGBLED_NUM;
 
 void rgblight_mode(int mode) {
     neopixel_init(&m_strip, dig_pin_num, leds_per_strip);

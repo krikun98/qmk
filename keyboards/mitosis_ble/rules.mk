@@ -1,17 +1,6 @@
-
 DEFAULT_FOLDER = mitosis_ble/master
 
-NRF_DEBUG = no
-
-# default state, RAM overflow 304 bytes
-# with all options disabled, RAM overflow 280 bytes
-# with disabled log in nrf.mk, RAM overflow is 252 bytes
-#  NRFCFLAGS += -DNRF_LOG_ENABLED=0
-#  NRFCFLAGS += -DNRF_LOG_BACKEND_SERIAL_USES_UART=0
-# disabled stack, still 252 bytes
-# ASFLAGS += -D__HEAP_SIZE=0 -D__STACK_SIZE=0
-# twis disabled, 212 bytes
-
+NRF_DEBUG = yes
 
 MOUSEKEY_ENABLE = no	# Mouse keys
 EXTRAKEY_ENABLE = no	# Audio control and System control

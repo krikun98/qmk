@@ -25,40 +25,6 @@
 
 void ble_advertising_modes_config_set(ble_adv_modes_config_t const * const p_adv_modes_config);
 
-#define NRF_LOG_MODULE_NAME "APP"
-#include "nrf_log.h"
-#include "nrf_log_ctrl.h"
-
-void my_debug_log(const char *fmt, ...)
-{
-    va_list list;
-    va_start(list, fmt);
-    char buf[256] = { 0 };
-    vsprintf(buf, fmt, list);
-    va_end(list);
-    for (char *p = buf; *p; p++)
-        app_uart_put(*p); // needs fifo library
-}
-
-void uart_error_handle(app_uart_evt_t * p_event)
-{
-}
-
-uint32_t my_debug_init(void *p)
-{
-    uint32_t err_code;
-    const app_uart_comm_params_t comm_params = {
-        RX_PIN_NUMBER, TX_PIN_NUMBER, RTS_PIN_NUMBER, CTS_PIN_NUMBER,
-        APP_UART_FLOW_CONTROL_DISABLED, false,
-        UART_BAUDRATE_BAUDRATE_Baud115200
-    };
-    APP_UART_FIFO_INIT(&comm_params, UART_RX_BUF_SIZE, UART_TX_BUF_SIZE, uart_error_handle, APP_IRQ_PRIORITY_LOW, err_code);
-    APP_ERROR_CHECK(err_code);
-    NRF_LOG_INFO("\nUART initialized\n");
-    return err_code;
-}
-
-
 #include "ble_common.h"
 #include "ble_master.h"
 #include "ble_central.h"
@@ -487,9 +453,6 @@ void battery_level_meas_timeout_handler(void * p_context) {
  * @details Initializes the timer module.
  */
 void timers_init(void (*main_task)(void*)) {
-
-  NRF_LOG_INIT(NULL); //NB! joric
-
   uint32_t err_code;
 
   // Initialize timer module, making it use the scheduler.
@@ -521,8 +484,7 @@ void gap_params_init(void)
     BLE_GAP_CONN_SEC_MODE_SET_OPEN(&sec_mode);
 
     err_code = sd_ble_gap_device_name_set(&sec_mode,
-                                          (const uint8_t *)DEVICE_NAME,
-                                          strlen(DEVICE_NAME));
+      (const uint8_t*) STR(PRODUCT), strlen(STR(PRODUCT)));
     APP_ERROR_CHECK(err_code);
 
     err_code = sd_ble_gap_appearance_set(BLE_APPEARANCE_HID_KEYBOARD);
@@ -2918,9 +2880,8 @@ void ble_disconnect(){}
 
 void ble_send_keyboard(report_keyboard_t *report){
 
-    unsigned char * buf = report->raw;
-    NRF_LOG_INFO("Sending HID report: %02x %02x %02x %02x %02x %02x %02x %02x\n",
-        buf[0], buf[1], buf[2], buf[3], buf[4], buf[5], buf[6], buf[7]);
+  uint8_t * buf = (uint8_t*)report->raw;
+  NRF_LOG_INFO("Sending HID report: %02x %02x %02x %02x\r\n", buf[0], buf[1], buf[2], buf[3]);
 
   if (m_conn_handle == BLE_CONN_HANDLE_INVALID) {
     return;
