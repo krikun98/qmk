@@ -101,6 +101,9 @@ VPATH += $(RN42_DIR)
 
 endif
 
+ifeq ($(strip $(PRO_MICRO)), yes)
+OPT_DEFS += -DPRO_MICRO
+endif
 
 # debug-on: EXTRAFLAGS += -DDEBUG -DDEBUG_ACTION
 # debug-on: all

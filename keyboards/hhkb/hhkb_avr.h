@@ -24,8 +24,53 @@
  * prev:    hysteresis control: assert(1) when previous key state is on
  */
 
+#if defined(PRO_MICRO)
+/*
+ * Pro Micro-based controller (ATMega32U4) and HHKB Pro 2
+ *
+ * PB0 on ProMicro is occupied by RX LED, so row and col pins are B1-B6
+ * PB6 remapped to PF6, PB7 remapped to PF7
+ *
+ * row:     PB0-2             remapped to B1-3
+ * col:     PB3-5,6           remapped to B4-6, F6
+ * key:     PD7(pull-uped)    D7 (same)
+ * prev:    PB7               remapped to F7
+ * power:   PD4(L:off/H:on)   D4 (same)
+ * row-ext: PC6,7 for HHKB JP(active low) same (unused)
+ */
+static inline void KEY_ENABLE(void) { (PORTF &= ~(1<<6)); }
+static inline void KEY_UNABLE(void) { (PORTF |=  (1<<6)); }
+static inline bool KEY_STATE(void) { return (PIND & (1<<7)); }
+static inline void KEY_PREV_ON(void) { (PORTF |=  (1<<7)); }
+static inline void KEY_PREV_OFF(void) { (PORTF &= ~(1<<7)); }
 
-#if defined(__AVR_ATmega32U4__)
+static inline void KEY_POWER_ON(void) {}
+static inline void KEY_POWER_OFF(void) {}
+static inline bool KEY_POWER_STATE(void) { return true; }
+
+static inline void KEY_INIT(void)
+{
+    /* row,col,prev: output */
+    DDRB  = 0xFF;
+    PORTB = 0x80;   // unable
+    /* key: input with pull-up */
+    DDRD  &= ~0x80;
+    PORTD |=  0x80;
+
+    DDRF  |= (1<<6|1<<7);
+    PORTF |= (1<<6|1<<7);
+
+    KEY_UNABLE();
+    KEY_PREV_OFF();
+
+    KEY_POWER_OFF();
+}
+static inline void KEY_SELECT(uint8_t ROW, uint8_t COL)
+{
+    PORTB = (PORTB & 0x81) | (((COL) & 0x07)<<4) | (((ROW) & 0x07)<<1);
+}
+
+#elif defined(__AVR_ATmega32U4__)
 /*
  * For TMK HHKB alt controller(ATMega32U4)
  *
