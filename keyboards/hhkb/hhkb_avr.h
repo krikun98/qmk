@@ -6,6 +6,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
+#include <quantum.h>
 
 
 // Timer resolution check
@@ -24,7 +25,68 @@
  * prev:    hysteresis control: assert(1) when previous key state is on
  */
 
-#if defined(PRO_MICRO)
+#if defined(CUSTOM_BOARD)
+
+/* #define HHKB_PINS { D7, B7, B0, B1, B2, B3, B4, B5, B6 } */ /* Hasu Alt Controller */
+#define HHKB_PINS { D7, F7, B1, B2, B3, B4, B5, B6, F6 } /* Pro Micro default */
+
+enum {
+    HHKB_KEY_PIN = 0,
+    HHKB_KEY_PREV_PIN,
+    HHKB_ROW_BIT0_PIN,
+    HHKB_ROW_BIT1_PIN,
+    HHKB_ROW_BIT2_PIN,
+    HHKB_COL_BIT0_PIN,
+    HHKB_COL_BIT1_PIN,
+    HHKB_COL_BIT2_PIN,
+    HHKB_COL_SELECT_PIN,
+    HHKB_PIN_COUNT
+} HHKB_pins_enum;
+
+static const pin_t HHKB_pins[HHKB_PIN_COUNT] = HHKB_PINS;
+
+static inline void KEY_ENABLE(void) { writePinLow(HHKB_pins[HHKB_COL_SELECT_PIN]); }
+static inline void KEY_UNABLE(void) { writePinHigh(HHKB_pins[HHKB_COL_SELECT_PIN]); }
+static inline bool KEY_STATE(void) { return readPin(HHKB_pins[HHKB_KEY_PIN]); }
+static inline void KEY_PREV_ON(void) { writePinHigh(HHKB_pins[HHKB_KEY_PREV_PIN]); }
+static inline void KEY_PREV_OFF(void) { writePinLow(HHKB_pins[HHKB_KEY_PREV_PIN]); }
+
+static inline void KEY_POWER_ON(void) {}
+static inline void KEY_POWER_OFF(void) {}
+static inline bool KEY_POWER_STATE(void) { return true; }
+
+static inline void KEY_INIT(void)
+{
+    setPinInputHigh(HHKB_pins[HHKB_KEY_PIN]);
+
+    setPinOutput(HHKB_pins[HHKB_ROW_BIT0_PIN]);
+    setPinOutput(HHKB_pins[HHKB_ROW_BIT1_PIN]);
+    setPinOutput(HHKB_pins[HHKB_ROW_BIT2_PIN]);
+    setPinOutput(HHKB_pins[HHKB_COL_BIT0_PIN]);
+    setPinOutput(HHKB_pins[HHKB_COL_BIT1_PIN]);
+    setPinOutput(HHKB_pins[HHKB_COL_BIT2_PIN]);
+    setPinOutput(HHKB_pins[HHKB_COL_SELECT_PIN]);
+    setPinOutput(HHKB_pins[HHKB_KEY_PREV_PIN]);
+
+    KEY_UNABLE();
+    KEY_PREV_OFF();
+    KEY_POWER_OFF();
+}
+
+#define SET_PIN_COND(PIN, COND) if (COND) writePinHigh(PIN); else writePinLow(PIN);
+
+static inline void KEY_SELECT(uint8_t ROW, uint8_t COL)
+{
+    SET_PIN_COND(HHKB_pins[HHKB_ROW_BIT0_PIN], ROW & 1);
+    SET_PIN_COND(HHKB_pins[HHKB_ROW_BIT1_PIN], ROW & 2);
+    SET_PIN_COND(HHKB_pins[HHKB_ROW_BIT2_PIN], ROW & 4);
+
+    SET_PIN_COND(HHKB_pins[HHKB_COL_BIT0_PIN], COL & 1);
+    SET_PIN_COND(HHKB_pins[HHKB_COL_BIT1_PIN], COL & 2);
+    SET_PIN_COND(HHKB_pins[HHKB_COL_BIT2_PIN], COL & 4);
+}
+
+#elif defined(PRO_MICRO)
 /*
  * Pro Micro-based controller (ATMega32U4) and HHKB Pro 2
  *
