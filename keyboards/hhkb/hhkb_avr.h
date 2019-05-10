@@ -31,17 +31,24 @@
 #define HHKB_PINS { D7, F7, B1, B2, B3, B4, B5, B6, F6 } /* Pro Micro default */
 
 enum {
-    HHKB_KEY_PIN = 0,
-    HHKB_KEY_PREV_PIN,
-    HHKB_ROW_BIT0_PIN,
-    HHKB_ROW_BIT1_PIN,
-    HHKB_ROW_BIT2_PIN,
-    HHKB_COL_BIT0_PIN,
-    HHKB_COL_BIT1_PIN,
-    HHKB_COL_BIT2_PIN,
-    HHKB_COL_SELECT_PIN,
+    HHKB_KEY_PIN = 0,    /* ~KEY: Low(0) when key is pressed (input with pullup) */
+    HHKB_KEY_PREV_PIN,   /* HYS: High(1) when key is pressed (output) */
+    HHKB_ROW_BIT0_PIN,   /* A(bit0) select row 0-7 (output) */
+    HHKB_ROW_BIT1_PIN,   /* B(bit1) select row 0-7 (output) */
+    HHKB_ROW_BIT2_PIN,   /* C(bit2) select row 0-7 (output) */
+    HHKB_COL_BIT0_PIN,   /* A(bit0) select column 0-7 (output) */
+    HHKB_COL_BIT1_PIN,   /* B(bit1) select column 0-7 (output) */
+    HHKB_COL_BIT2_PIN,   /* C(bit2) select column 0-7 (output) */
+    HHKB_COL_SELECT_PIN, /* ~D(enable) Low(0) enables selected column (output) */
     HHKB_PIN_COUNT
 } HHKB_pins_enum;
+
+/*
+    NOTE: Probably HYS changes threshold for upstroke and makes hysteresis in the result.
+    NOTE: HYS should be given High(1) when previous KEY state is Low(0).
+    NOTE: 1KOhm didn't work as pullup resistor on KEY. AVR internal pullup or 10KOhm resistor was OK.
+    NOTE: JP has two HC4051(Z2,Z3) and line 5, 6 and 7 are connected to both of them.
+*/
 
 static const pin_t HHKB_pins[HHKB_PIN_COUNT] = HHKB_PINS;
 
