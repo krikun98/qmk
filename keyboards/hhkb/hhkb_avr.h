@@ -27,8 +27,12 @@
 
 #if defined(CUSTOM_BOARD)
 
-/* #define HHKB_PINS { D7, B7, B0, B1, B2, B3, B4, B5, B6 } */ /* Hasu Alt Controller */
-#define HHKB_PINS { D7, F7, B1, B2, B3, B4, B5, B6, F6 } /* Pro Micro default */
+#define HHKB_PINS_HASU           { D7, B7, B0, B1, B2, B3, B4, B5, B6, D4 }
+#define HHKB_PINS_HASU_JP        { D7, B7, B0, B1, B2, B3, B4, B5, B6, D4, C6, C7 }
+#define HHKB_PINS_PRO_MICRO      { D7, F7, B1, B2, B3, B4, B5, B6, F6, D4 }
+#define HHKB_PINS_PRO_MICRO_HBAR { B2, B3, D7, B1, C6, F7, D4, F6, F5 }
+
+#define HHKB_PINS HHKB_PINS_HASU
 
 enum {
     HHKB_KEY_PIN = 0,    /* ~KEY: Low(0) when key is pressed (input with pullup) */
@@ -40,15 +44,21 @@ enum {
     HHKB_COL_BIT1_PIN,   /* B(bit1) select column 0-7 (output) */
     HHKB_COL_BIT2_PIN,   /* C(bit2) select column 0-7 (output) */
     HHKB_COL_SELECT_PIN, /* ~D(enable) Low(0) enables selected column (output) */
-    HHKB_PIN_COUNT
-} HHKB_pins_enum;
-
+#ifdef HHKB_POWER_SAVING
+    HHKB_POWER_PIN,
+#endif
+#ifdef HHKB_JP
+    HHKB_JP_COL_BIT3_PIN,   /* ~Enable of Z2   row0-7  (output) */
+    HHKB_JP_COL_BIT4_PIN,   /* ~Enable of Z3   row8-15 (output) */
+#endif
 /*
     NOTE: Probably HYS changes threshold for upstroke and makes hysteresis in the result.
     NOTE: HYS should be given High(1) when previous KEY state is Low(0).
     NOTE: 1KOhm didn't work as pullup resistor on KEY. AVR internal pullup or 10KOhm resistor was OK.
     NOTE: JP has two HC4051(Z2,Z3) and line 5, 6 and 7 are connected to both of them.
 */
+    HHKB_PIN_COUNT
+} HHKB_pins_enum;
 
 static const pin_t HHKB_pins[HHKB_PIN_COUNT] = HHKB_PINS;
 
@@ -58,14 +68,24 @@ static inline bool KEY_STATE(void) { return readPin(HHKB_pins[HHKB_KEY_PIN]); }
 static inline void KEY_PREV_ON(void) { writePinHigh(HHKB_pins[HHKB_KEY_PREV_PIN]); }
 static inline void KEY_PREV_OFF(void) { writePinLow(HHKB_pins[HHKB_KEY_PREV_PIN]); }
 
+static inline void KEY_POWER_ON(void) {
+    writePinHigh(HHKB_pins[HHKB_POWER_PIN]); // MOS FET switch on
+    /* Without this wait you will miss or get false key events. */
+    _delay_ms(5);                       // wait for powering up
+}
+static inline void KEY_POWER_OFF(void) {
+    writePinLow(HHKB_pins[HHKB_POWER_PIN]);  // MOS FET switch off
+}
+static inline bool KEY_POWER_STATE(void) { return readPin(HHKB_pins[HHKB_POWER_PIN]); }
+#else
 static inline void KEY_POWER_ON(void) {}
 static inline void KEY_POWER_OFF(void) {}
 static inline bool KEY_POWER_STATE(void) { return true; }
+#endif
 
 static inline void KEY_INIT(void)
 {
     setPinInputHigh(HHKB_pins[HHKB_KEY_PIN]);
-
     setPinOutput(HHKB_pins[HHKB_ROW_BIT0_PIN]);
     setPinOutput(HHKB_pins[HHKB_ROW_BIT1_PIN]);
     setPinOutput(HHKB_pins[HHKB_ROW_BIT2_PIN]);
@@ -74,7 +94,13 @@ static inline void KEY_INIT(void)
     setPinOutput(HHKB_pins[HHKB_COL_BIT2_PIN]);
     setPinOutput(HHKB_pins[HHKB_COL_SELECT_PIN]);
     setPinOutput(HHKB_pins[HHKB_KEY_PREV_PIN]);
-
+#ifdef HHKB_POWER_SAVING
+    setPinOutput(HHKB_pins[HHKB_POWER_PIN]);
+#endif
+#ifdef HHKB_JP
+    setPinOutput(HHKB_pins[HHKB_JP_COL_BIT3]);
+    setPinOutput(HHKB_pins[HHKB_JP_COL_BIT4]);
+#endif
     KEY_UNABLE();
     KEY_PREV_OFF();
     KEY_POWER_OFF();
@@ -91,52 +117,6 @@ static inline void KEY_SELECT(uint8_t ROW, uint8_t COL)
     SET_PIN_COND(HHKB_pins[HHKB_COL_BIT0_PIN], COL & 1);
     SET_PIN_COND(HHKB_pins[HHKB_COL_BIT1_PIN], COL & 2);
     SET_PIN_COND(HHKB_pins[HHKB_COL_BIT2_PIN], COL & 4);
-}
-
-#elif defined(PRO_MICRO)
-/*
- * Pro Micro-based controller (ATMega32U4) and HHKB Pro 2
- *
- * PB0 on ProMicro is occupied by RX LED, so row and col pins are B1-B6
- * PB6 remapped to PF6, PB7 remapped to PF7
- *
- * row:     PB0-2             remapped to B1-3
- * col:     PB3-5,6           remapped to B4-6, F6
- * key:     PD7(pull-uped)    D7 (same)
- * prev:    PB7               remapped to F7
- * power:   PD4(L:off/H:on)   D4 (same)
- * row-ext: PC6,7 for HHKB JP(active low) same (unused)
- */
-static inline void KEY_ENABLE(void) { (PORTF &= ~(1<<6)); }
-static inline void KEY_UNABLE(void) { (PORTF |=  (1<<6)); }
-static inline bool KEY_STATE(void) { return (PIND & (1<<7)); }
-static inline void KEY_PREV_ON(void) { (PORTF |=  (1<<7)); }
-static inline void KEY_PREV_OFF(void) { (PORTF &= ~(1<<7)); }
-
-static inline void KEY_POWER_ON(void) {}
-static inline void KEY_POWER_OFF(void) {}
-static inline bool KEY_POWER_STATE(void) { return true; }
-
-static inline void KEY_INIT(void)
-{
-    /* row,col,prev: output */
-    DDRB  = 0xFF;
-    PORTB = 0x80;   // unable
-    /* key: input with pull-up */
-    DDRD  &= ~0x80;
-    PORTD |=  0x80;
-
-    DDRF  |= (1<<6|1<<7);
-    PORTF |= (1<<6|1<<7);
-
-    KEY_UNABLE();
-    KEY_PREV_OFF();
-
-    KEY_POWER_OFF();
-}
-static inline void KEY_SELECT(uint8_t ROW, uint8_t COL)
-{
-    PORTB = (PORTB & 0x81) | (((COL) & 0x07)<<4) | (((ROW) & 0x07)<<1);
 }
 
 #elif defined(__AVR_ATmega32U4__)

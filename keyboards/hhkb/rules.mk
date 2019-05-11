@@ -101,10 +101,6 @@ VPATH += $(RN42_DIR)
 
 endif
 
-ifeq ($(strip $(PRO_MICRO)), yes)
-OPT_DEFS += -DPRO_MICRO
-endif
-
 ifeq ($(strip $(CUSTOM_BOARD)), yes)
 OPT_DEFS += -DCUSTOM_BOARD
 endif
