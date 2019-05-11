@@ -31,8 +31,8 @@
 #define HHKB_PINS_HASU_JP        { D7, B7, B0, B1, B2, B3, B4, B5, B6, D4, C6, C7 }
 #define HHKB_PINS_HBAR           { B2, B3, D7, B1, C6, F7, D4, F6, F5 }
 
-#define HHKB_PINS HHKB_PINS_HASU
-#define HHKB_POWER_SAVING
+#define HHKB_PINS HHKB_PINS_HBAR
+//#define HHKB_POWER_SAVING
 
 enum {
     HHKB_KEY_PIN = 0,    /* ~KEY: Low(0) when key is pressed (input with pullup) */
