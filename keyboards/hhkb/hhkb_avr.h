@@ -29,10 +29,10 @@
 
 #define HHKB_PINS_HASU           { D7, B7, B0, B1, B2, B3, B4, B5, B6, D4 }
 #define HHKB_PINS_HASU_JP        { D7, B7, B0, B1, B2, B3, B4, B5, B6, D4, C6, C7 }
-#define HHKB_PINS_PRO_MICRO      { D7, F7, B1, B2, B3, B4, B5, B6, F6, D4 }
-#define HHKB_PINS_PRO_MICRO_HBAR { B2, B3, D7, B1, C6, F7, D4, F6, F5 }
+#define HHKB_PINS_HBAR           { B2, B3, D7, B1, C6, F7, D4, F6, F5 }
 
 #define HHKB_PINS HHKB_PINS_HASU
+#define HHKB_POWER_SAVING
 
 enum {
     HHKB_KEY_PIN = 0,    /* ~KEY: Low(0) when key is pressed (input with pullup) */
@@ -51,16 +51,17 @@ enum {
     HHKB_JP_COL_BIT3_PIN,   /* ~Enable of Z2   row0-7  (output) */
     HHKB_JP_COL_BIT4_PIN,   /* ~Enable of Z3   row8-15 (output) */
 #endif
+    HHKB_PINS_COUNT
+} HHKB_pins_enum;
+
 /*
     NOTE: Probably HYS changes threshold for upstroke and makes hysteresis in the result.
     NOTE: HYS should be given High(1) when previous KEY state is Low(0).
     NOTE: 1KOhm didn't work as pullup resistor on KEY. AVR internal pullup or 10KOhm resistor was OK.
     NOTE: JP has two HC4051(Z2,Z3) and line 5, 6 and 7 are connected to both of them.
 */
-    HHKB_PIN_COUNT
-} HHKB_pins_enum;
 
-static const pin_t HHKB_pins[HHKB_PIN_COUNT] = HHKB_PINS;
+static const pin_t HHKB_pins[HHKB_PINS_COUNT] = HHKB_PINS;
 
 static inline void KEY_ENABLE(void) { writePinLow(HHKB_pins[HHKB_COL_SELECT_PIN]); }
 static inline void KEY_UNABLE(void) { writePinHigh(HHKB_pins[HHKB_COL_SELECT_PIN]); }
@@ -68,6 +69,7 @@ static inline bool KEY_STATE(void) { return readPin(HHKB_pins[HHKB_KEY_PIN]); }
 static inline void KEY_PREV_ON(void) { writePinHigh(HHKB_pins[HHKB_KEY_PREV_PIN]); }
 static inline void KEY_PREV_OFF(void) { writePinLow(HHKB_pins[HHKB_KEY_PREV_PIN]); }
 
+#ifdef HHKB_POWER_SAVING
 static inline void KEY_POWER_ON(void) {
     writePinHigh(HHKB_pins[HHKB_POWER_PIN]); // MOS FET switch on
     /* Without this wait you will miss or get false key events. */
