@@ -754,6 +754,7 @@ endif
   # use newlib in nano version
   LDFLAGS += --specs=nano.specs -lc -lnosys
 #  LDFLAGS += -L. $(NRFLIB)
+  LDFLAGS += -Wl,--no-wchar-size-warning
 endif
 
 ifeq ($(NRF_DEBUG), yes)
