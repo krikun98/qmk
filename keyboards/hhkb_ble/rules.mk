@@ -33,3 +33,5 @@ ARMV = 7
 # Build Options
 #   comment out to disable the options.
 #
+
+#SRC = matrix.c

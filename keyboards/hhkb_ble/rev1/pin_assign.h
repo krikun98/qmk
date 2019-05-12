@@ -53,5 +53,9 @@
 #define THIS_DEVICE_COLS MATRIX_COLS
 
 // wiring of each half
-#define MATRIX_ROW_PINS { D7, E6, B4, B5, F4, F5, F6, F7 }
-#define MATRIX_COL_PINS { B1, B3, B2, B6, D0, D4, C6, B1 }
+#define MATRIX_ROW_PINS { B2, B3, D7, B1, C6, F7, D4, F6 }
+#define MATRIX_COL_PINS { B2, B3, D7, B1, C6, F7, D4, F6 }
+
+#define MATRIX_PINS { B2, B3, D7, B1, C6, F7, D4, F6, F5 }
+
+
