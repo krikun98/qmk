@@ -15,5 +15,7 @@ echo Waiting for the UF2 drive. Press Reset twice...
 :loop
 if not exist e:\ goto :loop
 
+timeout 1
+
 copy flash.uf2 e:\
 
