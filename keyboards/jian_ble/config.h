@@ -4,9 +4,9 @@
 #define ENABLE_STARTUP_ADV_NOLIST
 
 #define BLE_NUS_MIN_INTERVAL 30
-#define BLE_NUS_MAX_INTERVAL 60
-#define BLE_HID_MAX_INTERVAL 80
-#define BLE_HID_SLAVE_LATENCY 10
+#define BLE_NUS_MAX_INTERVAL 40
+#define BLE_HID_MAX_INTERVAL 60
+#define BLE_HID_SLAVE_LATENCY 5
 
 /* USB Device descriptor parameter */
 #define VENDOR_ID       0xBC42
