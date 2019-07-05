@@ -49,11 +49,11 @@ void matrix_init_user() {
 
   nrf_gpio_pin_set(LED_PIN);
 
-  select_row(0);
+  select_row(3);
   wait_us(50);
   matrix_row_t row = read_cols();
   unselect_rows();
-  if (row == 0b11100) {
+  if (row == 0b111000) { // delete bonds on 3 thumb keys
     delete_bonds();
   } else if (row == 0b10) {
     bootloader_flag = true;
@@ -62,17 +62,17 @@ void matrix_init_user() {
 
 void matrix_scan_user() {
 
-    uint8_t value = nrf_gpio_pin_read(SWITCH_PIN);
+  uint8_t value = nrf_gpio_pin_read(SWITCH_PIN);
 
-    //NRF_LOG_INFO("SWITCH_PIN value: %d", value);
+  //NRF_LOG_INFO("SWITCH_PIN value: %d", value);
 
-    if (value)
-        nrf_gpio_pin_set(LED_PIN);
-    else
-        nrf_gpio_pin_clear(LED_PIN);
+  if (value)
+      nrf_gpio_pin_set(LED_PIN);
+  else
+      nrf_gpio_pin_clear(LED_PIN);
 
- static int cnt;
- if (bootloader_flag && cnt++==500) {
-   bootloader_jump();
- }
+  static int cnt;
+  if (bootloader_flag && cnt++==500) {
+    bootloader_jump();
+  }
 }
