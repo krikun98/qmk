@@ -57,12 +57,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 )
 
 #define PROGMEM // arm-gcc does not interpret PROGMEM
-#define RGB_DI_PIN 8     // The pin the LED strip is connected to
-#ifdef RGBLED_BACK
-  #define RGBLED_NUM 22
-#else
-  #define RGBLED_NUM 6
-#endif
+#define RGB_DI_PIN PIN1 //D3     // The pin the LED strip is connected to
+#define RGBLED_NUM 12
 
 /*
  * Feature disable options

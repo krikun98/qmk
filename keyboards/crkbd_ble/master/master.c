@@ -34,7 +34,7 @@ matrix_row_t read_cols(void);
 static bool bootloader_flag = false;
 
 void matrix_init_user() {
-//  rgblight_mode_noeeprom(35);
+  //rgblight_mode_noeeprom(35);
   set_usb_enabled(true);
 
   // blink on power on

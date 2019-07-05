@@ -10,6 +10,8 @@ set file=crkbd_ble_slave_default.hex
 
 %~dp0/uf2conv.py %file% -c -f 0xADA52840
 
+copy /Y flash.uf2 %~dp0\precompiled\slave
+
 echo Waiting for the UF2 drive. Press Reset twice...
 
 :loop
