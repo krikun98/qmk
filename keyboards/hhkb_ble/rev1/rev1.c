@@ -14,7 +14,7 @@
 #include "nrf_delay.h"
 
 void matrix_init_user() {
-  set_usb_enabled(false);
+  set_usb_enabled(true);
 
   // blink on power on
   nrf_gpio_cfg_output(LED_PIN);

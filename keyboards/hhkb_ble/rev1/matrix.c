@@ -35,6 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "hhkb_avr.h"
 #include "suspend.h"
 
+// needs microsecond timer here! // joric
 #define TIMER_RAW_FREQ      1000
 #define TIMER_RAW           timer_read32() // 1 millis timer
 
@@ -115,7 +116,8 @@ uint8_t matrix_scan(void)
             // If V-USB interrupts in this section we could lose 40us or so
             // and would read invalid value from KEY_STATE.
 
-            uint8_t last = TIMER_RAW; //NB!
+            // needs microsecond timer here! // joric
+            //uint8_t last = TIMER_RAW;
 
             KEY_ENABLE();
 
@@ -143,10 +145,10 @@ uint8_t matrix_scan(void)
             // MEMO: 20[us] * (TIMER_RAW_FREQ / 1000000)[count per us]
             // MEMO: then change above using this rule: a/(b/c) = a*1/(b/c) = a*(c/b)
 
-            if (TIMER_DIFF_RAW(TIMER_RAW, last) > 20/(1000000/TIMER_RAW_FREQ)) // NB!
-            {
-                matrix[row] = matrix_prev[row];
-            }
+            // needs microsecond timer here! // joric
+            //if (TIMER_DIFF_RAW(TIMER_RAW, last) > 20/(1000000/TIMER_RAW_FREQ)) {
+            //    matrix[row] = matrix_prev[row];
+            //}
 
             _delay_us(5);
             KEY_PREV_OFF();
