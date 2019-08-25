@@ -11,6 +11,8 @@ NKRO_ENABLE = no	    # USB Nkey Rollover
 CUSTOM_MATRIX = yes # This flag should be on for nrf52
 TAP_DANCE_ENABLE = no
 
+CUSTOM_CUSTOM_MATRIX = yes # because CUSTOM_MATRIX is occupied by nrf52
+
 ## chip/board settings
 MCU_FAMILY = NRF52
 # linker script to use

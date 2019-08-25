@@ -1,8 +1,11 @@
 PROTOCOL_DIR = protocol
 NRF_DIR = $(PROTOCOL_DIR)/nrf
 
-  SRC += $(NRF_DIR)/matrix.c \
-  				$(NRF_DIR)/io_expander.c \
+ifndef CUSTOM_CUSTOM_MATRIX
+  SRC += $(NRF_DIR)/matrix.c
+endif
+
+  SRC += $(NRF_DIR)/io_expander.c
 
   SRC += $(NRF_DIR)/$(NRF_VER_DIR)/ble_common.c \
        $(NRF_DIR)/$(NRF_VER_DIR)/i2c_master.c \

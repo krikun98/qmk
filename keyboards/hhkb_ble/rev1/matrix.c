@@ -1,3 +1,10 @@
+/* 
+    HHKB / nRFMicro controller by Joric
+    define CUSTOM_CUSTOM_MATRIX in makefile to skip nrf52 custom matrix.c
+    we only need exposed matrix_get_row for the matrix and that's it
+*/
+
+
 /*
 Copyright 2011 Jun Wako <wakojun@gmail.com>
 
@@ -35,12 +42,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MATRIX_POWER_SAVE       10000
 static uint32_t matrix_last_modified = 0;
 
+// required in "sleep_mode_enter" set all pins to 0 for now
+const uint32_t row_pins[THIS_DEVICE_ROWS] = {};
+const uint32_t col_pins[THIS_DEVICE_COLS] = {};
+
 // matrix state buffer(1:on, 0:off)
 static matrix_row_t *matrix;
 static matrix_row_t *matrix_prev;
 static matrix_row_t _matrix0[MATRIX_ROWS];
 static matrix_row_t _matrix1[MATRIX_ROWS];
-
 
 inline
 uint8_t matrix_rows(void)
@@ -68,6 +78,8 @@ void matrix_init(void)
     for (uint8_t i=0; i < MATRIX_ROWS; i++) _matrix1[i] = 0x00;
     matrix = _matrix0;
     matrix_prev = _matrix1;
+
+    matrix_init_user();
 }
 
 __attribute__ ((weak))

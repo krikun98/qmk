@@ -6,7 +6,7 @@ bash -c "cd ../../ && export NRFSDK15_ROOT=/mnt/c/SDK/nRF5_SDK_15.0.0_a53641a &&
 
 cd ..\..\.build
 
-set file=hhkb_ble_default.hex
+set file=hhkb_ble_rev1_default.hex
 
 %~dp0/uf2conv.py %file% -c -f 0xADA52840
 

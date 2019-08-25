@@ -52,10 +52,8 @@
 #define THIS_DEVICE_ROWS MATRIX_ROWS
 #define THIS_DEVICE_COLS MATRIX_COLS
 
-// wiring of each half
+// not really matrix pins (F5 is sleep mode)
 #define MATRIX_ROW_PINS { B2, B3, D7, B1, C6, F7, D4, F6 }
 #define MATRIX_COL_PINS { B2, B3, D7, B1, C6, F7, D4, F6 }
-
-#define MATRIX_PINS { B2, B3, D7, B1, C6, F7, D4, F6, F5 }
-
+#define MATRIX_PINS     { B2, B3, D7, B1, C6, F7, D4, F6, F5 }
 

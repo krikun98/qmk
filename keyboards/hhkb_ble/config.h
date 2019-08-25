@@ -36,7 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MATRIX_COLS 8
 
 /* COL2ROW or ROW2COL */
-#define DIODE_DIRECTION ROW2COL
+//#define DIODE_DIRECTION ROW2COL //not defined for hhkb
 
 /* define if matrix has ghost */
 //#define MATRIX_HAS_GHOST

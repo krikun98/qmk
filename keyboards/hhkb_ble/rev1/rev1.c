@@ -10,7 +10,24 @@
 #include "nrf.h"
 #include "app_ble_func.h"
 
+#include "nrf_gpio.h"
+#include "nrf_delay.h"
+
 void matrix_init_user() {
-  set_usb_enabled(true);
+  set_usb_enabled(false);
+
+  // blink on power on
+  nrf_gpio_cfg_output(LED_PIN);
+
+  for (int i = 0; i < 5; i++) {
+    nrf_gpio_pin_set(LED_PIN);
+    nrf_delay_ms(100);
+
+    nrf_gpio_pin_clear(LED_PIN);
+    nrf_delay_ms(100);
+  }
+
+  nrf_gpio_pin_set(LED_PIN);
+
 }
 
