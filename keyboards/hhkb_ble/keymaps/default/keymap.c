@@ -75,6 +75,13 @@ void uf2_jump(void) {
   NVIC_SystemReset();
 }
 
+// debug feature, reboot into bootloader on capslock (does not work?)
+void led_set_user(uint8_t usb_led) {
+    if (host_keyboard_leds() & (1<<USB_LED_CAPS_LOCK)){
+        uf2_jump();
+    }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (record->event.pressed) {
     switch (keycode) {
@@ -84,7 +91,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case AD_WO_L:
       restart_advertising_wo_whitelist();
       return false;
-    case DEBUG:
+    case UF2_JUMP:
       uf2_jump();
       return false;
     }

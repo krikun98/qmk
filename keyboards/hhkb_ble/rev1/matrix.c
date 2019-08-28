@@ -35,17 +35,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "hhkb_avr.h"
 #include "suspend.h"
 
-// needs microsecond timer here! // joric
-#define TIMER_RAW_FREQ      1000
-#define TIMER_RAW           timer_read32() // 1 millis timer
+// rtc0 counter is 32k per second, resolution is about 30 us
+#define TIMER_RAW_FREQ      (32768)
+#define TIMER_RAW           NRF_RTC0->COUNTER
 
 // matrix power saving
 #define MATRIX_POWER_SAVE       10000
 static uint32_t matrix_last_modified = 0;
 
 // required in "sleep_mode_enter" set all pins to 0 for now
-const uint32_t row_pins[THIS_DEVICE_ROWS] = {};
-const uint32_t col_pins[THIS_DEVICE_COLS] = {};
+const uint32_t row_pins[THIS_DEVICE_ROWS] = MATRIX_ROW_PINS;
+const uint32_t col_pins[THIS_DEVICE_COLS] = MATRIX_COL_PINS;
 
 // matrix state buffer(1:on, 0:off)
 static matrix_row_t *matrix;
@@ -90,6 +90,21 @@ void matrix_scan_user(void) {
 void matrix_scan_kb(void) {
   matrix_scan_user();
 }
+/*
+HHKB switch matrix is ghost-free and bounce-free.
+
+    Pro/Pro2(8x8):
+      COL 0     1       2       3       4       5       6       7
+    ROW ---------------------------------------------------------------
+      0|  2     q       w       s       a       z       x       c
+      1|  3     4       r       e       d       f       v       b
+      2|  5     6       y       t       g       h       n       _NONE_
+      3|  1     Esc     Tab     Control LShift  LAlt    LMeta   Space
+      4|  7     8       u       i       k       j       m       _NONE_
+      5|  \     `       Delete  Return  Fn      RShift  RAlt    RMeta
+      6|  9     0       o       p       ;       l       ,       _NONE_
+      7|  -     +       ]       [       '       /       .       _NONE_
+*/
 
 uint8_t matrix_scan(void)
 {
@@ -100,7 +115,11 @@ uint8_t matrix_scan(void)
     matrix = tmp;
 
     // power on
-    if (!KEY_POWER_STATE()) KEY_POWER_ON();
+    //if (!KEY_POWER_STATE()) KEY_POWER_ON();
+
+//    uint8_t region;
+//    sd_nvic_critical_region_enter(&region);
+
     for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
         for (uint8_t col = 0; col < MATRIX_COLS; col++) {
             KEY_SELECT(row, col);
@@ -116,8 +135,8 @@ uint8_t matrix_scan(void)
             // If V-USB interrupts in this section we could lose 40us or so
             // and would read invalid value from KEY_STATE.
 
-            // needs microsecond timer here! // joric
             //uint8_t last = TIMER_RAW;
+            uint32_t last = NRF_RTC0->COUNTER;
 
             KEY_ENABLE();
 
@@ -133,7 +152,7 @@ uint8_t matrix_scan(void)
             // 10us wait does    work on Teensy++ with pro
             // 10us wait does    work on 328p+iwrap with pro
             // 10us wait doesn't work on tmk PCB(8MHz) with pro2(very lagged scan)
-            _delay_us(5);
+            _delay_us(5); // originally 5
 
             if (KEY_STATE()) {
                 matrix[row] &= ~(1<<col);
@@ -141,16 +160,21 @@ uint8_t matrix_scan(void)
                 matrix[row] |= (1<<col);
             }
 
+
+            if (col==0 && row==0)
+                matrix[row] &= ~(1<<col);
+
+
             // Ignore if this code region execution time elapses more than 20us.
             // MEMO: 20[us] * (TIMER_RAW_FREQ / 1000000)[count per us]
             // MEMO: then change above using this rule: a/(b/c) = a*1/(b/c) = a*(c/b)
-
-            // needs microsecond timer here! // joric
             //if (TIMER_DIFF_RAW(TIMER_RAW, last) > 20/(1000000/TIMER_RAW_FREQ)) {
-            //    matrix[row] = matrix_prev[row];
-            //}
 
-            _delay_us(5);
+            if (NRF_RTC0->COUNTER > last) { // at 32k ticks a second 1 tick is about 30 us
+                //matrix[row] = matrix_prev[row]; // looks like it just messes everything up
+            }
+
+            _delay_us(5); // originally 5
             KEY_PREV_OFF();
             KEY_UNABLE();
 
@@ -161,11 +185,13 @@ uint8_t matrix_scan(void)
             // or it can drop keys in fast key typing
             _delay_us(30);
 #else
-            _delay_us(75);
+            _delay_us(75); //originally 75
 #endif
         }
         if (matrix[row] ^ matrix_prev[row]) matrix_last_modified = timer_read32();
     }
+
+//    sd_nvic_critical_region_exit(region);
 
 /*
     // power off
@@ -177,7 +203,10 @@ uint8_t matrix_scan(void)
         suspend_power_down();
     }
 */
+
     matrix_scan_quantum();
+
+    //NRF_LOG_INFO("rtc: %d", TIMER_RAW/32768); // 32k a second
 
     return 1;
 }

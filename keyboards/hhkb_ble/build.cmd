@@ -10,6 +10,8 @@ set file=hhkb_ble_rev1_default.hex
 
 %~dp0/uf2conv.py %file% -c -f 0xADA52840
 
+echo dfu| plink.exe -serial com26
+
 echo Waiting for the UF2 drive. Press Reset twice...
 
 :loop

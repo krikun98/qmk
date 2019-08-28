@@ -53,7 +53,8 @@
 #define THIS_DEVICE_COLS MATRIX_COLS
 
 // not really matrix pins (F5 is sleep mode)
-#define MATRIX_ROW_PINS { B2, B3, D7, B1, C6, F7, D4, F6 }
-#define MATRIX_COL_PINS { B2, B3, D7, B1, C6, F7, D4, F6 }
-#define MATRIX_PINS     { B2, B3, D7, B1, C6, F7, D4, F6, F5 }
+#define MATRIX_ROW_PINS { 0, 0, 0, 0, 0, 0, 0, 0 }
+#define MATRIX_COL_PINS { 0, 0, 0, 0, 0, 0, 0, 0 }
+
+#define HHKB_PINS_HBAR  { B2, B3, D7, B1, C6, F7, D4, F6, F5 }
 

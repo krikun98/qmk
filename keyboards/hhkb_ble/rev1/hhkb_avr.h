@@ -54,7 +54,7 @@ enum {
     NOTE: JP has two HC4051(Z2,Z3) and line 5, 6 and 7 are connected to both of them.
 */
 
-static const uint32_t HHKB_pins[HHKB_PINS_COUNT] = MATRIX_PINS;
+static const uint32_t HHKB_pins[HHKB_PINS_COUNT] = HHKB_PINS_HBAR;
 
 static inline void KEY_ENABLE(void) { writePinLow(HHKB_pins[HHKB_COL_SELECT_PIN]); }
 static inline void KEY_UNABLE(void) { writePinHigh(HHKB_pins[HHKB_COL_SELECT_PIN]); }

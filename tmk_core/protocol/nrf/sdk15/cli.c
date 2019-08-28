@@ -56,9 +56,23 @@ static MSCMD_USER_RESULT usrcmd_advertise(MSOPT *msopt, MSCMD_USER_OBJECT usrobj
 #endif
   return 0;
 }
+
+// adafruit bootloader
+#define DFU_DBL_RESET_MAGIC             0x5A1AD5
+#define DFU_DBL_RESET_MEM               0x20007F7C
+#define DFU_MAGIC_UF2_RESET             0x57
+uint32_t* dbl_reset_mem2 = ((uint32_t*)  DFU_DBL_RESET_MEM );
+void uf2_jump2(void) {
+  NRF_POWER->GPREGRET = DFU_MAGIC_UF2_RESET;
+  *dbl_reset_mem2 = DFU_DBL_RESET_MAGIC;
+  NRF_POWER->RESETREAS |= POWER_RESETREAS_RESETPIN_Msk;
+  NVIC_SystemReset();
+}
+
 static MSCMD_USER_RESULT usrcmd_bootloader(MSOPT *msopt, MSCMD_USER_OBJECT usrobj) {
   NRF_LOG_DEBUG("DFU");
-  bootloader_jump();
+  //bootloader_jump(); // doesn't work for some reason
+  uf2_jump2();
   return 0;
 }
 
