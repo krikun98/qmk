@@ -160,16 +160,10 @@ uint8_t matrix_scan(void)
                 matrix[row] |= (1<<col);
             }
 
-
-            if (col==0 && row==0)
-                matrix[row] &= ~(1<<col);
-
-
             // Ignore if this code region execution time elapses more than 20us.
             // MEMO: 20[us] * (TIMER_RAW_FREQ / 1000000)[count per us]
             // MEMO: then change above using this rule: a/(b/c) = a*1/(b/c) = a*(c/b)
             //if (TIMER_DIFF_RAW(TIMER_RAW, last) > 20/(1000000/TIMER_RAW_FREQ)) {
-
             if (NRF_RTC0->COUNTER > last) { // at 32k ticks a second 1 tick is about 30 us
                 //matrix[row] = matrix_prev[row]; // looks like it just messes everything up
             }
