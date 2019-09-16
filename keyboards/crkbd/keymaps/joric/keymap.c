@@ -10,6 +10,20 @@
 
 extern keymap_config_t keymap_config;
 
+#ifdef SWAP_HANDS_ENABLE
+__attribute__ ((weak))
+const keypos_t hand_swap_config[MATRIX_ROWS][MATRIX_COLS] = {
+  {{0, 4}, {1, 4}, {2, 4}, {3, 4}, {4, 4}, {5, 4}, {6, 4}},
+  {{0, 5}, {1, 5}, {2, 5}, {3, 5}, {4, 5}, {5, 5}, {6, 5}},
+  {{0, 6}, {1, 6}, {2, 6}, {3, 6}, {4, 6}, {5, 6}, {6, 6}},
+  {{0, 7}, {1, 7}, {2, 7}, {3, 7}, {4, 7}, {5, 7}, {6, 7}},
+  {{0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0}, {5, 0}, {6, 0}},
+  {{0, 1}, {1, 1}, {2, 1}, {3, 1}, {4, 1}, {5, 1}, {6, 1}},
+  {{0, 2}, {1, 2}, {2, 2}, {3, 2}, {4, 2}, {5, 2}, {6, 2}},
+  {{0, 3}, {1, 3}, {2, 3}, {3, 3}, {4, 3}, {5, 3}, {6, 3}},
+};
+#endif
+
 #ifdef RGBLIGHT_ENABLE
 //Following line allows macro to read current RGB settings
 extern rgblight_config_t rgblight_config;
@@ -121,7 +135,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   RESET,   DEBUG,   KC_ASUP, RGBRST,  RGB_VAI, RGB_VAD, RGB_TOG,      RGB_TOG, RGB_VAD, RGB_VAI, RGBRST, KC_ASUP, DEBUG,   RESET, \
            KC_ASRP, KC_ASTG, RGB_HUI, RGB_SAI, QWERTY,  PLOVER,       PLOVER,  QWERTY,  RGB_SAI, RGB_HUI, KC_ASTG, KC_ASRP, \
            RGB_MOD, KC_ASDN, RGB_HUD, RGB_SAD, TG_ISO,  TG_THMB,      TG_THMB, TG_ISO,  RGB_SAD, RGB_HUD, KC_ASDN, RGB_MOD, \
-                                      _______, _______,   _______,      _______, _______,   _______\
+                                      _______, SH_TG,   _______,      _______, SH_TG,   _______\
 ),
 
 [_THUMB_ALT] = LAYOUT(\

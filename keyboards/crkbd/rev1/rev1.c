@@ -1,6 +1,5 @@
 #include "crkbd.h"
 
-
 #ifdef RGB_MATRIX_ENABLE
 
   // Logical Layout
