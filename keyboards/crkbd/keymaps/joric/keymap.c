@@ -134,18 +134,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
            _______, KC_P0,   KC_P1,   KC_P2,   KC_P3,   KC_PCMM,      KC_VOLD, KC_END,  KC_DOWN, KC_PGDN, KC_PAUS, _______, \
                                       _______, _______, _______,      _______, _______, _______\
 ),
-/*
-[_ADJUST] = LAYOUT(\
-  RESET,   DEBUG,   KC_ASUP, RGBRST,  RGB_VAI, RGB_VAD, RGB_TOG,      RGB_TOG, RGB_VAD, RGB_VAI, RGBRST, KC_ASUP, DEBUG,   RESET, \
-           KC_ASRP, KC_ASTG, RGB_HUI, RGB_SAI, QWERTY,  PLOVER,       PLOVER,  QWERTY,  RGB_SAI, RGB_HUI, KC_ASTG, KC_ASRP, \
-           RGB_MOD, KC_ASDN, RGB_HUD, RGB_SAD, TG_ISO,  TG_THMB,      TG_THMB, TG_ISO,  RGB_SAD, RGB_HUD, KC_ASDN, RGB_MOD, \
-                                      _______, SH_TG,   _______,      _______, SH_TG,   _______\
-),
-*/
 
 [_ADJUST] = LAYOUT(\
-  RESET,   DEBUG,   KC_ASUP, KC_ASTG, KC_ASDN, TG_ISO,  TG_THMB,      TG_THMB, TG_ISO,  KC_ASDN, KC_ASTG, KC_ASUP, DEBUG,   RESET, \
-           RGB_TOG, RGB_HUI, RGB_SAI, RGB_VAI, QWERTY,   PLOVER,      PLOVER,  QWERTY,  RGB_VAI, RGB_SAI, RGB_HUI, RGB_TOG, \
+  RESET,   DEBUG,   KC_ASUP, KC_ASTG, KC_ASDN, _______, _______,      _______, _______,  KC_ASDN, KC_ASTG, KC_ASUP, DEBUG,   RESET, \
+           RGB_TOG, RGB_HUI, RGB_SAI, RGB_VAI, QWERTY,  PLOVER,       PLOVER,  QWERTY,  RGB_VAI, RGB_SAI, RGB_HUI, RGB_TOG, \
            RGB_MOD, RGB_HUD, RGB_SAD, RGB_VAD, TG_ISO,  TG_THMB,      TG_THMB, TG_ISO,  RGB_VAD, RGB_SAD, RGB_HUD, RGB_MOD, \
                                       _______, SH_TG,   _______,      _______, SH_TG,   _______\
 ),

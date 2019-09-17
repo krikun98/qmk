@@ -63,7 +63,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* Disable the animations you don't want/need.  You will need to disable a good number of these    *
  * because they take up a lot of space.  Disable until you can successfully compile your firmware. */
 //#   define DISABLE_RGB_MATRIX_ALPHAS_MODS //nb
-//#   define DISABLE_RGB_MATRIX_GRADIENT_UP_DOWN
+#   define DISABLE_RGB_MATRIX_GRADIENT_UP_DOWN
 #   define DISABLE_RGB_MATRIX_BREATHING
 #   define DISABLE_RGB_MATRIX_BAND_SAT
 #   define DISABLE_RGB_MATRIX_BAND_VAL
@@ -78,9 +78,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #   define DISABLE_RGB_MATRIX_CYCLE_OUT_IN_DUAL//nb
 #   define DISABLE_RGB_MATRIX_RAINBOW_MOVING_CHEVRON
 #   define DISABLE_RGB_MATRIX_DUAL_BEACON
-//#   define DISABLE_RGB_MATRIX_RAINBOW_BEACON
+#   define DISABLE_RGB_MATRIX_RAINBOW_BEACON
 #   define DISABLE_RGB_MATRIX_RAINBOW_PINWHEELS // 3 effects
-//#   define DISABLE_RGB_MATRIX_RAINDROPS
+#   define DISABLE_RGB_MATRIX_RAINDROPS
 #   define DISABLE_RGB_MATRIX_JELLYBEAN_RAINDROPS
 #   define DISABLE_RGB_MATRIX_TYPING_HEATMAP //nb
 //#   define DISABLE_RGB_MATRIX_DIGITAL_RAIN
@@ -93,7 +93,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #   define DISABLE_RGB_MATRIX_SOLID_REACTIVE_NEXUS
 #   define DISABLE_RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS
 #   define DISABLE_RGB_MATRIX_SPLASH
-#   define DISABLE_RGB_MATRIX_MULTISPLASH
+//#   define DISABLE_RGB_MATRIX_MULTISPLASH
 #   define DISABLE_RGB_MATRIX_SOLID_SPLASH
 #   define DISABLE_RGB_MATRIX_SOLID_MULTISPLASH
 
