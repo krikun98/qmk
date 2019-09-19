@@ -217,6 +217,7 @@ extern bool has_usb(void);
 
 void matrix_init_user(void) {
 
+/*
     #define OUTPUT 0x02
     #define HIGH 0x01
     #define LOW 0x0
@@ -228,7 +229,7 @@ void matrix_init_user(void) {
         digitalWrite(LED_BUILTIN, LOW);
         _delay_ms(250);
     }
-
+*/
     #ifdef RGBLIGHT_ENABLE
       RGB_current_mode = rgblight_config.mode;
       rgblight_step();
