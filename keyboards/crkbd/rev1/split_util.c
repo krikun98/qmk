@@ -48,9 +48,13 @@ static void keyboard_slave_setup(void) {
 }
 
 bool has_usb(void) {
+#if defined(__AVR_ATmega328P__)
+return false;
+#else
    USBCON |= (1 << OTGPADE); //enables VBUS pad
    _delay_us(5);
    return (USBSTA & (1<<VBUS));  //checks state of VBUS
+#endif
 }
 
 void split_keyboard_setup(void) {

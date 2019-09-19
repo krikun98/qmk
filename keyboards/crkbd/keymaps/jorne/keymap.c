@@ -211,7 +211,24 @@ void update_tri_layer_RGB(uint8_t layer1, uint8_t layer2, uint8_t layer3) {
   }
 }
 
+#if defined(__AVR_ATmega328P__)
+extern bool has_usb(void);
+#endif
+
 void matrix_init_user(void) {
+
+    #define OUTPUT 0x02
+    #define HIGH 0x01
+    #define LOW 0x0
+    #define LED_BUILTIN 13 // pro mini
+    pinMode(LED_BUILTIN, OUTPUT);
+    for (int i=0; i<5; i++) {
+        digitalWrite(LED_BUILTIN, HIGH);
+        _delay_ms(250);
+        digitalWrite(LED_BUILTIN, LOW);
+        _delay_ms(250);
+    }
+
     #ifdef RGBLIGHT_ENABLE
       RGB_current_mode = rgblight_config.mode;
       rgblight_step();
@@ -255,6 +272,11 @@ void matrix_render_user(struct CharacterMatrix *matrix) {
     matrix_write(matrix, read_logo());
   }
 }
+
+
+#if defined(__AVR_ATmega328P__)
+#include <string.h>
+#endif
 
 void matrix_update(struct CharacterMatrix *dest, const struct CharacterMatrix *source) {
   if (memcmp(dest->display, source->display, sizeof(dest->display))) {

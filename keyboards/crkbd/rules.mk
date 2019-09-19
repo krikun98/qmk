@@ -6,7 +6,8 @@ SRC += ssd1306.c
 # CFLAGS += -flto
 
 # MCU name
-MCU = atmega32u4
+MCU = atmega328p
+PROTOCOL = VUSB
 
 # Processor frequency.
 #     This will define a symbol, F_CPU, in all source code files equal to the
@@ -44,7 +45,8 @@ F_USB = $(F_CPU)
 #     This definition is optional, and if your keyboard supports multiple bootloaders of
 #     different sizes, comment this out, and the correct address will be loaded
 #     automatically (+60). See bootloader.mk for all options.
-BOOTLOADER = caterina
+#BOOTLOADER = USBasp
+#OPT_DEFS += -DBOOTLOADER_SIZE=2048
 
 # Interrupt driven control endpoint task(+60)
 OPT_DEFS += -DINTERRUPT_CONTROL_ENDPOINT
@@ -54,7 +56,7 @@ OPT_DEFS += -DINTERRUPT_CONTROL_ENDPOINT
 #   the appropriate keymap folder that will get included automatically
 #
 BOOTMAGIC_ENABLE = no       # Virtual DIP switch configuration(+1000)
-MOUSEKEY_ENABLE = yes       # Mouse keys(+4700)
+MOUSEKEY_ENABLE = no       # Mouse keys(+4700)
 EXTRAKEY_ENABLE = no       # Audio control and System control(+450)
 CONSOLE_ENABLE = no         # Console for debug(+400)
 COMMAND_ENABLE = no        # Commands for debug and configuration

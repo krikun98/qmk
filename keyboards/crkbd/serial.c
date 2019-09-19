@@ -66,6 +66,21 @@
   #error invalid SOFT_SERIAL_PIN value
   #endif
 
+#elif defined(__AVR_ATmega328P__)
+
+// promicro D2 is D0 on pro mini
+#undef SOFT_SERIAL_PIN
+#define SOFT_SERIAL_PIN D0
+
+#define SERIAL_PIN_DDR   DDRD
+#define SERIAL_PIN_PORT  PORTD
+#define SERIAL_PIN_INPUT PIND
+
+#define SERIAL_PIN_MASK _BV(PD0)
+#define EIMSK_BIT       _BV(INT0)
+#define EICRx_BIT       (~(_BV(ISC00) | _BV(ISC01)))
+#define SERIAL_PIN_INTERRUPT INT0_vect
+
 #else
  #error serial.c now support ATmega32U4 only
 #endif
@@ -290,7 +305,9 @@ void soft_serial_target_init(SSTD_t *sstd_table, int sstd_table_size)
 
     // Enable INT0-INT3,INT6
     EIMSK |= EIMSK_BIT;
-#if SERIAL_PIN_MASK == _BV(PE6)
+
+    EICRA &= EICRx_BIT;
+#if SERIAL_PIN_MASK == _BV(PE6) && !defined(__AVR_ATmega328P__)
     // Trigger on falling edge of INT6
     EICRB &= EICRx_BIT;
 #else
