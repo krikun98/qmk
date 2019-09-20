@@ -2,12 +2,15 @@
 
 Trying to use Pro Mini for the slave half. Does not work yet (hangs after start).
 
-[Pro Micro](https://www.sparkfun.com/products/12640)
-/ [Schematic](http://cdn.sparkfun.com/datasheets/Dev/Arduino/Boards/Pro_Micro_v13b.pdf)
-/ [Pinout](https://cdn.sparkfun.com/datasheets/Dev/Arduino/Boards/ProMicro16MHzv1.pdf)
-| [Pro Mini](https://www.sparkfun.com/products/11113)
-/ [Schematic](https://cdn.sparkfun.com/datasheets/Dev/Arduino/Boards/Arduino-Pro-Mini-v14.pdf)
-/ [Pinout](https://cdn.sparkfun.com/assets/d/5/2/f/0/ProMini16MHzv2.pdf)
+## Pro Micro
+* [Product page](https://www.sparkfun.com/products/12640)
+* [Schematic](http://cdn.sparkfun.com/datasheets/Dev/Arduino/Boards/Pro_Micro_v13b.pdf)
+* [Pinout](https://cdn.sparkfun.com/datasheets/Dev/Arduino/Boards/ProMicro16MHzv1.pdf)
+
+## Pro Mini
+* [Product page](https://www.sparkfun.com/products/11113)
+* [Schematic](https://cdn.sparkfun.com/datasheets/Dev/Arduino/Boards/Arduino-Pro-Mini-v14.pdf)
+* [Pinout](https://cdn.sparkfun.com/assets/d/5/2/f/0/ProMini16MHzv2.pdf)
 
 Mind that the second reset on pro mini should be desoldered to not touch the ground.
 
@@ -33,7 +36,9 @@ B1  B5    B6  B2 // Note E6, F4, F5, F6, F7 are not defined for 328p (lots of un
 
 ![](https://i.imgur.com/POoLoaV.jpg)
 
-Pictures:
+## Crkbd Schematic
+
+![](https://i.imgur.com/3FvwNdU.jpg)
 
 ![](https://i.imgur.com/FBFUenv.jpg)
 
