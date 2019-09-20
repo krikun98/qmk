@@ -2,6 +2,13 @@
 
 Trying to use Pro Mini for the slave half. Does not work yet (hangs after start).
 
+See crkbd_328p for the simpler example that actually works and does not hang.
+The secret is to disable VUSB driver (see vusb/main.c).
+Unfortunately B5 cannot be used as input on Pro Mini.
+B5 (pin13) is a built-in LED with load resistor.
+
+This project is postponed for now.
+
 ## Pro Micro
 * [Product page](https://www.sparkfun.com/products/12640)
 * [Schematic](http://cdn.sparkfun.com/datasheets/Dev/Arduino/Boards/Pro_Micro_v13b.pdf)

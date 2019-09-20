@@ -21,7 +21,11 @@
 #include "uart.h"
 #include "debug.h"
 
+#ifdef VUSB_DISABLE
+#define UART_BAUD_RATE 57600
+#else
 #define UART_BAUD_RATE 115200
+#endif
 
 /* This is from main.c of USBaspLoader */
 static void initForUsbConnectivity(void) {
@@ -38,7 +42,10 @@ static void initForUsbConnectivity(void) {
     sei();
 }
 
+#include <quantum.h>
+
 int main(void) {
+
     bool suspended = false;
 #if USB_COUNT_SOF
     uint16_t last_timer = timer_read();
@@ -52,13 +59,20 @@ int main(void) {
 #ifndef NO_UART
     uart_init(UART_BAUD_RATE);
 #endif
-    keyboard_setup();
 
+    keyboard_setup();
     keyboard_init();
     host_set_driver(vusb_driver());
 
     debug("initForUsbConnectivity()\n");
     initForUsbConnectivity();
+
+#ifdef VUSB_DISABLE
+    while (1) {
+        keyboard_task();
+        _delay_ms(1);
+    }
+#endif
 
     debug("main loop\n");
     while (1) {

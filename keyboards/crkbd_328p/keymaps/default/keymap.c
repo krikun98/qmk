@@ -2,12 +2,7 @@
 #include "bootloader.h"
 #ifdef PROTOCOL_LUFA
   #include "lufa.h"
-  #include "split_util.h"
 #endif
-#ifdef SSD1306OLED
-  #include "ssd1306.h"
-#endif
-
 
 #undef LAYOUT
 #undef LAYOUT_kc
@@ -44,28 +39,7 @@ KC_##L33, KC_##L00, KC_##L01, KC_##L02, KC_##L03, KC_##L04, KC_##L05,           
 
 extern keymap_config_t keymap_config;
 
-#ifdef SWAP_HANDS_ENABLE
-__attribute__ ((weak))
-const keypos_t hand_swap_config[MATRIX_ROWS][MATRIX_COLS] = {
-  {{0, 4}, {1, 4}, {2, 4}, {3, 4}, {4, 4}, {5, 4}},
-  {{0, 5}, {1, 5}, {2, 5}, {3, 5}, {4, 5}, {5, 5}},
-  {{0, 6}, {1, 6}, {2, 6}, {3, 6}, {4, 6}, {5, 6}},
-  {{0, 7}, {1, 7}, {2, 7}, {3, 7}, {4, 7}, {5, 7}},
-  {{0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0}, {5, 0}},
-  {{0, 1}, {1, 1}, {2, 1}, {3, 1}, {4, 1}, {5, 1}},
-  {{0, 2}, {1, 2}, {2, 2}, {3, 2}, {4, 2}, {5, 2}},
-  {{0, 3}, {1, 3}, {2, 3}, {3, 3}, {4, 3}, {5, 3}},
-};
-#else
 #define SH_TG KC_TRNS
-#endif
-
-#ifdef RGBLIGHT_ENABLE
-//Following line allows macro to read current RGB settings
-extern rgblight_config_t rgblight_config;
-#endif
-
-extern uint8_t is_master;
 
 // Each layer gets a name for readability, which is then used in the keymap matrix below.
 // The underscores don't mean anything - you can have a layer called STUFF or any other name.
@@ -195,8 +169,6 @@ uint32_t layer_state_set_user(uint32_t state) {
   return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
 
-int RGB_current_mode;
-
 void persistent_default_layer_set(uint16_t default_layer) {
   eeconfig_update_default_layer(default_layer);
   default_layer_set(default_layer);
@@ -216,16 +188,6 @@ extern bool has_usb(void);
 #endif
 
 void matrix_init_user(void) {
-
-    int pin = B5;
-    setPinOutput(pin);
-    for(int i=0; i<5; i++) {
-        writePinHigh(pin);
-        _delay_ms(100);
-        writePinLow(pin);
-        _delay_ms(100);
-    }
-
     #ifdef RGBLIGHT_ENABLE
       RGB_current_mode = rgblight_config.mode;
       rgblight_step();
@@ -290,6 +252,29 @@ void iota_gfx_task_user(void) {
 }
 #endif//SSD1306OLED
 
+#include "uart.h"
+
+#include <stdio.h>
+#include <stdarg.h>
+void uart_print(const char *fmt, ...) {
+    va_list list;
+    va_start(list, fmt);
+    char buf[256] = { 0 };
+    vsprintf(buf, fmt, list);
+    va_end(list);
+    for (char *p = buf; *p; p++) uart_putchar(*p);
+}
+
+const char code_to_name[60] = {
+    ' ', ' ', ' ', ' ', 'a', 'b', 'c', 'd', 'e', 'f',
+    'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
+    'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+    '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
+    'R', 'E', 'B', 'T', ' ', ' ', ' ', ' ', ' ', ' ',
+    ' ', ';', '\'', ' ', ',', '.', '/', ' ', ' ', ' '};
+
+
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (record->event.pressed) {
 #ifdef SSD1306OLED
@@ -297,6 +282,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #endif
     // set_timelog();
   }
+
+  char name = ' ';
+  if (keycode < 60) {
+    name = code_to_name[keycode];
+  }
+
+    //uart_print("hello");
+    if (record->event.pressed) {
+          //uart_putchar(name);
+
+        uart_print("%dx%d, k%2d : %c\n",
+           record->event.key.row, record->event.key.col,
+           keycode, name);
+    }
 
   switch (keycode) {
     case QWERTY:
