@@ -29,9 +29,9 @@ B0  B4    B2  B3
 B1  B5    B6  B2 // Note E6, F4, F5, F6, F7 are not defined for 328p (lots of undefined symbol errors)
 ```
 
-![](microvsmini.png)
+![](https://i.imgur.com/DgnWuBE.jpg)
 
-![](microvsmini_sch.png)
+![](https://i.imgur.com/POoLoaV.jpg)
 
 Pictures:
 
