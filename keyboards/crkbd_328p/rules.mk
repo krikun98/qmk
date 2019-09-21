@@ -57,3 +57,5 @@ LAYOUTS = ortho_4x12 planck_mit
 LAYOUTS_HAS_RGB = no
 
 SRC+=uart.c
+SRC+=serial.c
+
