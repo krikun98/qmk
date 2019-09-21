@@ -14,7 +14,6 @@ Still no OLED, master/slave serial connection or RGB.
 
 ![](https://i.imgur.com/HM5wx9k.jpg)
 
-
 ## Pro Micro
 * [Product page](https://www.sparkfun.com/products/12640)
 * [Schematic](http://cdn.sparkfun.com/datasheets/Dev/Arduino/Boards/Pro_Micro_v13b.pdf)
@@ -25,24 +24,23 @@ Still no OLED, master/slave serial connection or RGB.
 * [Schematic](https://cdn.sparkfun.com/datasheets/Dev/Arduino/Boards/Arduino-Pro-Mini-v14.pdf)
 * [Pinout](https://cdn.sparkfun.com/assets/d/5/2/f/0/ProMini16MHzv2.pdf)
 
-Mind that the second reset on pro mini should be desoldered to not touch the ground.
+## Hardware changes
 
-Pinout is vastly different as well, atmega328p has different wiring, something like:
+* The second reset on Pro Mini should be desoldered to not touch the ground (see GND/GND side on Pro Micro)
+* The built-in indicator LED at pin 13 (B5) should be desoldered because B5 it is used in the matrix as input
 
-```
-328p  32u4  328p
-D1  D3   RAW  RAW
-D0  D2   GND  GND
-RST GND  RST  RST
-GND GND  VCC  VCC
-D2  D1    F4  C3
-D3  D0    F5  C2
-D4  D4    F6  C1
-D5  C6    F7  C0
-D6  D7    B1  B5
-D7  E6    B3  B4
-B0  B4    B2  B3
-B1  B5    B6  B2 // Note E6, F4, F5, F6, F7 are not defined for 328p (lots of undefined symbol errors)
+## Pinout
+
+Pinout is vastly different as well, atmega328p has different wiring (those pins are actually PDxx without the P prefix):
+
+```cpp
+#if defined(__AVR_ATmega328P__) // Pro Mini
+#define MATRIX_ROW_PINS { D4, D5, D6, D7 }
+#define MATRIX_COL_PINS { C3, C2, C1, C0, B5, B4 }
+#else // default Crkbd Pro Micro layout
+#define MATRIX_ROW_PINS { D4, C6, D7, E6 }
+#define MATRIX_COL_PINS { F4, F5, F6, F7, B1, B3 }
+#endif
 ```
 
 ![](https://i.imgur.com/DgnWuBE.jpg)
