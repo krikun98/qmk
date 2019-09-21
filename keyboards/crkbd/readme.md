@@ -47,7 +47,7 @@ B1  B5    B6  B2 // Note E6, F4, F5, F6, F7 are not defined for 328p (lots of un
 
 ![](https://i.imgur.com/DgnWuBE.jpg)
 
-![](https://i.imgur.com/POoLoaV.jpg)
+![](https://i.imgur.com/V14d3vf.jpg)
 
 ## Crkbd Schematic
 
