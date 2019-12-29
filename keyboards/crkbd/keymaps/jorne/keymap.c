@@ -74,10 +74,10 @@ extern uint8_t is_master;
 
 enum layer_number {
   _QWERTY = 0,
-  _ISO,
   _LOWER,
   _RAISE,
   _ADJUST,
+  _ISO,
   _THUMB_ALT,
 };
 
