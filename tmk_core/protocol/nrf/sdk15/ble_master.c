@@ -789,8 +789,8 @@ static void on_hid_rep_char_write(ble_hids_evt_t * p_evt){
     NRF_LOG_INFO("keyboard_led_stats: %d", keyboard_led_stats);
 
       keyboard_led_stats = ((report_val & OUTPUT_REPORT_BIT_MASK_CAPS_LOCK) ? USB_LED_CAPS_LOCK : 0)
-        || ((report_val & OUTPUT_REPORT_BIT_MASK_NUM_LOCK) ? USB_LED_NUM_LOCK : 0)
-        || ((report_val & OUTPUT_REPORT_BIT_MASK_SCROLL_LOCK) ? USB_LED_SCROLL_LOCK : 0);
+        | ((report_val & OUTPUT_REPORT_BIT_MASK_NUM_LOCK) ? USB_LED_NUM_LOCK : 0)
+        | ((report_val & OUTPUT_REPORT_BIT_MASK_SCROLL_LOCK) ? USB_LED_SCROLL_LOCK : 0);
 
         }
     }
