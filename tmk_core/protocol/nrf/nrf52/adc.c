@@ -58,9 +58,7 @@ void adc_start() {
 
 uint16_t get_vcc() {
 #ifdef USE_BATTERY_PIN
-  #define V_MAX 4200
-  #define V_BAT ((V_MAX * BATTERY_R2) / (BATTERY_R1 + BATTERY_R2))
-  return ((uint32_t)adc_buffer[0]*6*600/255) * V_MAX / V_BAT;
+  return ((uint32_t)adc_buffer[0]*6*600/255) * (BATTERY_R1 + BATTERY_R2) / BATTERY_R2;
 #else
   return ((uint32_t)adc_buffer[0]*6*600/255);
 #endif
