@@ -85,19 +85,22 @@ void nrfmicro_init(void) {
 #endif
 
 #ifdef USE_MCP73811_CTRL
-  nrf_gpio_cfg_output(STAT_PIN);
-  nrf_gpio_cfg_output(PROG_PIN);
-  nrf_gpio_pin_write(STAT_PIN, 1); // 0/1 - disable/enable MCP73811 charger
-  nrf_gpio_pin_write(PROG_PIN, 0); // 0 - 85 mA, 1 - 450 mA
+  // tested with KSB7 marking and nRFMicro 1.2, doesn't comply with the specs
+  nrf_gpio_cfg_output(STAT_PIN); nrf_gpio_cfg_output(PROG_PIN);
+//nrf_gpio_pin_write(STAT_PIN, 1); nrf_gpio_pin_write(PROG_PIN, 1); // 0V BAT
+//nrf_gpio_pin_write(STAT_PIN, 0); nrf_gpio_pin_write(PROG_PIN, 1); // 0V BAT
+//nrf_gpio_pin_write(STAT_PIN, 1); nrf_gpio_pin_write(PROG_PIN, 0); // 4.2V BAT, 1.2V STAT
+  nrf_gpio_pin_write(STAT_PIN, 0); nrf_gpio_pin_write(PROG_PIN, 0); // 4.2V BAT, 0V STAT
 #endif
 
 #ifdef USE_MCP73831_CTRL
-  nrf_gpio_cfg_input(PROG_PIN, NRF_GPIO_PIN_PULLDOWN); // Rprog = 13K, 1000/13K ~= 78 mA current
+  //nrf_gpio_cfg_input(PROG_PIN, NRF_GPIO_PIN_NOPULL); // disabled
+  nrf_gpio_cfg_input(PROG_PIN, NRF_GPIO_PIN_PULLDOWN); // enabled, Rprog = 13K, 1000/13K ~= 78 mA current
 #endif
 
 #ifdef USE_TP4054_CTRL
-  nrf_gpio_cfg_output(PROG_PIN); // set to input (float) to disable the charger
-  nrf_gpio_cfg_write(PROG_PIN, 0); // set prog resistor to GND to enable the charger
+  //nrf_gpio_cfg_input(PROG_PIN, NRF_GPIO_PIN_NOPULL); // disabled
+  nrf_gpio_cfg_output(PROG_PIN); nrf_gpio_cfg_write(PROG_PIN, 0); // enabled
 #endif
 
   nrfmicro_power_enable(true);
