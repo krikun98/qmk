@@ -46,19 +46,24 @@ void adc_init() {
 }
 
 void adc_start() {
-  //nrf_saadc_channel_config_t pincfg = NRF_DRV_SAADC_DEFAULT_CHANNEL_CONFIG_SE(NRF_SAADC_INPUT_VDD);
-  nrf_saadc_channel_config_t pincfg = NRF_DRV_SAADC_DEFAULT_CHANNEL_CONFIG_SE(NRF_SAADC_INPUT_AIN2); // nRFMicro 1.0 // joric
+#ifdef USE_BATTERY_PIN
+  nrf_saadc_channel_config_t pincfg = NRF_DRV_SAADC_DEFAULT_CHANNEL_CONFIG_SE(NRF_SAADC_INPUT_AIN2); // pin 0.04
+#else
+  nrf_saadc_channel_config_t pincfg = NRF_DRV_SAADC_DEFAULT_CHANNEL_CONFIG_SE(NRF_SAADC_INPUT_VDD);
+#endif
   nrf_drv_saadc_channel_init(0, &pincfg);
   nrf_drv_saadc_buffer_convert(adc_buffer, 1);
   nrf_drv_saadc_sample();
 }
 
 uint16_t get_vcc() {
-  // NB! joric
-  // we're using pin AIN2 with 10K/13K pulldown so we have to adjust the voltage a little bit
-  // charged shows 2456mV so we scale that up to 4200mV
-  // 2.37V (at 4.2V) to 1.36 (at 2.4V).
-  return ((uint32_t)adc_buffer[0]*6*600/255) * 4200 / 2456;
+#ifdef USE_BATTERY_PIN
+  #define V_MAX 4200
+  #define V_BAT ((V_MAX * BATTERY_R2) / (BATTERY_R1 + BATTERY_R2))
+  return ((uint32_t)adc_buffer[0]*6*600/255) * V_MAX / V_BAT;
+#else
+  return ((uint32_t)adc_buffer[0]*6*600/255);
+#endif
 }
 
 

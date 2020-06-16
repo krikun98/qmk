@@ -7,6 +7,33 @@ extern "C" {
 
 #define GPIO(port, pin) ((port << 6) | pin)
 
+//#define USE_NRFMICRO_1_1
+#define USE_NRFMICRO_1_2
+//#define USE_NRFMICRO_1_3
+
+#ifdef USE_NRFMICRO_1_1
+#define USE_SWITCH_PIN
+#define USE_BATTERY_PIN
+#define BATTERY_R1 10
+#define BATTERY_R2 13
+#endif
+
+#ifdef USE_NRFMICRO_1_2
+#define USE_INTERNAL_LDO
+#define USE_MCP73811_CTRL
+//#define USE_MCP73831_CTRL
+#define USE_BATTERY_PIN
+#define BATTERY_R1 820
+#define BATTERY_R2 2000
+#endif
+
+#ifdef USE_NRFMICRO_1_3
+#define USE_TP4054_CTRL
+#define USE_BATTERY_PIN
+#define BATTERY_R1 820
+#define BATTERY_R2 2000
+#endif
+
 #define PIN1 GPIO(0,6)
 #define PIN2 GPIO(0,8)
 
@@ -53,11 +80,11 @@ extern "C" {
 #endif
 
 #define LED_PIN GPIO(1,10)
-#define RESET_PIN GPIO(1,18)
-#define SWO_PIN GPIO(1,0)
-#define DFU_PIN GPIO(1,2)
 #define SWITCH_PIN GPIO(0,26)
 #define POWER_PIN GPIO(1,9)
+
+#define STAT_PIN GPIO(0,7)
+#define PROG_PIN GPIO(0,5)
 
 // i2c pins
 #define CONFIG_PIN_SDA PIN5
