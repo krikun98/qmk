@@ -23,6 +23,16 @@
 # Project, sources and paths
 #
 
+NRFSDK_ROOT := $(NRFSDK15_ROOT) #Path to nRF SDK v15.0.0
+
+ifeq ($(wildcard $(NRFSDK_ROOT)), "")
+  $(error no nrf NRFSDK was found. Please set NRFNRFSDK_ROOT in your rules.mk)
+else
+  NRFSDK_ROOT := $(strip $(NRFSDK_ROOT))
+endif
+
+$(info $$NRFSDK_ROOT is [${NRFSDK_ROOT}])
+
 # Imported source files and paths
 NRFSDK_VER = 15
 NRFCFLAGS += -DNRF_SDK_MAJOR_VER=$(NRFSDK_VER)
@@ -30,6 +40,9 @@ NRFCFLAGS += -DMATRIX_ROWS=32
 NRFCFLAGS += -DMATRIX_COLS=32
 NRFCFLAGS += -DRGBLED_NUM=128
 NRFCFLAGS += -DEEPROM_SIZE=32
+
+NRFCFLAGS += -DPRODUCT_ID=0x0000
+NRFCFLAGS += -DVENDOR_ID=0x0000
 
 NRF_VER_DIR = sdk$(NRFSDK_VER)
 
@@ -55,6 +68,141 @@ EXTRAINCDIRS += \
   $(TMK_PATH)/protocol/nrf/$(NRF_VER_DIR) \
   $(TMK_PATH)/protocol/nrf/nrf52 \
   $(TMK_PATH)/protocol/chibios/lufa_utils \
+  $(TMK_PATH)/protocol/nrf/bmpapi \
+  $(NRFSDK_ROOT)/components/nfc/ndef/generic/message \
+  $(NRFSDK_ROOT)/components/nfc/t2t_lib \
+  $(NRFSDK_ROOT)/components/nfc/t4t_parser/hl_detection_procedure \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_ancs_c \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_ias_c \
+  $(NRFSDK_ROOT)/components/libraries/pwm \
+  $(NRFSDK_ROOT)/components/libraries/usbd/class/cdc/acm \
+  $(NRFSDK_ROOT)/components/libraries/usbd/class/hid/generic \
+  $(NRFSDK_ROOT)/components/libraries/usbd/class/msc \
+  $(NRFSDK_ROOT)/components/libraries/usbd/class/hid \
+  $(NRFSDK_ROOT)/modules/nrfx/hal \
+  $(NRFSDK_ROOT)/components/libraries/experimental_log \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_gls \
+  $(NRFSDK_ROOT)/components/libraries/fstorage \
+  $(NRFSDK_ROOT)/components/nfc/ndef/text \
+  $(NRFSDK_ROOT)/components/libraries/mutex \
+  $(NRFSDK_ROOT)/components/libraries/gpiote \
+  $(NRFSDK_ROOT)/components/libraries/experimental_log/src \
+  $(NRFSDK_ROOT)/components/libraries/bootloader/ble_dfu \
+  $(NRFSDK_ROOT)/components/nfc/ndef/connection_handover/common \
+  $(NRFSDK_ROOT)/components/boards \
+  $(NRFSDK_ROOT)/components/nfc/ndef/generic/record \
+  $(NRFSDK_ROOT)/components/libraries/experimental_memobj \
+  $(NRFSDK_ROOT)/components/nfc/t4t_parser/cc_file \
+  $(NRFSDK_ROOT)/components/ble/ble_advertising \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_bas_c \
+  $(NRFSDK_ROOT)/modules/nrfx/drivers/include \
+  $(NRFSDK_ROOT)/components/libraries/experimental_task_manager \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_hrs_c \
+  $(NRFSDK_ROOT)/components/nfc/ndef/connection_handover/le_oob_rec \
+  $(NRFSDK_ROOT)/components/libraries/queue \
+  $(NRFSDK_ROOT)/components/libraries/pwr_mgmt \
+  $(NRFSDK_ROOT)/components/ble/ble_dtm \
+  $(NRFSDK_ROOT)/components/toolchain/cmsis/include \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_rscs_c \
+  $(NRFSDK_ROOT)/components/ble/common \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_lls \
+  $(NRFSDK_ROOT)/components/libraries/bsp \
+  $(NRFSDK_ROOT)/components/nfc/ndef/connection_handover/ac_rec \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_bas \
+  $(NRFSDK_ROOT)/components/libraries/experimental_section_vars \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_ans_c \
+  $(NRFSDK_ROOT)/components/libraries/slip \
+  $(NRFSDK_ROOT)/components/libraries/delay \
+  $(NRFSDK_ROOT)/components/libraries/experimental_mpu \
+  $(NRFSDK_ROOT)/components/libraries/mem_manager \
+  $(NRFSDK_ROOT)/components/libraries/csense_drv \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_nus_c \
+  $(NRFSDK_ROOT)/components/libraries/usbd/config \
+  $(NRFSDK_ROOT)/components/softdevice/common \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_ias \
+  $(NRFSDK_ROOT)/components/libraries/usbd/class/hid/mouse \
+  $(NRFSDK_ROOT)/components/libraries/low_power_pwm \
+  $(NRFSDK_ROOT)/components/nfc/ndef/conn_hand_parser/ble_oob_advdata_parser \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_dfu \
+  $(NRFSDK_ROOT)/external/fprintf \
+  $(NRFSDK_ROOT)/components/libraries/atomic \
+  $(NRFSDK_ROOT)/components \
+  $(NRFSDK_ROOT)/components/libraries/scheduler \
+  $(NRFSDK_ROOT)/components/libraries/cli \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_lbs \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_hts \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_cts_c \
+  $(NRFSDK_ROOT)/components/libraries/crc16 \
+  $(NRFSDK_ROOT)/components/nfc/t4t_parser/apdu \
+  $(NRFSDK_ROOT)/components/libraries/util \
+  $(NRFSDK_ROOT)/components/libraries/usbd/class/cdc \
+  $(NRFSDK_ROOT)/components/libraries/csense \
+  $(NRFSDK_ROOT)/components/libraries/balloc \
+  $(NRFSDK_ROOT)/components/libraries/ecc \
+  $(NRFSDK_ROOT)/components/libraries/hardfault \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_cscs \
+  $(NRFSDK_ROOT)/components/libraries/hci \
+  $(NRFSDK_ROOT)/components/libraries/usbd/class/hid/kbd \
+  $(NRFSDK_ROOT)/components/libraries/timer \
+  $(NRFSDK_ROOT)/integration/nrfx \
+  $(NRFSDK_ROOT)/components/nfc/t4t_parser/tlv \
+  $(NRFSDK_ROOT)/components/libraries/sortlist \
+  $(NRFSDK_ROOT)/components/libraries/spi_mngr \
+  $(NRFSDK_ROOT)/components/libraries/experimental_stack_guard \
+  $(NRFSDK_ROOT)/components/libraries/led_softblink \
+  $(NRFSDK_ROOT)/components/nfc/ndef/conn_hand_parser \
+  $(NRFSDK_ROOT)/components/libraries/sdcard \
+  $(NRFSDK_ROOT)/components/nfc/ndef/parser/record \
+  $(NRFSDK_ROOT)/modules/nrfx/mdk \
+  $(NRFSDK_ROOT)/components/ble/ble_link_ctx_manager \
+  $(NRFSDK_ROOT)/components/nfc/ndef/conn_hand_parser/le_oob_rec_parser \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_nus \
+  $(NRFSDK_ROOT)/components/libraries/twi_mngr \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_hids \
+  $(NRFSDK_ROOT)/components/libraries/strerror \
+  $(NRFSDK_ROOT)/components/libraries/crc32 \
+  $(NRFSDK_ROOT)/components/nfc/ndef/connection_handover/ble_oob_advdata \
+  $(NRFSDK_ROOT)/components/nfc/t2t_parser \
+  $(NRFSDK_ROOT)/components/nfc/ndef/connection_handover/ble_pair_msg \
+  $(NRFSDK_ROOT)/components/libraries/usbd/class/audio \
+  $(NRFSDK_ROOT)/components/nfc/t4t_lib/hal_t4t \
+  $(NRFSDK_ROOT)/components/libraries/sensorsim \
+  $(NRFSDK_ROOT)/components/nfc/t4t_lib \
+  $(NRFSDK_ROOT)/components/ble/peer_manager \
+  $(NRFSDK_ROOT)/components/drivers_nrf/usbd \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_tps \
+  $(NRFSDK_ROOT)/components/nfc/ndef/parser/message \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_dis \
+  $(NRFSDK_ROOT)/components/nfc/ndef/uri \
+  $(NRFSDK_ROOT)/components/ble/nrf_ble_gatt \
+  $(NRFSDK_ROOT)/components/ble/nrf_ble_qwr \
+  $(NRFSDK_ROOT)/components/libraries/gfx \
+  $(NRFSDK_ROOT)/components/libraries/button \
+  $(NRFSDK_ROOT)/modules/nrfx \
+  $(NRFSDK_ROOT)/components/libraries/twi_sensor \
+  $(NRFSDK_ROOT)/integration/nrfx/legacy \
+  $(NRFSDK_ROOT)/components/libraries/usbd \
+  $(NRFSDK_ROOT)/components/nfc/ndef/connection_handover/ep_oob_rec \
+  $(NRFSDK_ROOT)/external/segger_rtt \
+  $(NRFSDK_ROOT)/components/libraries/atomic_fifo \
+  $(NRFSDK_ROOT)/components/libraries/experimental_ringbuf \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_lbs_c \
+  $(NRFSDK_ROOT)/components/nfc/ndef/connection_handover/ble_pair_lib \
+  $(NRFSDK_ROOT)/components/libraries/crypto \
+  $(NRFSDK_ROOT)/components/ble/ble_racp \
+  $(NRFSDK_ROOT)/components/libraries/fds \
+  $(NRFSDK_ROOT)/components/nfc/ndef/launchapp \
+  $(NRFSDK_ROOT)/components/libraries/atomic_flags \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_rscs \
+  $(NRFSDK_ROOT)/components/nfc/ndef/connection_handover/hs_rec \
+  $(NRFSDK_ROOT)/components/nfc/t2t_lib/hal_t2t \
+  $(NRFSDK_ROOT)/components/nfc/ndef/conn_hand_parser/ac_rec_parser \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_hrs \
+  $(NRFSDK_ROOT)/components/ble/ble_db_discovery \
+  $(NRFSDK_ROOT)/components/ble/ble_radio_notification \
+  $(NRFSDK_ROOT)/components/softdevice/s140/headers \
+  $(NRFSDK_ROOT)/components/softdevice/s140/headers/nrf52 \
+  $(TOP_DIR)/drivers/oled \
 
   NRFCFLAGS += -DAPP_USBD_VID=VENDOR_ID
   NRFCFLAGS += -DAPP_USBD_PID=PRODUCT_ID
@@ -305,6 +453,105 @@ uf2: $(BUILD_DIR)/$(TARGET).bin
 	-./util/uf2conv.py -f nrf52 -b 0x26000 $(TARGET).bin
 
 elf: $(NRFLIB)
+
+# by joric - begin
+
+NRFLIBSRC += \
+  $(NRFSDK_ROOT)/components/libraries/experimental_log/src/nrf_log_backend_rtt.c \
+  $(NRFSDK_ROOT)/components/libraries/experimental_log/src/nrf_log_backend_serial.c \
+  $(NRFSDK_ROOT)/components/libraries/experimental_log/src/nrf_log_backend_uart.c \
+  $(NRFSDK_ROOT)/components/libraries/experimental_log/src/nrf_log_default_backends.c \
+  $(NRFSDK_ROOT)/components/libraries/experimental_log/src/nrf_log_frontend.c \
+  $(NRFSDK_ROOT)/components/libraries/experimental_log/src/nrf_log_str_formatter.c \
+  $(NRFSDK_ROOT)/components/libraries/button/app_button.c \
+  $(NRFSDK_ROOT)/components/libraries/util/app_error.c \
+  $(NRFSDK_ROOT)/components/libraries/util/app_error_handler_gcc.c \
+  $(NRFSDK_ROOT)/components/libraries/util/app_error_weak.c \
+  $(NRFSDK_ROOT)/components/libraries/scheduler/app_scheduler.c \
+  $(NRFSDK_ROOT)/components/libraries/timer/app_timer.c \
+  $(NRFSDK_ROOT)/components/libraries/util/app_util_platform.c \
+  $(NRFSDK_ROOT)/components/libraries/crc16/crc16.c \
+  $(NRFSDK_ROOT)/components/libraries/fds/fds.c \
+  $(NRFSDK_ROOT)/components/libraries/hardfault/hardfault_implementation.c \
+  $(NRFSDK_ROOT)/components/libraries/util/nrf_assert.c \
+  $(NRFSDK_ROOT)/components/libraries/atomic_fifo/nrf_atfifo.c \
+  $(NRFSDK_ROOT)/components/libraries/atomic_flags/nrf_atflags.c \
+  $(NRFSDK_ROOT)/components/libraries/atomic/nrf_atomic.c \
+  $(NRFSDK_ROOT)/components/libraries/balloc/nrf_balloc.c \
+  $(NRFSDK_ROOT)/external/fprintf/nrf_fprintf.c \
+  $(NRFSDK_ROOT)/external/fprintf/nrf_fprintf_format.c \
+  $(NRFSDK_ROOT)/components/libraries/fstorage/nrf_fstorage.c \
+  $(NRFSDK_ROOT)/components/libraries/fstorage/nrf_fstorage_sd.c \
+  $(NRFSDK_ROOT)/components/libraries/experimental_memobj/nrf_memobj.c \
+  $(NRFSDK_ROOT)/components/libraries/pwr_mgmt/nrf_pwr_mgmt.c \
+  $(NRFSDK_ROOT)/components/libraries/experimental_section_vars/nrf_section_iter.c \
+  $(NRFSDK_ROOT)/components/libraries/strerror/nrf_strerror.c \
+  $(NRFSDK_ROOT)/integration/nrfx/legacy/nrf_drv_clock.c \
+  $(NRFSDK_ROOT)/integration/nrfx/legacy/nrf_drv_uart.c \
+  $(NRFSDK_ROOT)/integration/nrfx/legacy/nrf_drv_power.c \
+  $(NRFSDK_ROOT)/integration/nrfx/legacy/nrf_drv_twi.c \
+  $(NRFSDK_ROOT)/modules/nrfx/drivers/src/nrfx_gpiote.c \
+  $(NRFSDK_ROOT)/modules/nrfx/drivers/src/nrfx_clock.c \
+  $(NRFSDK_ROOT)/modules/nrfx/drivers/src/nrfx_power.c \
+  $(NRFSDK_ROOT)/modules/nrfx/drivers/src/nrfx_power_clock.c \
+  $(NRFSDK_ROOT)/modules/nrfx/drivers/src/prs/nrfx_prs.c \
+  $(NRFSDK_ROOT)/modules/nrfx/drivers/src/nrfx_uart.c \
+  $(NRFSDK_ROOT)/modules/nrfx/drivers/src/nrfx_uarte.c \
+  $(NRFSDK_ROOT)/modules/nrfx/drivers/src/nrfx_saadc.c \
+  $(NRFSDK_ROOT)/modules/nrfx/drivers/src/nrfx_spim.c \
+  $(NRFSDK_ROOT)/modules/nrfx/drivers/src/nrfx_twi.c \
+  $(NRFSDK_ROOT)/modules/nrfx/drivers/src/nrfx_twim.c \
+  $(NRFSDK_ROOT)/modules/nrfx/drivers/src/nrfx_twis.c \
+  $(NRFSDK_ROOT)/modules/nrfx/drivers/src/nrfx_pwm.c \
+  $(NRFSDK_ROOT)/external/segger_rtt/SEGGER_RTT.c \
+  $(NRFSDK_ROOT)/external/segger_rtt/SEGGER_RTT_Syscalls_GCC.c \
+  $(NRFSDK_ROOT)/external/segger_rtt/SEGGER_RTT_printf.c \
+  $(NRFSDK_ROOT)/components/ble/common/ble_advdata.c \
+  $(NRFSDK_ROOT)/components/ble/ble_advertising/ble_advertising.c \
+  $(NRFSDK_ROOT)/components/ble/common/ble_conn_state.c \
+  $(NRFSDK_ROOT)/components/ble/ble_link_ctx_manager/ble_link_ctx_manager.c \
+  $(NRFSDK_ROOT)/components/ble/common/ble_srv_common.c \
+  $(NRFSDK_ROOT)/components/ble/peer_manager/gatt_cache_manager.c \
+  $(NRFSDK_ROOT)/components/ble/peer_manager/gatts_cache_manager.c \
+  $(NRFSDK_ROOT)/components/ble/peer_manager/id_manager.c \
+  $(NRFSDK_ROOT)/components/ble/nrf_ble_qwr/nrf_ble_qwr.c \
+  $(NRFSDK_ROOT)/components/ble/peer_manager/peer_data_storage.c \
+  $(NRFSDK_ROOT)/components/ble/peer_manager/peer_database.c \
+  $(NRFSDK_ROOT)/components/ble/peer_manager/peer_id.c \
+  $(NRFSDK_ROOT)/components/ble/peer_manager/peer_manager.c \
+  $(NRFSDK_ROOT)/components/ble/peer_manager/pm_buffer.c \
+  $(NRFSDK_ROOT)/components/ble/peer_manager/pm_mutex.c \
+  $(NRFSDK_ROOT)/components/ble/peer_manager/security_manager.c \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_bas/ble_bas.c \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_dis/ble_dis.c \
+  $(NRFSDK_ROOT)/components/ble/ble_services/ble_hids/ble_hids.c \
+  $(NRFSDK_ROOT)/components/softdevice/common/nrf_sdh.c \
+  $(NRFSDK_ROOT)/components/softdevice/common/nrf_sdh_soc.c \
+  $(NRFSDK_ROOT)/components/libraries/queue/nrf_queue.c \
+  $(NRFSDK_ROOT)/modules/nrfx/mdk/system_nrf52840.c \
+  $(NRFSDK_ROOT)/components/libraries/usbd/class/hid/app_usbd_hid.c \
+  $(NRFSDK_ROOT)/components/libraries/usbd/class/hid/generic/app_usbd_hid_generic.c \
+  $(NRFSDK_ROOT)/components/libraries/usbd/class/cdc/acm/app_usbd_cdc_acm.c \
+  $(NRFSDK_ROOT)/components/libraries/usbd/app_usbd.c \
+  $(NRFSDK_ROOT)/components/libraries/usbd/app_usbd_string_desc.c \
+  $(NRFSDK_ROOT)/components/libraries/usbd/class/dummy/app_usbd_dummy.c \
+  $(NRFSDK_ROOT)/components/drivers_nrf/usbd/nrf_drv_usbd.c \
+  $(NRFSDK_ROOT)/components/libraries/usbd/app_usbd_core.c \
+  $(NRFSDK_ROOT)/components/ble/peer_manager/security_dispatcher.c \
+  $(NRFSDK_ROOT)/components/softdevice/common/nrf_sdh_ble.c \
+  $(NRFSDK_ROOT)/components/ble/common/ble_conn_params.c \
+  $(NRFSDK_ROOT)/components/ble/nrf_ble_gatt/nrf_ble_gatt.c \
+  $(TMK_PATH)/protocol/nrf/bmpapi/bmpapi.c \
+  $(TMK_PATH)/protocol/nrf/bmpapi/ws2812.c \
+  $(TMK_PATH)/protocol/nrf/bmpapi/usbd.c \
+  $(TMK_PATH)/protocol/nrf/bmpapi/ble_common.c \
+  $(TMK_PATH)/protocol/nrf/bmpapi/app_usbd_hid_kbd.c \
+  $(TMK_PATH)/protocol/nrf/bmpapi/app_usbd_hid_mouse.c \
+  $(TMK_PATH)/protocol/nrf/bmpapi/i2c_master.c \
+
+# by joric - end
+
+
 
 NRFLIBOBJ := $(NRFLIBSRC:%.c=$(BUILD_DIR)/$(NRFLIB)/%.o)
 NRFLIBINC := $(patsubst %,-I%,$(EXTRAINCDIRS))

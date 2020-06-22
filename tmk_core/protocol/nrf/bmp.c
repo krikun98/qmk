@@ -222,7 +222,7 @@ MATRIX_LOOP_END:
     oled_task();
 #ifndef OLED_DISABLE_TIMEOUT
     // Wake up oled if user is using those fabulous keys!
-    if (ret)
+    //if (ret) // ret undeclared // joric
         oled_on();
 #endif
 #endif
@@ -245,7 +245,7 @@ MATRIX_LOOP_END:
 #endif
 
 #ifdef SERIAL_LINK_ENABLE
-	serial_link_update();
+    serial_link_update();
 #endif
 
 #ifdef VISUALIZER_ENABLE
@@ -424,8 +424,11 @@ static bool is_safe_mode_ = false;
 
 bool is_safe_mode() { return is_safe_mode_; }
 
+#include "bmpapi.h"
+
 void bmp_init()
 {
+  bmpapi_init();
 
   if (BMPAPI->api_version != API_VERSION)
   {
