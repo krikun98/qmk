@@ -11,6 +11,13 @@ enum jiran_layers {
   _ADJUST,
 };
 
+enum jiran_keycodes {
+  QWERTY = SAFE_RANGE,
+  DVORAK,
+  COLEMAK,
+  WORKMAN
+};
+
 #define RAISE_T(kc) LT(_RAISE, kc)
 #define LOWER_T(kc) LT(_LOWER, kc)
 
