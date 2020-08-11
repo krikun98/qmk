@@ -58,6 +58,7 @@ KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                              
            KC_LCTL, KC_A,    KC_S,    KC_H,    KC_T,    KC_G,      KC_Y,    KC_N,    KC_E,    KC_O,   KC_I,    RCTL_T(KC_QUOT),
            KC_LALT, KC_Z,    KC_X,    KC_M,    KC_C,    KC_V,      KC_K,    KC_L,    KC_COMM, KC_DOT, KC_SLSH, RALT_T(KC_BSLS),
                     RAISE_T(KC_TAB), LSFT_T(KC_SPC), LOWER_T(KC_ENT),      LOWER_T(KC_ESC), RSFT_T(KC_BSPC), RAISE_T(KC_DEL)
+                    ),
 
   [_LOWER] = LAYOUT(
   //          ┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
