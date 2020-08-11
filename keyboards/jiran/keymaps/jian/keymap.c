@@ -86,12 +86,12 @@ KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                              
                                               _______, _______, _______,      _______, _______, _______
 ),
 
-[_ADJUST] = LAYOUT_symmetric(
-XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  RESET,   DEBUG,          XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-           XXXXXXX,        WORKMAN, COLEMAK, DVORAK,  QWERTY,  XXXXXXX,
-           XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                                             _______, SW_TG,   _______
+[_ADJUST] = LAYOUT(
+XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  RESET,   DEBUG,          XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, DEBUG, RESET
+           XXXXXXX,        WORKMAN, COLEMAK, DVORAK,  QWERTY,  XXXXXXX, XXXXXXX, QWERTY, DVORAK, COLEMAK, WORKMAN  XXXXXXX,
+           XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+                                             _______, SW_TG,   _______, _______, SW_TG,   _______
 ),
 
 };
