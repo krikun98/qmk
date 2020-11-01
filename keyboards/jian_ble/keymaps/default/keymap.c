@@ -87,8 +87,8 @@ enum custom_keycodes {
 #define BSH_LAL MT(MOD_LALT, KC_BSLS)
 #define APP_RAL MT(MOD_RALT, KC_APP)
 
-#define BSP_LSH MT(MOD_LSFT, KC_BSPC)
-#define SPC_RSH MT(MOD_RSFT, KC_SPC)
+#define BSP_RSH MT(MOD_RSFT, KC_BSPC)
+#define SPC_LSH MT(MOD_LSFT, KC_SPC)
 #define DEL_RSE LT(_RAISE, KC_DEL)
 #define TAB_RSE LT(_RAISE, KC_TAB)
 #define ENT_LWR LT(_LOWER, KC_ENT)
@@ -103,7 +103,7 @@ enum custom_keycodes {
   KC_LGUI, GRV,     Q,       W,       E,       R,       T,            Y,       U,       I,       O,       P,       LBRC,    RGUI_T(RBRC), \
            KC_LCTL, A,       S,       D,       F,       G,            H,       J,       K,       L,       SCLN,    RCTL_T(QUOT), \
            KC_LALT, Z,       X,       C,       V,       B,            N,       M,       COMM,    DOT,     SLSH,    BSL_RAL, \
-                                      TAB_RSE, SPC_RSH, ENT_LWR,      ESC_LWR, BSP_LSH, DEL_RSE \
+                                      TAB_RSE, SPC_LSH, ENT_LWR,      ESC_LWR, BSP_RSH, DEL_RSE             \
   )
 #define LAYOUT_base_wrapper(...) LAYOUT_base(__VA_ARGS__)
 

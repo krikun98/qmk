@@ -3,6 +3,6 @@
 
 #include "custom_board.h"
 
-#define IS_LEFT_HAND  true
+#define IS_LEFT_HAND true
 
 #endif /* MASTER_CONFIG_H_ */

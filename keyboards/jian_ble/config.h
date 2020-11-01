@@ -18,18 +18,20 @@
 
 /* key matrix size */
 #define MATRIX_ROWS 8
-#define MATRIX_COLS 7
+#define MATRIX_COLS 6
+
+#define DIODE_DIRECTION COL2ROW
 
 // different Jian configs
-#define DIPS_ENABLE
+//#define DIPS_ENABLE
 #define PHYSICAL_LEDS_ENABLE
-#define NUM_LOCK_LED_PIN C6
-#define CAPS_LOCK_LED_PIN D7
-#define SCROLL_LOCK_LED_PIN B5
+#define NUM_LOCK_LED_PIN PIN9
+#define CAPS_LOCK_LED_PIN PIN12
+#define SCROLL_LOCK_LED_PIN PIN13
 
-#define NUM_LOCK_INVERT  //uncomment this if you using n-mosfet
-#define CAPS_LOCK_INVERT  //uncomment this if you using n-mosfet
-#define SCROLL_LOCK_INVERT  //uncomment this if you using n-mosfet
+//#define NUM_LOCK_INVERT  //uncomment this if you using n-mosfet
+//#define CAPS_LOCK_INVERT  //uncomment this if you using n-mosfet
+//#define SCROLL_LOCK_INVERT  //uncomment this if you using n-mosfet
 
 #ifdef NUM_LOCK_INVERT
 #define SET_NUM_LOCK_LED() writePinHigh(NUM_LOCK_LED_PIN)
@@ -55,8 +57,6 @@
 #define RESET_SCROLL_LOCK_LED() writePinHigh(SCROLL_LOCK_LED_PIN)
 #endif // SCROLL_LOCK_INVERT
 
-#define DIODE_DIRECTION COL2ROW
-
 /* define if matrix has ghost */
 //#define MATRIX_HAS_GHOST
 
@@ -75,7 +75,7 @@
 )
 
 //#ifdef BACKLIGHT_ENABLE
-#define BACKLIGHT_PIN PIN13
+#define BACKLIGHT_PIN PIN8
 #define BACKLIGHT_LEVELS 5
 //#define BACKLIGHT_BREATHING //not working with splits right now
 #define BREATHING_PERIOD 6

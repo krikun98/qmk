@@ -8,3 +8,7 @@ NRFSDK_ROOT := $(NRFSDK15_ROOT) #Path to nRF SDK v15.0.0
 # project specific files
 #SRC =	matrix.c
 NRF_SEPARATE = slave
+
+#CFLAGS += -DNRFMICRO
+#CFLAGS += -DFLIPPED_NRFMICRO
+CFLAGS += -DNICE_NANO

@@ -7,10 +7,39 @@ extern "C" {
 
 #define GPIO(port, pin) ((port << 6) | pin)
 
+#ifdef NICE_NANO
+
 #define PIN1 GPIO(0,6)
 #define PIN2 GPIO(0,8)
 
-#ifdef FLIPPED_NRFMICRO //flipped nRFMicro 0.03 (for jian master)
+#define PIN5  GPIO(0,17)
+#define PIN6  GPIO(0,20)
+#define PIN7  GPIO(0,22)
+#define PIN8  GPIO(0,24)
+#define PIN9  GPIO(1,0)
+#define PIN10 GPIO(0,11)
+#define PIN11 GPIO(1,4)
+#define PIN12 GPIO(1,6)
+
+#define PIN13 GPIO(0,9)
+#define PIN14 GPIO(0,10)
+#define PIN15 GPIO(1,11)
+#define PIN16 GPIO(1,13)
+#define PIN17 GPIO(1,15)
+#define PIN18 GPIO(0,2)
+#define PIN19 GPIO(0,29)
+#define PIN20 GPIO(0,31)
+
+#define LED_PIN GPIO(0,15)
+#define RESET_PIN GPIO(1,1)
+#define SWO_PIN GPIO(1,7)
+#define DFU_PIN GPIO(1,2)
+#define SWITCH_PIN GPIO(0,12)
+
+#elif FLIPPED_NRFMICRO //flipped nRFMicro
+
+#define PIN1 GPIO(0,6)
+#define PIN2 GPIO(0,8)
 
 #define PIN20 GPIO(0,15)
 #define PIN19 GPIO(0,17)
@@ -30,7 +59,16 @@ extern "C" {
 #define PIN6 GPIO(0,31)
 #define PIN5 GPIO(0,30)
 
-#else // regular board
+#define LED_PIN GPIO(1,10)
+#define RESET_PIN GPIO(1,18)
+#define SWO_PIN GPIO(1,0)
+#define DFU_PIN GPIO(1,2)
+#define SWITCH_PIN GPIO(0,26)
+
+#elif NRFMICRO
+
+#define PIN1 GPIO(0,6)
+#define PIN2 GPIO(0,8)
 
 #define PIN5 GPIO(0,15)
 #define PIN6 GPIO(0,17)
@@ -50,14 +88,13 @@ extern "C" {
 #define PIN19 GPIO(0,31)
 #define PIN20 GPIO(0,30)
 
-#endif
-
 #define LED_PIN GPIO(1,10)
 #define RESET_PIN GPIO(1,18)
-#define SWO_PIN GPIO(1,00)
-#define DFU_PIN GPIO(1,02)
+#define SWO_PIN GPIO(1,0)
+#define DFU_PIN GPIO(1,2)
 #define SWITCH_PIN GPIO(0,26)
 
+#endif
 
 //#define NRF_LOG_ENABLED 0
 //#define NRF_LOG_BACKEND_SERIAL_USES_UART 0
@@ -78,7 +115,6 @@ extern "C" {
                                  .xtal_accuracy = 0}
 
 #endif
-
 
 #ifdef __cplusplus
 }
